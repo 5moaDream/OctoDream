@@ -27,6 +27,9 @@ jobs:
         channel: 'stable' # 'dev', 'alpha', default to: 'stable'
         flutter-version: '3.7.0' # you can also specify exact version of flutter
     
+    # Upgrade dart version
+    - run: flutter upgrade
+    
     # Get flutter dependencies.
     - run: flutter pub get
     
