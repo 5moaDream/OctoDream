@@ -29,11 +29,15 @@ jobs:
 #         run: flutter format --set-exit-if-changed --dry-run .
         
 #       - name: Test
-#         run: flutter test
-        
-      - name: Merge
+#         run: flutter test          
+          
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Merge dev branch into main
         run: |
-          git remote update
-          git checkout main
-          git merge dev
+          git merge --no-ff origin/dev
+          git push origin main
         
