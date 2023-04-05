@@ -25,6 +25,9 @@ jobs:
           cd prodect1
           flutter pub get
           
+      - name: Flutter build
+        run: flutter build
+          
 #       - name: Ensure the Dart code is formatted correctly
 #         run: flutter format --set-exit-if-changed --dry-run .
         
@@ -37,5 +40,5 @@ jobs:
 
       - name: Merge dev branch into main
         run: |
-          git merge --no-ff origin/dev
+          git merge --no-ff --allow-unrelated-histories origin/dev
           git push origin main
