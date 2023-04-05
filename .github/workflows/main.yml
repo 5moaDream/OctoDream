@@ -30,14 +30,4 @@ jobs:
         
 #       - name: Test
 #         run: flutter test          
-          
-      - name: Checkout main branch
-        uses: actions/checkout@v2
-        with:
-          ref: main
-
-      - name: Merge dev branch into main
-        run: |
-          git merge --no-ff --allow-unrelated-histories origin/dev
-          git push origin main
         
