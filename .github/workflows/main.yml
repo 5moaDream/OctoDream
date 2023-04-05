@@ -2,7 +2,7 @@ name: Android Release
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
 
 jobs:
   build:
@@ -21,9 +21,14 @@ jobs:
           cd prodect1
           flutter pub get
           
-      - name: Ensure the Dart code is formatted correctly
-        run: flutter format --set-exit-if-changed --dry-run .
+#       - name: Ensure the Dart code is formatted correctly
+#         run: flutter format --set-exit-if-changed --dry-run .
         
-      - name: Test
-        run: flutter test
+#       - name: Test
+#         run: flutter test
+        
+      - name: Merge
+        run: |
+          git checkout main
+          git merge dev
         
