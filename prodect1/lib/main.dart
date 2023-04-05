@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:prodect1/home.dart';
 import 'calendar.dart';
 import 'login.dart';
-import 'package:kakao_flutter_sdk/all.dart';
 
 void main() {
   runApp(MyApp());
-  KakaoContext.clientId = '0d8641b383ce6ac9788b8c877fdd33fb';
 }
 
 class MyApp extends StatefulWidget{
@@ -21,7 +19,7 @@ class _dreamApp extends State<MyApp>{
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: Calendar(),
+      home: LogIn(),
     );
   }
 }

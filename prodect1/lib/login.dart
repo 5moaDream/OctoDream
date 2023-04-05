@@ -1,6 +1,14 @@
+import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'home.dart';
-import 'package:kakao_flutter_sdk/all.dart';
+
+
+final String restApiKey = '86aba9aec0985787d071adc7c329635d';
+final String redirectUri = 'http://127.0.0.1:8080/kakao-login';
+
+final String authorizationEndpoint = 'https://kauth.kakao.com/oauth/authorize';
+final String authorizationUrl = '$authorizationEndpoint?client_id=$restApiKey&redirect_uri=$redirectUri&response_type=code';
 
 class LogIn extends StatefulWidget {
   @override
@@ -9,10 +17,6 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogIn extends State<LogIn> {
-  Future<void> _loginButtonPressed() async {
-    String authCode = await AuthCodeClient.instance.request();
-    print(authCode);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +42,25 @@ class _LogIn extends State<LogIn> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Home()),
+                MaterialPageRoute(builder: (context) => MyApp()),
               );
             },
           ),
           ElevatedButton(
-            onPressed: _loginButtonPressed,
+            onPressed: () async {
+              if (await canLaunchUrlString(authorizationUrl)) {
+                await launchUrlString(
+                  authorizationUrl,
+                );
+              }
+              else{AndroidIntent intent = AndroidIntent(
+                action: 'action_view',
+                data: authorizationUrl,
+                package: 'com.android.chrome',
+              );
+              await intent.launch();
+              }
+            },
             child: Text(
               '카카오 로그인',
               style: TextStyle(
