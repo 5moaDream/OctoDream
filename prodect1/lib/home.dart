@@ -262,14 +262,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     horizontal: 40 // 가로축
                 ),
                 height: 140,
-                width: 200,
+                width: 190,
                 //color: Colors.red,
-                child: Image.asset("assets/images/pngwing.com.png", width: 200, height: 200,),
+                child: Image.asset("assets/images/speech-bubble.png", width: 200, height: 200,),
               ),
             ),
             Positioned(
-              bottom: 80,
-              right: 80,
+              bottom: 70,
+              right: 75,
               child: Container(
                 //color: Colors.amber,
                 child: Text(
