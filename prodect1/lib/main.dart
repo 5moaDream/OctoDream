@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:prodect1/home.dart';
+import 'calendar.dart';
 import 'login.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 
@@ -19,7 +21,7 @@ class _dreamApp extends State<MyApp>{
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: LogIn(),
+      home: Calendar(),
     );
   }
 }

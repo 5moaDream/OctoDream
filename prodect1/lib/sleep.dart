@@ -1,7 +1,7 @@
 import'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:pie_chart/pie_chart.dart';
 import 'sleepchart.dart';
+import 'piechart.dart';
 
 class sleep extends StatelessWidget {
 
@@ -80,26 +80,6 @@ class mysleep extends StatefulWidget {
   _mysleep createState() => _mysleep();
 }
 
-class myList {
-  String day;
-  double sleep;
-  myList(this.day, this.sleep);
-}
-
-List<myList> mylist = <myList>[
-  myList('5/1', 0.5),
-  myList('5/2', 1.2),
-  myList('5/3', 1.28),
-  myList('5/4', 0.8),
-  myList('5/5', 1),
-  myList('5/6', 1.1),
-  myList('5/7', 1.24),
-];
-
-final dataMap = <String, double>{
-  "sleep": 6,
-};
-
 final colorList = <Color>[
   Colors.deepPurple,
 ];
@@ -115,7 +95,7 @@ class _mysleep extends State<mysleep> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
+              Container(
                 padding: EdgeInsets.only(top: 40, left: 30),
                 child: Text("수면(5.7)",
                   style: TextStyle(
@@ -123,10 +103,10 @@ class _mysleep extends State<mysleep> {
                   ),
                 ),
               ),
-              Center(
+              Container(
                 child: Column(
                   children: [
-                    Text("오늘 수면시간 : ${dataMap.values}시간",
+                    Text("오늘 수면시간 : 6시간",
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold
@@ -138,52 +118,36 @@ class _mysleep extends State<mysleep> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width*0.38,
-                              child: PieChart(
-                                dataMap: dataMap,
-                                chartType: ChartType.disc,
-                                baseChartColor: Colors.grey[300]!,
-                                colorList: colorList,
-                                legendOptions: LegendOptions(
-                                  showLegendsInRow: false,
-                                  showLegends: false,
-                                ),
-                                chartValuesOptions: ChartValuesOptions(
-                                  showChartValues: false,),
-                                totalValue: 8,
-                              ),
+                              width: 200,
+                              child: PieChartSample3(),
                             ),
-                            Padding(
-                                padding: EdgeInsets.only(left: 26),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("평균 : 6시 30분",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("평균 : 6시 30분",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  Text("목표 : 8시간",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                ),
+                                Text("목표 : 8시간",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ],
-                              ),
-                            )
+                                ),
+                              ],
+                            ),
                           ],
                         )
                     ),
-                  ],),
-              ),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 50),
-                  child: sleepLineChart(),
+                  ],
                 ),
               ),
+              Padding(
+                  padding: EdgeInsets.only(top: 20),
+                child: sleepLineChart(),
+              )
             ])
     );
   }

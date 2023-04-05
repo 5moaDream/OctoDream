@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'runningchart.dart';
 import'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
@@ -164,14 +164,19 @@ class _myrunning extends State<myrunnig> {
             Center(
               child: Padding(
                 padding: EdgeInsets.only(top: 50),
-                child: CustomPaint(
-                  size: Size(340, 260),
-                  foregroundPainter: BarChart(
-                    data: mylist,
-                    sleepmax: 1.28,
-                    color: Colors.deepPurple,
-                  ),
-                ),
+                child: Container(
+                  height: 300,
+                  width: 400,
+                  child: BarChartSample(),
+                )
+                // CustomPaint(
+                //   size: Size(340, 260),
+                //   foregroundPainter: BarChart(
+                //     data: mylist,
+                //     sleepmax: 1.28,
+                //     color: Colors.deepPurple,
+                //   ),
+                // ),
               ),
             ),
     ])
