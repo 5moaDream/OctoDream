@@ -17,17 +17,13 @@ jobs:
         with:
           flutter-version: "3.7.9"
           channel: 'stable'
-
-      - name: Get dependencies
+          
+      - name: Install packages
         run: flutter pub get
-
-      - name: Analyze
-        run: flutter analyze
-
-      - name: Run tests
-        run: flutter test --coverage
         
-      - name: Upload coverage to codecov
-        run: curl -s https://codecov.io/bash
-        shell: bash     
+      - name: Linter
+        run: flutter analyze
+        
+      - name: Test
+        run: flutter test
         
