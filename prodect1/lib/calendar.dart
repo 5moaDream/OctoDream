@@ -129,12 +129,13 @@ class _Calendar extends State<Calendar> {
                       if (events.isNotEmpty) {
                         return _buildEventsMarker(date, events);
                       }
+                      return null;
                     },
                   ),
                 ),
                 ListView(
                   shrinkWrap: true,
-                  children: _getEventsForDay(selectedDay!)
+                  children: _getEventsForDay(selectedDay)
                       .map((event) => Container(
                       padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
                       child: Column(
