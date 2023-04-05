@@ -18,8 +18,9 @@ jobs:
           flutter-version: "3.7.9"
           channel: 'stable'
           
-      - name: Install packages
-        run: flutter pub get
+      - name: Import Flutter Package
+        run: |
+          flutter pub get
         
       - name: Linter
         run: flutter analyze
