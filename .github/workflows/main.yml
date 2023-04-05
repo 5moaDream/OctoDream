@@ -20,7 +20,7 @@ jobs:
           
       - name: Import Flutter Package
         run: |
-          cd /Documents/GitHub/OctoDream/prodect1
+          cd Documents/GitHub/OctoDream/prodect1
           flutter pub get
         
       - name: Linter
