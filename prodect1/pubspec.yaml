@@ -32,7 +32,6 @@ dependencies:
   intl: ^0.17.0
   flutter_speed_dial: ^6.2.0
   flutter_animation_progress_bar: ^2.3.1
-  pie_chart: ^5.3.2
   fl_chart: ^0.61.0
 
   flutter:
@@ -66,18 +65,7 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/images/R1280x0.png
-    - assets/images/pngwing.com.png
-    - assets/images/bagIcon.png
-    - assets/images/ball.png
-    - assets/images/hand.png
-    - assets/images/spoon.png
-    - assets/images/calendar.png
-    - assets/images/light1.png
-    - assets/images/octopus.png
-    - assets/images/running.png
-    - assets/images/light2.png
+  # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
@@ -92,11 +80,6 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Neo
-      fonts:
-        - asset: assets/fonts/font1.ttf
-          weight: 700
   # fonts:
   #   - family: Schyler
   #     fonts:
