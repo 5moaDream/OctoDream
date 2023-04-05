@@ -38,6 +38,6 @@ jobs:
 
       - name: Merge dev branch into main
         run: |
-          git merge --no-ff origin/dev
+          git merge --no-ff --allow-unrelated-histories origin/dev
           git push origin main
         
