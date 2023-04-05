@@ -120,7 +120,7 @@ class _BarChartSample extends State<BarChartSample> {
                 weekDay = 'Thursday';
                 break;
               case 4:
-                weekDay = 'Friday';
+                weekDay = 'Hello~';
                 break;
               case 5:
                 weekDay = 'Saturday';
