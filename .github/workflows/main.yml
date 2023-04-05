@@ -20,6 +20,9 @@ jobs:
         run: |
           cd prodect1
           flutter pub get
+          
+      - name: Ensure the Dart code is formatted correctly
+        run: flutter format --set-exit-if-changed --dry-run .
         
       - name: Test
         run: flutter test
