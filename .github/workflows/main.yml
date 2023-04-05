@@ -33,6 +33,7 @@ jobs:
         
       - name: Merge
         run: |
+          git remote update
           git checkout main
           git merge dev
         
