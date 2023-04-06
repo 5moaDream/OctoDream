@@ -30,7 +30,7 @@ jobs:
         
       - name: Merge dev branch into main
         run: |
-          git fetch origin
+          git fetch main
           git checkout main
           git checkout dev
           git merge main
