@@ -4,9 +4,9 @@ on:
   push:
     branches: 
       - dev
-#   pull_request:
-#     branches:
-#       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
         
       - name: Merge dev branch into main
         run: |
-          git fetch main
+          git fetch [origin]
           git checkout main
           git checkout dev
           git merge main
