@@ -4,9 +4,9 @@ on:
   push:
     branches: 
       - dev
-  pull_request:
-    branches:
-      - main
+#   pull_request:
+#     branches:
+#       - main
 
 jobs:
   build:
@@ -27,4 +27,9 @@ jobs:
           
       - name: Flutter build
         run: flutter build
+        
+      - name: Merge dev branch into main
+        run: |
+          git checkout dev
+          git merge main
                 
