@@ -47,9 +47,6 @@ class _Friends extends State<Friends> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
-
-                            ),
                             Text(myFriend[i + j].toString(),
                                 style: TextStyle(fontSize: 20)),
                             Image.asset('assets/images/character.png',
@@ -76,11 +73,6 @@ class _Friends extends State<Friends> {
               ]),
         ),
       ),
-    );
-  }
-  Widget Octo(){
-    return Container(
-
     );
   }
 }
