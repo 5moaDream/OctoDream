@@ -22,21 +22,9 @@ class _LogIn extends State<LogIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          TextField(
-            decoration: InputDecoration(
-              suffixStyle: TextStyle(fontSize: 15),
-              hintText: 'LogIn',
-              border: OutlineInputBorder(), //외곽선
-            ),
-          ),
-          TextField(
-            decoration: InputDecoration(
-              suffixStyle: TextStyle(fontSize: 15),
-              hintText: 'PassWord',
-              border: OutlineInputBorder(), //외곽선
-            ),
-          ),
           ElevatedButton(
             child: const Text('로그인'),
             onPressed: () {

@@ -80,6 +80,10 @@ flutter:
      - assets/images/octopus.png
      - assets/images/running.png
      - assets/images/light2.png
+     - assets/images/right.png
+     - assets/images/left.png
+     - assets/images/character.png
+     - assets/images/shadow.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
