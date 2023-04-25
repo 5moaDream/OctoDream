@@ -1,22 +1,36 @@
-import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'home.dart';
-
-
-final String restApiKey = '86aba9aec0985787d071adc7c329635d';
-final String redirectUri = 'http://127.0.0.1:8080/kakao-login';
-
-final String authorizationEndpoint = 'https://kauth.kakao.com/oauth/authorize';
-final String authorizationUrl = '$authorizationEndpoint?client_id=$restApiKey&redirect_uri=$redirectUri&response_type=code';
 
 class LogIn extends StatefulWidget {
   @override
-  _LogIn createState() =>
-      _LogIn(); // StatefulWidget은 상태를 생성하는 createState() 메서드로 구현한다.
+  _LogInState createState() => _LogInState();
 }
 
-class _LogIn extends State<LogIn> {
+class _LogInState extends State<LogIn> {
+  bool _isKaKaoTalkInstalled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initKaKaoTalkInstalled();
+  }
+
+  Future<void> _initKaKaoTalkInstalled() async {
+    final installed = await isKakaoTalkInstalled();
+    setState(() {
+      _isKaKaoTalkInstalled = installed;
+    });
+  }
+
+  Future<void> _loginWithKakaoApp() async {
+    try {
+      OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
+      print('카카오톡으로 로그인 성공 ${token.accessToken}');
+    } catch (error) {
+      print('카카오톡으로 로그인 실패 $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,28 +48,22 @@ class _LogIn extends State<LogIn> {
               );
             },
           ),
-          ElevatedButton(
-            onPressed: () async {
-              if (await canLaunchUrlString(authorizationUrl)) {
-                await launchUrlString(
-                  authorizationUrl,
-                );
-              }
-              else{AndroidIntent intent = AndroidIntent(
-                action: 'action_view',
-                data: authorizationUrl,
-                package: 'com.android.chrome',
-              );
-              await intent.launch();
+          GestureDetector(
+            onTap: () async {
+              if (_isKaKaoTalkInstalled) {
+                _loginWithKakaoApp();
+              } else {
+                // 카카오 계정으로 로그인
+                try {
+                  OAuthToken token =
+                      await UserApi.instance.loginWithKakaoAccount();
+                  print('로그인 성공 ${token.accessToken}');
+                } catch (error) {
+                  print('로그인 실패 $error');
+                }
               }
             },
-            child: Text(
-              '카카오 로그인',
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.black87,
-              ),
-            ),
+            child: Image.asset('assets/images/kakao_login.png'),
           ),
         ],
       ),

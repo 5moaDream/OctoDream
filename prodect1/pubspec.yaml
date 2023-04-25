@@ -29,6 +29,13 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
 
+  kakao_flutter_sdk: ^1.4.1
+  dio: ^4.0.6
+  json_annotation: ^4.8.0
+  shared_preferences: ^2.1.0
+  platform: ^3.1.0
+  package_info_plus: ^3.1.0
+
   table_calendar: ^3.0.6
   intl: ^0.18.0
   flutter_speed_dial: ^6.2.0
@@ -84,6 +91,8 @@ flutter:
      - assets/images/left.png
      - assets/images/character.png
      - assets/images/shadow.png
+     - assets/images/kakao_login.png
+     - assets/images/kakao_login_medium_narrow.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
