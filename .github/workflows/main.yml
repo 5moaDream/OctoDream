@@ -2,7 +2,7 @@ name: Android Release
 
 on:
   push:
-    branches: 
+    branches:
       - dev
   pull_request:
     branches:
@@ -32,9 +32,10 @@ jobs:
         run: |
           git fetch origin
           git checkout main
-          git merge dev
+          git merge --allow-unrelated-histories dev
 
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
