@@ -3,10 +3,10 @@ name: Android Release
 on:
   push:
     branches: 
-      - dev
+      - test
   pull_request:
     branches:
-      - test
+      - main
 
 jobs:
   build:
@@ -28,10 +28,10 @@ jobs:
       - name: Flutter build
         run: flutter build
 
-      - name: Merge dev branch into test
+      - name: Merge test branch into main
         run: |
           git fetch origin
-          git checkout test
+          git checkout main
           git merge dev --allow-unrelated-histories
 
       - name: Push changes
