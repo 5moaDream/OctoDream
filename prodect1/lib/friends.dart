@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'friend_home.dart';
+import 'home.dart';
+// test
 
 class Friends extends StatefulWidget {
   @override
@@ -23,64 +25,76 @@ class _Friends extends State<Friends> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => FriendHome()),
-            );
-          },
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                  child: Text("친구 목록($_friend_cnt)",
-                      style: TextStyle(fontSize: 35)),
-                ),
-                for (int i = 0; i < 3; i++) ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Stack(
+          children: [
+            Positioned(
+              top: 400,
+              left: 0,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyHomePage()),
+                  );
+                },
+                child: Image.asset('assets/images/left.png', height: 55),
+              ),
+            ),
+            Positioned(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FriendHome()),
+                  );
+                },
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (int j = 0; j < 3; j++) ...[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                      Container(
+                        margin: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                        child: Text("친구 목록($_friend_cnt)",
+                            style: TextStyle(fontSize: 35)),
+                      ),
+                      for (int i = 0; i < 3; i++) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Container(
-
-                            ),
-                            Text(myFriend[i + j].toString(),
-                                style: TextStyle(fontSize: 20)),
-                            Image.asset('assets/images/character.png',
-                                width: 100),
-                            Container(
-                              width: 100,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  colorFilter: ColorFilter.mode(
-                                      Colors.black.withOpacity(0.1),
-                                      BlendMode.modulate),
-                                  fit: BoxFit.fill,
-                                  image: AssetImage('assets/images/shadow.png'),
-                                ),
+                            for (int j = 0; j < 3; j++) ...[
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(myFriend[i + j].toString(),
+                                      style: TextStyle(fontSize: 20)),
+                                  Image.asset('assets/images/character.png',
+                                      width: 100),
+                                  Container(
+                                    width: 100,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        colorFilter: ColorFilter.mode(
+                                            Colors.black.withOpacity(0.1),
+                                            BlendMode.modulate),
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            'assets/images/shadow.png'),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
+                            ],
                           ],
                         ),
                       ],
-                    ],
-                  ),
-                ],
-              ]),
+                    ]),
+              ),
+            ),
+          ],
         ),
       ),
-    );
-  }
-  Widget Octo(){
-    return Container(
-
     );
   }
 }
