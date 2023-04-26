@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
+import 'package:http/http.dart' as http;
 
 //import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'Datelist.dart';
@@ -9,10 +11,11 @@ void main() {
 }
 
 class Coment {
-  String coment = "오늘 하루는 어땠어?";
+  String diaryComent = "오늘 하루는 어땠어?";
+  String coment = '내문어어떻노어떻냐고 어떠너데?? ';
 
-  String getComment() {
-    return coment;
+  void setComment(String coment) {
+    this.coment = coment;
   }
 }
 
@@ -25,21 +28,23 @@ class Diary {
 
   void saveDiary(String contents) {
     now = DateTime.now();
-    today = "${now.year}-${now.month}-${now.day}";
+    this.today = "${now.year}-${now.month}-${now.day}";
     this.contents = contents;
   }
 
   void printDiary() {
     print(contents);
+    print(today);
   }
 }
 
-// class LightState extends State<MyHomePage> {
-//   int num = 0;
-//   List<String> Light = [
-//     "assets/images/light1.png", //0
-//     "assets/images/light2.png", //1
-//   ];
+class User {
+  var nickName = '무너무너';
+  var score; //경험치
+  String getNickName() {
+    return nickName;
+  }
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -80,112 +85,159 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Coment coment = new Coment();
   Diary diary = new Diary();
+  User user = new User();
+
+  double _currentValue = 20;
+
+  setEndPressed(double value) {
+    setState(() {
+      _currentValue = value;
+    });
+  }
+
+  Widget buildFloatingButton(String text, VoidCallback callback) {
+    TextStyle roundTextStyle =
+        const TextStyle(fontSize: 16.0, color: Colors.white);
+    return new FloatingActionButton(
+        child: new Text(text, style: roundTextStyle), onPressed: callback);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //상중하를 나눠주는 위젯
       backgroundColor: Colors.white,
-      body: Container(
-        //body는 중간 내용 영역
-        // color: Colors.blue,
-        // height: 750,
-        //padding: EdgeInsets.fromLTRB(0, 0, 0, 0),//padding을 통해 좌우 여백 지정
-        child: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Positioned(
-                child: Column(
-                  children: [
-                    Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            //color: Colors.red,
-                            margin: EdgeInsets.symmetric(
-                              //가로 세로 값 설정
-                              vertical: 130, // 세로축
-                              horizontal: 20, // 가로축
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              //텍스트를 왼쪽으로 정렬렬
-                              children: <Widget>[
-                                // Text(
-                                //   'level 1',
-                                //   style: TextStyle(color: Colors.black,
-                                //       fontSize: 18,
-                                //       letterSpacing: 2.0,
-                                //       fontFamily: 'Neo'),
-                                // ),
+      body: SafeArea(
+          //body는 중간 내용 영역
+          // color: Colors.blue,
+          // height: 750,
+          //padding: EdgeInsets.fromLTRB(0, 0, 0, 0),//padding을 통해 좌우 여백 지정
+          child: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Column(
+              //crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  height: 170,
+                  //color: Colors.cyan,
+                  padding:
+                      EdgeInsets.only(bottom: 0, left: 0, top: 0, right: 0),
+                  child: Row(
+                    children: [
+                      Container(
+                        //color: Colors.red,
+                        height: 160,
+                        width: 190,
+                        padding: EdgeInsets.only(
+                            bottom: 0, left: 20, top: 90, right: 0),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: [
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '무너무너',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.bold,
-                                              letterSpacing: 2.0,
-                                              fontFamily: 'Neo'),
-                                        ),
-                                        IconButton(
-                                          //설정
-                                          icon: Icon(Icons.settings),
-                                          color: Colors.grey, // Icon 색상 설정
-                                          iconSize: 30.0, //아이콘 크기
-                                          onPressed: () {}, //클릭시 실행할 코드
-                                        ),
-                                      ],
+                                    Text(
+                                      user.getNickName(),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 2.0,
+                                          fontFamily: 'Neo'),
+                                    ),
+                                    IconButton(
+                                      //설정
+                                      icon: Icon(Icons.settings),
+                                      color: Colors.grey, // Icon 색상 설정
+                                      iconSize: 30.0, //아이콘 크기
+                                      onPressed: () {}, //클릭시 실행할 코드
                                     ),
                                   ],
-                                )
+                                ),
                               ],
-                            ),
-                          ),
-                          Menu(),
-                        ]),
-                    Answer(),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            bottom: 0, left: 0, top: 0, right: 0),
+                        height: 160,
+                        width: 190,
+                        //color: Colors.deepOrange,
+                        child: Menu(),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
                     Container(
-                      height: 200,
-                      width: 200,
-                      color: Colors.red,
+                      height: 500,
+                      //color: Colors.green,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 80,
+                            //color: Colors.cyanAccent,
+                            child: Progress(),
+                          ),
+                          Column(
+                            children: [
+                              Answer(),
+                              Container(
+                                //문어 넣을 곳
+                                height: 230,
+                                width: 270,
+                                color: Colors.red,
+                                child: Image.asset(
+                                  "assets/images/mainOctopus.gif",
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                    Bag(),
+                    Positioned(
+                      top: 400,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Datelist()),
+                          );
+                        },
+                        child:
+                            Image.asset('assets/images/right.png', height: 60),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              Positioned(
-                top: 400,
-                right: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Datelist()),
-                    );
-                  },
-                  child: Image.asset('assets/images/right.png', height: 60),
+                Container(
+                  height: 100,
+                  //color:Colors.amber,
+                  child: Bag(),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
-      ),
+      )),
     );
   }
 
   Widget Menu() {
     return Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-        margin: EdgeInsets.symmetric(
-          //가로 세로 값 설정
-          vertical: 50, // 세로축
-          horizontal: 0, // 가로축
-        ),
+        padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+        // margin: EdgeInsets.symmetric( //가로 세로 값 설정
+        //   vertical: 50, // 세로축
+        //   horizontal: 0, // 가로축
+        // ),
         height: 135,
         width: 160,
         decoration: BoxDecoration(
@@ -198,12 +250,13 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               children: [
                 IconButton(
+                  padding: EdgeInsets.fromLTRB(0, 0, 25, 0),
                   icon: Image.asset(
                     "assets/images/octopus.png",
                     width: 60,
                     height: 60,
                   ),
-                  iconSize: 50,
+                  iconSize: 55,
                   onPressed: () {},
                 ),
                 IconButton(
@@ -212,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 60,
                     height: 60,
                   ),
-                  iconSize: 50,
+                  iconSize: 55,
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -227,12 +280,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 Row(
                   children: [
                     IconButton(
+                      padding: EdgeInsets.fromLTRB(0, 0, 25, 0),
                       icon: Image.asset(
                         Light[state],
                         width: 60,
                         height: 60,
                       ),
-                      iconSize: 50,
+                      iconSize: 55,
                       onPressed: () {
                         showDialog(
                             context: context,
@@ -251,6 +305,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: Text('예'),
                                         onPressed: () => setState(() {
                                           state = 1;
+                                          coment.setComment('나 자께요');
                                           Navigator.of(context).pop();
                                         }),
                                       )
@@ -288,7 +343,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         width: 60,
                         height: 60,
                       ),
-                      iconSize: 50,
+                      iconSize: 55,
                       onPressed: () {},
                     )
                   ],
@@ -307,33 +362,40 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               child: Container(
                 //color: Colors.blue,
-                margin: EdgeInsets.symmetric(
-                    //가로 세로 값 설정
-                    vertical: 0, // 세로축
-                    horizontal: 40 // 가로축
-                    ),
-                height: 140,
-                width: 190,
-                //color: Colors.red,
+                margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                // margin: EdgeInsets.symmetric( //가로 세로 값 설정
+                //     vertical: 0, // 세로축
+                //     horizontal: 40 // 가로축
+                // ),
+                height: 180,
+                width: 230,
                 child: Image.asset(
-                  "assets/images/speech-bubble.png",
-                  width: 200,
-                  height: 200,
+                  "assets/images/speech.png",
+                  fit: BoxFit.fill,
                 ),
               ),
             ),
             Positioned(
-              bottom: 70,
-              right: 75,
+              //sizebox만들어서 row colum center위젯
+              bottom: 55,
+              right: 20,
               child: Container(
-                //color: Colors.amber,
-                child: Text(coment.getComment()),
-              ),
+                  height: 110,
+                  width: 200,
+                  //color: Colors.amber,
+                  child: Center(
+                    child: Text(
+                      coment.coment,
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                  )),
             ),
             Positioned(
               bottom: 0,
-              right: 0,
+              right: 10,
               child: ElevatedButton(
+                //답변하면 지워야 하는데...
                 onPressed: () {
                   showDialog(
                       context: context,
@@ -392,7 +454,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 child: Text("답변하기"),
               ),
-            ),
+            )
           ],
         )
       ],
@@ -406,7 +468,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Positioned(
               child: AnimatedContainer(
-                  margin: EdgeInsets.fromLTRB(0, 60, 100, 0),
+                  margin: EdgeInsets.fromLTRB(0, 10, 100, 0),
                   height: 65,
                   width: 300,
                   decoration: BoxDecoration(
@@ -419,8 +481,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Positioned(
                 child: AnimatedContainer(
-              //color: Colors.deepPurple,
-              margin: EdgeInsets.fromLTRB(60, 60, 0, 0),
+              // color: Colors.deepPurple,
+              margin: EdgeInsets.fromLTRB(60, 10, 0, 0),
               height: 65,
               width: 65,
               duration: const Duration(seconds: 1),
@@ -429,13 +491,22 @@ class _MyHomePageState extends State<MyHomePage> {
               child: IconButton(
                 icon: Image.asset("assets/images/spoon.png"),
                 iconSize: 65,
-                onPressed: () {},
+                onPressed: () => setState(() {
+                  //setEndPressed(40);
+                  String temp = coment.coment;
+                  coment.setComment('맛나요');
+                  Future.delayed(Duration(seconds: 1), () {
+                    setState(() {
+                      coment.setComment(temp);
+                    });
+                  });
+                }),
               ),
             )),
             Positioned(
               child: AnimatedContainer(
-                //color: Colors.deepPurple,
-                margin: EdgeInsets.fromLTRB(130, 60, 0, 0),
+                // color: Colors.deepPurple,
+                margin: EdgeInsets.fromLTRB(130, 10, 0, 0),
                 height: 65,
                 width: 65,
                 duration: const Duration(seconds: 1),
@@ -444,14 +515,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: IconButton(
                   icon: Image.asset("assets/images/hand.png"),
                   iconSize: 65,
-                  onPressed: () {},
+                  onPressed: () => setState(() {
+                    String temp = coment.coment;
+                    coment.setComment('꺅');
+                    Future.delayed(Duration(seconds: 1), () {
+                      setState(() {
+                        coment.setComment(temp);
+                      });
+                    });
+                  }),
                 ),
               ),
             ),
             Positioned(
               child: AnimatedContainer(
-                //color: Colors.deepPurple,
-                margin: EdgeInsets.fromLTRB(200, 60, 0, 0),
+                // color: Colors.deepPurple,
+                margin: EdgeInsets.fromLTRB(200, 10, 0, 0),
                 height: 65,
                 width: 65,
                 duration: const Duration(seconds: 1),
@@ -460,7 +539,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: IconButton(
                   icon: Image.asset("assets/images/ball.png"),
                   iconSize: 65,
-                  onPressed: () {},
+                  onPressed: () => setState(() {
+                    String temp = coment.coment;
+                    coment.setComment('개신나노');
+                    Future.delayed(Duration(seconds: 1), () {
+                      setState(() {
+                        coment.setComment(temp);
+                      });
+                    });
+                  }),
                 ),
               ),
             ),
@@ -468,7 +555,7 @@ class _MyHomePageState extends State<MyHomePage> {
               //bottom: 120,
               //right: 0,
               child: Container(
-                margin: EdgeInsets.fromLTRB(0, 60, 100, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 100, 0),
                 height: 65,
                 width: 65,
                 color: Colors.blue,
@@ -489,5 +576,37 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       ],
     );
+  }
+
+  Widget Progress() {
+    return Container(
+        height: 450,
+        width: 80,
+        //color: Colors.amber,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          child: Row(
+            children: <Widget>[
+              FAProgressBar(
+                currentValue: _currentValue,
+                maxValue: 150,
+                size: 40,
+                animatedDuration: const Duration(milliseconds: 400),
+                direction: Axis.vertical,
+                verticalDirection: VerticalDirection.up,
+                borderRadius: BorderRadius.circular(0),
+                border: Border.all(
+                  color: Colors.indigo,
+                  width: 0.5,
+                ),
+                backgroundColor: Colors.white,
+                progressColor: Colors.green,
+                changeColorValue: 90,
+                changeProgressColor: Colors.red,
+                displayText: '점',
+              ),
+            ],
+          ),
+        ));
   }
 }
