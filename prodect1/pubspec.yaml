@@ -103,6 +103,9 @@ flutter:
      - assets/images/light_off.png
      - assets/images/food.png
      - assets/images/setting.png
+     - assets/images/letters.png
+     - assets/images/treasure_close.png
+     - assets/images/chest.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
