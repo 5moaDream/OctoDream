@@ -93,10 +93,16 @@ flutter:
      - assets/images/character.png
      - assets/images/shadow.png
      - assets/images/kakao_login.png
-     - assets/images/kakao_login_medium_narrow.png
      - assets/images/kakao_friend.png
      - assets/images/speech.png
      - assets/images/mainOctopus.gif
+     - assets/images/background.gif
+     - assets/images/first_octo.gif
+     - assets/images/octo_icon.png
+     - assets/images/light_on.png
+     - assets/images/light_off.png
+     - assets/images/food.png
+     - assets/images/setting.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
