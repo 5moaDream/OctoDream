@@ -30,10 +30,23 @@ class _datelist extends State<datelist> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlueAccent,
       body: Container(
         child: Stack(
           children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/background.gif'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+            ),
             Positioned(
               top: 400,
               left: 0,
@@ -47,67 +60,58 @@ class _datelist extends State<datelist> {
                 child: Image.asset('assets/images/left.png', height: 55),
               ),
             ),
-            Positioned(
-              child: Column(
+            Container(
+              height: 150,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    height: 150,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            color: Colors.grey,
-                            margin: EdgeInsets.only(right: 30, top: 30),
-                          ),
-                          onTap: () => {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => letters()))
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 550,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          width: 300,
-                          height: 400,
-                          color: Colors.grey,
-                          margin: EdgeInsets.only(bottom: 65),
-                          padding: EdgeInsets.only(
-                              top: 200, left: 30, right: 30, bottom: 30),
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.cyan,
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [memo(context), memo(context)],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [memo(context)],
-                                )
-                              ],
-                            ),
-                          ),
-                          //onTap: () => {},
-                        )
-                      ],
+                  InkWell(
+                    child: GestureDetector(
+                      onTap: () => {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => letters()))
+                      },
+                      child:
+                          Image.asset('assets/images/letters.png', height: 80),
                     ),
                   )
                 ],
               ),
+            ),
+            Stack(
+              children: [
+                Positioned(
+                  bottom: 75,
+                  left: 100,
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: ((context) {
+                            return AlertDialog(
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('2023.2.3 (수)'),
+                                  IconButton(
+                                    icon: Icon(Icons.close),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              ),
+                              content: Text(
+                                  '네 문어는 수면 문어구나! 너 수면 목표를 30일이나 지켰어?? 개부럽다 문어 잘 보고 간다! -지연-'),
+                            );
+                          }));
+                    },
+                    child: Image.asset('assets/images/chest.png',
+                        height: 200),
+                  ),
+                ),
+              ],
             ),
             Positioned(
               top: 400,
@@ -127,35 +131,4 @@ class _datelist extends State<datelist> {
       ),
     );
   }
-}
-
-Widget memo(BuildContext context) {
-  return InkWell(
-      child: Container(
-        width: 70,
-        height: 70,
-        color: Colors.white,
-      ),
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: ((context) {
-              return AlertDialog(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('2023.2.3 (수)'),
-                    IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                ),
-                content: Text(
-                    '네 문어는 수면 문어구나! 너 수면 목표를 30일이나 지켰어?? 개부럽다 문어 잘 보고 간다! -지연-'),
-              );
-            }));
-      });
 }
