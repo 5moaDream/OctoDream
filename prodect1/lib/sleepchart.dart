@@ -8,47 +8,79 @@ class sleepLineChart extends StatefulWidget {
   State<sleepLineChart> createState() => _LineChartState();
 }
 
+List<FlSpot> sleepdata = <FlSpot>[
+  FlSpot(0, 7),
+  FlSpot(1, 6),
+  FlSpot(2, 6),
+  FlSpot(3, 8),
+  FlSpot(4, 5),
+  FlSpot(5, 8),
+  FlSpot(6, 9),
+];
+
+List<FlSpot> monthsleepdata = <FlSpot>[
+  FlSpot(0, 7),
+  FlSpot(1, 6),
+  FlSpot(2, 6),
+];
+
 class _LineChartState extends State<sleepLineChart> {
+  late double touchedValue;
+
   List<Color> gradientColors = [
     Colors.cyan,
     Colors.blueAccent
+  ];
+
+  List<Color> arggradientColors = [
+    Color(0xFF77DDFF),
+    Color(0xFF748EF6),
   ];
 
   bool showAvg = false;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.70,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              right: 18,
-              left: 12,
-              top: 24,
-              bottom: 12,
+        Container(
+          padding: EdgeInsets.only(right: 30),
+          width: 100,
+          height: 24,
+          child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(18),
+                ),),
+                side: BorderSide(width: 1, color: Colors.white),
             ),
-            child: LineChart(
-              showAvg ? avgData() : mainData(),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 60,
-          height: 34,
-          child: TextButton(
             onPressed: () {
               setState(() {
                 showAvg = !showAvg;
               });
             },
             child: Text(
-              'avg',
+              showAvg? 'week' : 'month',
               style: TextStyle(
                 fontSize: 12,
-                color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white,
+                color: showAvg ? Colors.white : Colors.white,
               ),
+            ),
+          ),
+        ),
+        AspectRatio(
+          aspectRatio: 1.70,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              right: 30,
+              left: 12,
+              top: 10,
+              bottom: 12,
+            ),
+            child: LineChart(
+              showAvg ? avgData() : mainData(),
             ),
           ),
         ),
@@ -58,26 +90,32 @@ class _LineChartState extends State<sleepLineChart> {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
+        fontSize: 15,
+        color:Colors.white70
     );
     Widget text;
 
     switch (value.toInt()) {
+      case 0:
+        text = Text('${(sleepdata[0].x.toInt()+1).toString()}일', style: style);
+        break;
       case 1:
-        text = const Text('5/1', style: style);
+        text = Text('${(sleepdata[1].x.toInt()+1).toString()}일', style: style);
         break;
       case 2:
-        text = const Text('5/2', style: style);
+        text = Text('${(sleepdata[2].x.toInt()+1).toString()}일', style: style);
         break;
       case 3:
-        text = const Text('5/3', style: style);
+        text = Text('${(sleepdata[3].x.toInt()+1).toString()}일', style: style);
         break;
       case 4:
-        text = const Text('5/4', style: style);
+        text = Text('${(sleepdata[4].x.toInt()+1).toString()}일', style: style);
         break;
       case 5:
-        text = const Text('5/5', style: style);
+        text = Text('${(sleepdata[5].x.toInt()+1).toString()}일', style: style);
+        break;
+      case 6:
+        text = Text('${(sleepdata[6].x.toInt()+1).toString()}일', style: style);
         break;
       default:
         text = const Text('', style: style);
@@ -93,19 +131,20 @@ class _LineChartState extends State<sleepLineChart> {
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 15,
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+        color:Colors.white54
     );
     String text;
     switch (value.toInt()) {
-      case 1:
-        text = '0';
-        break;
       case 3:
-        text = '6';
+        text = '3h';
         break;
-      case 5:
-        text = '12';
+      case 6:
+        text = '6h';
+        break;
+      case 9:
+        text = '9h';
         break;
       default:
         return Container();
@@ -117,8 +156,118 @@ class _LineChartState extends State<sleepLineChart> {
     );
   }
 
+  // 최근 일주일
   LineChartData mainData() {
     return LineChartData(
+      lineTouchData: LineTouchData(
+        getTouchedSpotIndicator:
+            (LineChartBarData barData, List<int> spotIndexes) {
+          return spotIndexes.map((spotIndex) {
+            final spot = barData.spots[spotIndex];
+            if (spot.x == 0 || spot.x == 6) {
+              return null;
+            }
+            return TouchedSpotIndicatorData(
+              FlLine(
+                color: Colors.white24,
+                strokeWidth: 4,
+              ),
+              FlDotData(
+                // getDotPainter: (spot, percent, barData, index) {
+                //   return FlDotCirclePainter(
+                //     radius: 8,
+                //     color: Colors.white,
+                //     strokeWidth: 5,
+                //     strokeColor:
+                //     Colors.blue,
+                //   );
+                // },
+              ),
+            );
+          }).toList();
+        },
+        touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: Color(0xFF444974),
+          getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
+            return touchedBarSpots.map((barSpot) {
+              final flSpot = barSpot;
+              if (flSpot.x == 0 || flSpot.x == 6) {
+                return null;
+              }
+
+              TextAlign textAlign;
+              switch (flSpot.x.toInt()) {
+                case 1:
+                  textAlign = TextAlign.left;
+                  break;
+                case 5:
+                  textAlign = TextAlign.right;
+                  break;
+                default:
+                  textAlign = TextAlign.center;
+              }
+
+              return LineTooltipItem(
+                '${flSpot.x.toInt()}일 수면시간\n',
+                TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                children: [
+                  TextSpan(
+                    text: '${flSpot.y.toInt()}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const TextSpan(
+                    text: ' 시간 ',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
+                textAlign: TextAlign.center,
+              );
+            }).toList();
+          },
+        ),
+        touchCallback: (FlTouchEvent event, LineTouchResponse? lineTouch) {
+          if (!event.isInterestedForInteractions ||
+              lineTouch == null ||
+              lineTouch.lineBarSpots == null) {
+            setState(() {
+              touchedValue = -1;
+            });
+            return;
+          }
+          final value = lineTouch.lineBarSpots![0].x;
+
+          if (value == 0 || value == 6) {
+            setState(() {
+              touchedValue = -1;
+            });
+            return;
+          }
+
+          setState(() {
+            touchedValue = value;
+          });
+        },
+      ),
+      // 목표 수면시간
+      extraLinesData: ExtraLinesData(
+        horizontalLines: [
+          HorizontalLine(
+            y: 6.5,
+            color: Color(0xFFEAECFF),
+            strokeWidth: 2,
+            dashArray: [20, 10],
+          ),
+        ],
+      ),
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
@@ -126,13 +275,13 @@ class _LineChartState extends State<sleepLineChart> {
         verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: Colors.grey[400],
+            color: Colors.white10,
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: Colors.grey[400],
+            color: Colors.white10,
             strokeWidth: 1,
           );
         },
@@ -158,29 +307,22 @@ class _LineChartState extends State<sleepLineChart> {
             showTitles: true,
             interval: 1,
             getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
+            reservedSize: 36,
           ),
         ),
       ),
       borderData: FlBorderData(
         show: true,
-        border: Border.all(color: const Color(0xff37434d)),
+        border: Border.all(color: Colors.white10),
       ),
       minX: 0,
-      maxX: 11,
+      maxX: 6,
       minY: 0,
-      maxY: 6,
+      maxY: 10,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
-          ],
+          spots: sleepdata,
+          // 그래프 선 둥글게
           isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,
@@ -203,6 +345,44 @@ class _LineChartState extends State<sleepLineChart> {
     );
   }
 
+  Widget argbottomTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+        fontSize: 15,
+        color: Colors.white70
+    );
+    Widget text;
+
+    switch (value.toInt()) {
+      case 0:
+        text = Text('${(sleepdata[0].x.toInt()+1).toString()}월', style: style);
+        break;
+      case 1:
+        text = Text('${(sleepdata[1].x.toInt()+1).toString()}월', style: style);
+        break;
+      case 2:
+        text = Text('${(sleepdata[2].x.toInt()+1).toString()}월', style: style);
+        break;
+      case 3:
+        text = Text('${(sleepdata[3].x.toInt()+1).toString()}월', style: style);
+        break;
+      case 4:
+        text = Text('${(sleepdata[4].x.toInt()+1).toString()}월', style: style);
+        break;
+      case 5:
+        text = Text('${(sleepdata[5].x.toInt()+1).toString()}월', style: style);
+        break;
+      default:
+        text = const Text('', style: style);
+        break;
+    }
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: text,
+    );
+  }
+
+  // 평균 그래프
   LineChartData avgData() {
     return LineChartData(
       lineTouchData: LineTouchData(enabled: false),
@@ -211,15 +391,15 @@ class _LineChartState extends State<sleepLineChart> {
         drawHorizontalLine: true,
         verticalInterval: 1,
         horizontalInterval: 1,
-        getDrawingVerticalLine: (value) {
+        getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: const Color(0xff37434d),
+            color: Colors.white10,
             strokeWidth: 1,
           );
         },
-        getDrawingHorizontalLine: (value) {
+        getDrawingVerticalLine: (value) {
           return FlLine(
-            color: const Color(0xff37434d),
+            color: Colors.white10,
             strokeWidth: 1,
           );
         },
@@ -230,7 +410,7 @@ class _LineChartState extends State<sleepLineChart> {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 30,
-            getTitlesWidget: bottomTitleWidgets,
+            getTitlesWidget: argbottomTitleWidgets,
             interval: 1,
           ),
         ),
@@ -251,48 +431,43 @@ class _LineChartState extends State<sleepLineChart> {
       ),
       borderData: FlBorderData(
         show: true,
-        border: Border.all(color: const Color(0xff37434d)),
+        border: Border.all(color: Colors.white10),
       ),
       minX: 0,
-      maxX: 11,
+      maxX: 5,
       minY: 0,
-      maxY: 6,
+      maxY: 10,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3.44),
-            FlSpot(2.6, 3.44),
-            FlSpot(4.9, 3.44),
-            FlSpot(6.8, 3.44),
-            FlSpot(8, 3.44),
-            FlSpot(9.5, 3.44),
-            FlSpot(11, 3.44),
-          ],
+          spots: monthsleepdata,
           isCurved: true,
           gradient: LinearGradient(
             colors: [
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
+              ColorTween(begin: arggradientColors[0], end: arggradientColors[1])
                   .lerp(0.2)!,
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
+              ColorTween(begin: arggradientColors[0], end: arggradientColors[1])
                   .lerp(0.2)!,
             ],
           ),
           barWidth: 5,
           isStrokeCapRound: true,
           dotData: FlDotData(
-            show: false,
+            show: true,
           ),
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
-              colors: [
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-              ],
+               colors: arggradientColors
+                   .map((color) => color.withOpacity(0.3))
+                   .toList(),
+              // [
+              //   ColorTween(begin: arggradientColors[0], end: arggradientColors[1])
+              //       .lerp(0.2)!
+              //       .withOpacity(0.1),
+              //   ColorTween(begin: arggradientColors[0], end: arggradientColors[1])
+              //       .lerp(0.2)!
+              //       .withOpacity(0.1),
+              // ],
             ),
           ),
         ),

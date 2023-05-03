@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'calendar.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatefulWidget{
-  _dreamApp createState() => _dreamApp();
+void main() {
+  runApp(const MyApp());
 }
 
-class _dreamApp extends State<MyApp>{
+class MyApp extends StatelessWidget{
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context){
     return MaterialApp(
@@ -15,7 +16,16 @@ class _dreamApp extends State<MyApp>{
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: Calendar(),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: [
+        Locale('ko', 'KO'),
+        Locale('en', 'EN'),
+      ],
+      home: const Calendar(),
     );
   }
 }

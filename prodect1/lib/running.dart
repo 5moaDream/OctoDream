@@ -1,7 +1,7 @@
-import 'dart:math';
+import 'runningchart.dart';
 import'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
+import 'floatingbutton.dart';
 
 class running extends StatelessWidget {
 
@@ -11,66 +11,10 @@ class running extends StatelessWidget {
 
       // appBar에 AppBar 위젯을 가져온다.
       appBar: null,
-      floatingActionButton: floatingButtons(),
-
+      floatingActionButton: floatingButton(),
       body: SafeArea(
         child: myrunnig(),
       ), // 리스트 함수를 불러온다.
-    );
-  }
-
-  Widget floatingButtons() {
-    return SpeedDial(
-      animatedIcon: AnimatedIcons.menu_close,
-      visible: true,
-      curve: Curves.bounceIn,
-      backgroundColor: Colors.pink[200],
-      children: [
-        SpeedDialChild(
-            child: const Icon(Icons.calendar_month, color: Colors.white),
-            label: "캘린더",
-            labelStyle: const TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-                fontSize: 13.0),
-            backgroundColor: Colors.indigo.shade900,
-            labelBackgroundColor: Colors.indigo.shade900,
-            onTap: () {}),
-        SpeedDialChild(
-            child: const Icon(Icons.bed, color: Colors.white),
-            label: "수면",
-            labelStyle: const TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-                fontSize: 13.0),
-            backgroundColor: Colors.indigo.shade900,
-            labelBackgroundColor: Colors.indigo.shade900,
-            onTap: () {}),
-        SpeedDialChild(
-          child: const Icon(
-            Icons.run_circle_outlined,
-            color: Colors.white,
-          ),
-          label: "러닝",
-          backgroundColor: Colors.indigo.shade900,
-          labelBackgroundColor: Colors.indigo.shade900,
-          labelStyle: const TextStyle(
-              fontWeight: FontWeight.w500, color: Colors.white, fontSize: 13.0),
-          onTap: () {},
-        ),
-        SpeedDialChild(
-          child: const Icon(
-            Icons.add_chart_rounded,
-            color: Colors.white,
-          ),
-          label: "나의 기록",
-          backgroundColor: Colors.indigo.shade900,
-          labelBackgroundColor: Colors.indigo.shade900,
-          labelStyle: const TextStyle(
-              fontWeight: FontWeight.w500, color: Colors.white, fontSize: 13.0),
-          onTap: () {},
-        )
-      ],
     );
   }
 }
@@ -81,19 +25,21 @@ class myrunnig extends StatefulWidget {
 }
 
 class myList {
-  String day;
-  double sleep;
-  myList(this.day, this.sleep);
+  int month;
+  int day;
+  double time;
+  double km;
+  myList(this.month, this.day, this.time, this.km);
 }
 
 List<myList> mylist = <myList>[
-  myList('5/1', 0.5),
-  myList('5/2', 1.2),
-  myList('5/3', 1.28),
-  myList('5/4', 0.8),
-  myList('5/5', 1),
-  myList('5/6', 1.1),
-  myList('5/7', 1.24),
+  myList(5,1, 10.20, 1.01),
+  myList(5,2, 12, 1.2),
+  myList(5,3, 12.08, 1.28),
+  myList(5,4, 8, 0.8),
+  myList(5,5, 9.99, 1),
+  myList(5,6, 12, 1.1),
+  myList(5,7, 11, 1.24),
 ];
 
 class _myrunning extends State<myrunnig> {
@@ -101,271 +47,226 @@ class _myrunning extends State<myrunnig> {
   Widget build(BuildContext context) {
     // ListView.builder()에 구분선이 추가된 형태 => ListView.separated()
     return Container(
-          padding: EdgeInsets.only(bottom: 50),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFffd194),
+                //Color(0xFF556270),
+                Color(0xFF70e1f5),
+              ]
+          ),
+        ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Padding(
-                padding: EdgeInsets.only(top: 40, left: 30),
-              child: Text("러닝(5.7)",
-                style: TextStyle(
-                    fontSize: 22, fontWeight: FontWeight.bold
-                ),
-              ),
-            ),
-            Center(
-              child: Column(
-                children: [
-                  Text("0.56km",
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold
+            Container(
+                padding: EdgeInsets.only(top: 35, left: 30, bottom: 10),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.white70),
+                    )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text("금요일",
+                      style: TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xff373b44),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 24),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.75,
-                          child: FAProgressBar(
-                            backgroundColor: Colors.grey[100]!,
-                            borderRadius: BorderRadius.circular(30),
-                            currentValue: 56,
-                            displayText: '%',
-                            size: 40,
-                          ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text("2023.05.12",
+                        style: TextStyle(
+                          fontSize: 20, color: Colors.blueGrey,
                         ),
-                        Container(
-                          padding: EdgeInsets.only(top:5),
-                          width: MediaQuery.of(context).size.width*0.78,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("0",
-                              style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold
-                              ),
-                            ),
-                            Text("목표 : 1km",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold
-                              ),
-                            )
-                          ],
-                          )
-                        ),
-                      ],
-                    )
-                  ),
-                ],),
+                      ),
+                    ),
+                  ],
+                )
             ),
-            Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: CustomPaint(
-                  size: Size(340, 260),
-                  foregroundPainter: BarChart(
-                    data: mylist,
-                    sleepmax: 1.28,
-                    color: Colors.deepPurple,
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding:EdgeInsets.only(left:35, top:16),
+                  child: Row(
+                    children: [
+                      Text("러닝 거리 : ",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey
+                        ),
+                      ),
+                      Text("0.56km",
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff373b44)
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
+                Padding(
+                  padding: EdgeInsets.only(top: 12),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.75,
+                        child: FAProgressBar(
+                          progressColor: Color(0xFF4facfe),
+                          backgroundColor: Colors.grey[100]!,
+                          borderRadius: BorderRadius.circular(30),
+                          currentValue: 56,
+                          displayText: '%',
+                          size: 40,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(top:5),
+                        width: MediaQuery.of(context).size.width*0.78,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("0",
+                            style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold,
+                              color: Color(0xff373b44)
+                            ),
+                          ),
+                          Text("목표 : 1km",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold,
+                              color: Color(0xff373b44)
+                            ),
+                          )
+                        ],
+                        )
+                      ),
+                      _runninglist(),
+                    ],
+                  )
+                ),
+                Center(
+                  child: Padding(
+                      padding: EdgeInsets.only(top: 24),
+                      child: SizedBox(
+                        height: 254,
+                        width: MediaQuery.of(context).size.width,
+                        child: BarChartSample(),
+                      )
+                  ),
+                ),
+              ],),
     ])
         );
   }
-}
 
-class BarChart extends CustomPainter {
-  final Color color;
-  final List<myList> data;
-  final double sleepmax;
-  double bottomPadding = 0.0;
-  double leftPadding = 0.0;
-  double textScaleFactorXAxis = 1.0;
-  double textScaleFactorYAxis = 1.2;
-
-  BarChart({required this.data, required this.sleepmax, this.color = Colors.blue});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    // 텍스트 공간을 미리 정한다.
-    setTextPadding(size);
-
-    List<Offset> coordinates = getCoordinates(size);
-
-    drawBar(canvas, size, coordinates);
-    drawXLabels(canvas, size, coordinates);
-    drawYLabels(canvas, size, coordinates);
-    drawLines(canvas, size, coordinates);
-  }
-
-  @override
-  bool shouldRepaint(BarChart oldDelegate) {
-    return oldDelegate.data != data;
-  }
-
-  void setTextPadding(Size size) {
-    // 세로 크기의 1/10만큼 텍스트 패딩
-    bottomPadding = size.height / 10;
-    // 가로 길이 1/10만큼 텍스트 패딩
-    leftPadding = size.width / 20;
-  }
-
-  void drawBar(Canvas canvas, Size size, List<Offset> coordinates) {
-    Paint paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill
-      ..strokeCap = StrokeCap.round;
-
-    // 막대 그래프가 겹치지 않게 간격을 준다.
-    double barWidthMargin = size.width * 0.1;
-
-    for (int index = 0; index < coordinates.length; index++) {
-      Offset offset = coordinates[index];
-      double left = offset.dx;
-      // 간격만큼 가로로 이동
-      double right = offset.dx + barWidthMargin;
-      double top = offset.dy;
-      // 텍스트 크기만큼 패딩을 빼준다. 그래서 텍스트와 겹치지 않게 한다.
-      double bottom = size.height - bottomPadding;
-
-      Rect rect = Rect.fromLTRB(left, top, right, bottom);
-      canvas.drawRect(rect, paint);
-    }
-  }
-
-  // x축 텍스트(레이블)를 그린다.
-  void drawXLabels(Canvas canvas, Size size, List<Offset> coordinates) {
-    // 화면 크기에 따라 유동적으로 폰트 크기를 계산한다.
-    double fontSize = calculateFontSize(data[0].day, size, xAxis: true);
-
-    for (int index = 0; index < data.length; index++) {
-      TextSpan span = TextSpan(
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: fontSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w400,
+  Widget _runninglist(){
+    if(mylist[1].month != 0){
+      return Padding(
+        padding: const EdgeInsets.only(left: 34, right: 34, top: 40),
+        child: Container(
+          color: Colors.white.withOpacity(0.3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5, left: 5),
+                child: Text("기록", style: TextStyle(fontSize: 17,
+                    color: Color(0xff373b44), fontWeight: FontWeight.w500),),
+              ),
+              Center(
+                child: Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.85,
+                  height: 1.2,
+                  color: Colors.blueGrey[700],
+                ),
+              ),
+              SizedBox(
+                height: 90,
+                child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: ListView.builder(
+                        itemCount: mylist.length,
+                        itemBuilder: (BuildContext context, int i){
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(child: Text((i+1).toString(),
+                                style: TextStyle(color: Colors.blueGrey[700], fontSize: 16),)),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text("시간 : ", style: TextStyle(
+                                        color: Colors.blueGrey[700])),
+                                    Text(mylist[i].time.toString(),
+                                        style: TextStyle(
+                                            color: Color(0xff373b44), fontSize: 16, fontWeight: FontWeight.bold)
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text("거리 : ", style: TextStyle(
+                                        color: Colors.blueGrey[700])),
+                                    Text(mylist[i].km.toString() + "km",
+                                        style: TextStyle(
+                                            color: Color(0xff373b44), fontSize: 16, fontWeight: FontWeight.bold)
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          );
+                        }
+                    )
+                ),
+              ),
+            ],
+          ),
         ),
-        text: data[index].day,
       );
-      TextPainter tp =
-      TextPainter(text: span, textDirection: TextDirection.ltr);
-      tp.layout();
-
-      Offset offset = coordinates[index];
-      double dx = offset.dx;
-      double dy = size.height - tp.height;
-
-      tp.paint(canvas, Offset(dx, dy));
     }
-  }
-
-  // Y축 텍스트(레이블)를 그린다. 최저값과 최고값을 Y축에 표시한다.
-  void drawYLabels(Canvas canvas, Size size, List<Offset> coordinates) {
-    double bottomY = coordinates[0].dy;
-    double topY = coordinates[0].dy;
-    int indexOfMin = 0;
-    int indexOfMax = 0;
-
-    for (int index = 0; index < coordinates.length; index++) {
-      double dy = coordinates[index].dy;
-      if (bottomY < dy) {
-        bottomY = dy;
-        indexOfMin = index;
-      }
-      if (topY > dy) {
-        topY = dy;
-        indexOfMax = index;
-      }
+    else{
+      return Padding(
+        padding: const EdgeInsets.only(left: 34, right: 34, top: 20),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+              padding: const EdgeInsets.only(bottom: 5, top: 20),
+              child: 
+              Text("기록", style: TextStyle(fontSize: 16),),
+            ),
+              Center(
+                child: Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.85,
+                  height: 1,
+                  color: Colors.black,
+                ),
+              ),
+              Text("기록 없음")
+            ]
+        )
+      );
     }
-    String minValue = '${data[indexOfMin].sleep}';
-    String maxValue = '${data[indexOfMax].sleep.toInt()}';
-
-    drawYText(canvas, '0', 20, 220);
-    drawYText(canvas, minValue, 20, bottomY);
-    drawYText(canvas, maxValue, 20, topY);
-  }
-
-  // 화면 크기에 비례해 폰트 크기를 계산한다.
-  double calculateFontSize(String value, Size size, {required bool xAxis}) {
-    // 글자수에 따라 폰트 크기를 계산하기 위함
-    int numberOfCharacters = value.length;
-    // width가 600일 때 100글자를 적어야 한다면, fontSize는 글자 하나당 6이어야 한다.
-    double fontSize = (size.width / numberOfCharacters) / data.length;
-
-    if (xAxis) {
-      fontSize *= textScaleFactorXAxis;
-    } else {
-      fontSize *= textScaleFactorYAxis;
-    }
-    return fontSize;
-  }
-
-  // x축 & y축 구분하는 선을 그린다.
-  void drawLines(Canvas canvas, Size size, List<Offset> coordinates) {
-    Paint paint = Paint()
-      ..color = Colors.blueGrey[100]!
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.8;
-
-    double bottom = size.height - bottomPadding;
-    double left = coordinates[0].dx;
-
-    Path path = Path();
-    path.moveTo(left, 0);
-    path.lineTo(left, bottom);
-    path.lineTo(size.width, bottom);
-
-    canvas.drawPath(path, paint);
-  }
-
-  void drawYText(Canvas canvas, String text, double fontSize, double y) {
-    TextSpan span = TextSpan(
-      style: TextStyle(
-        fontSize: fontSize,
-        color: Colors.black,
-        fontFamily: 'Roboto',
-        fontWeight: FontWeight.w600,
-      ),
-      text: text,
-    );
-    TextPainter tp = TextPainter(text: span, textAlign: TextAlign.right, textDirection: TextDirection.ltr);
-
-    tp.layout();
-
-    Offset offset = Offset(-15.0, y);
-    tp.paint(canvas, offset);
-
-  }
-
-  List<Offset> getCoordinates(Size size) {
-    List<Offset> coordinates = <Offset>[];
-
-    double maxData = sleepmax;
-
-    double width = size.width - leftPadding;
-    double minBarWidth = width / data.length;
-
-    for (int index = 0; index < data.length; index++) {
-      // 그래프의 가로 위치를 정한다.
-      double left = minBarWidth * (index) + leftPadding;
-      // 그래프의 높이가 [0~1] 사이가 되도록 정규화 한다.
-      double normalized = data[index].sleep / maxData;
-      // x축에 표시되는 글자들과 겹치지 않게 높이에서 패딩을 제외한다.
-      double height = size.height - bottomPadding;
-      // 정규화된 값을 통해 높이를 구한다.
-      double top = height - normalized * height;
-
-      Offset offset = Offset(left, top);
-      coordinates.add(offset);
-    }
-
-    return coordinates;
   }
 }

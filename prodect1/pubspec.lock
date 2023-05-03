@@ -94,6 +94,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_speed_dial:
     dependency: "direct main"
     description:
@@ -163,14 +168,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.2"
-  pie_chart:
-    dependency: "direct main"
-    description:
-      name: pie_chart
-      sha256: "5dba6d0eb4718e8ed00a9079361cd8947c3f84ac5a5d76f05a27f4ec5e27589e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.3.2"
   simple_gesture_detector:
     dependency: transitive
     description:
@@ -249,5 +246,5 @@ packages:
     source: hosted
     version: "2.1.4"
 sdks:
-  dart: ">=2.19.0 <4.0.0"
+  dart: ">=2.19.0 <3.0.0"
   flutter: ">=2.5.0"
