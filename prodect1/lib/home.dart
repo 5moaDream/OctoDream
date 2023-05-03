@@ -73,8 +73,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int state = 0;
   List<String> Light = [
-    "assets/images/light1.png", //0
-    "assets/images/light2.png", //1
+    "assets/images/light_on.png", //0
+    "assets/images/light_off.png", //1
   ];
 
   double value = 0.0;
@@ -116,118 +116,122 @@ class _MyHomePageState extends State<MyHomePage> {
           child: SingleChildScrollView(
         child: Stack(
           children: [
-            Column(
-              //crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  height: 170,
-                  //color: Colors.cyan,
-                  padding:
-                      EdgeInsets.only(bottom: 0, left: 0, top: 0, right: 0),
-                  child: Row(
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/background.gif'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              child: Column(
+                //crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 170,
+                    //color: Colors.cyan,
+                    padding:
+                        EdgeInsets.only(bottom: 0, left: 0, top: 0, right: 0),
+                    child: Row(
+                      children: [
+                        Container(
+                          //color: Colors.red,
+                          height: 160,
+                          width: 190,
+                          padding: EdgeInsets.only(
+                              bottom: 0, left: 20, top: 90, right: 0),
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        user.getNickName(),
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 2.0,
+                                            fontFamily: 'Neo'),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Image.asset('assets/images/setting.png',
+                                            height: 25),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              bottom: 0, left: 0, top: 0, right: 0),
+                          height: 160,
+                          width: 190,
+                          //color: Colors.deepOrange,
+                          child: Menu(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Container(
-                        //color: Colors.red,
-                        height: 160,
-                        width: 190,
-                        padding: EdgeInsets.only(
-                            bottom: 0, left: 20, top: 90, right: 0),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
+                        height: 500,
+                        //color: Colors.green,
+                        child: Row(
+                          children: [
+                            Column(
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      user.getNickName(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 2.0,
-                                          fontFamily: 'Neo'),
-                                    ),
-                                    IconButton(
-                                      //설정
-                                      icon: Icon(Icons.settings),
-                                      color: Colors.grey, // Icon 색상 설정
-                                      iconSize: 30.0, //아이콘 크기
-                                      onPressed: () {
-                                        Navigator.of(context).push(MaterialPageRoute(
-                                            builder: (context) => Setting(title: '설정')));
-                                      }, //클릭시 실행할 코드
-                                    ),
-                                  ],
+                                Answer(),
+                                ColorFiltered(
+                                  colorFilter: ColorFilter.mode(
+                                      Colors.transparent, BlendMode.color),
+                                  child: Image.asset(
+                                      'assets/images/first_octo.gif',
+                                      height: 120),
                                 ),
                               ],
                             )
                           ],
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            bottom: 0, left: 0, top: 0, right: 0),
-                        height: 160,
-                        width: 190,
-                        //color: Colors.deepOrange,
-                        child: Menu(),
-                      ),
                     ],
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      height: 500,
-                      //color: Colors.green,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 80,
-                            //color: Colors.cyanAccent,
-                            child: Progress(),
-                          ),
-                          Column(
-                            children: [
-                              Answer(),
-                              Container(
-                                //문어 넣을 곳
-                                height: 230,
-                                width: 270,
-                                color: Colors.red,
-                                child: Image.asset(
-                                  "assets/images/mainOctopus.gif",
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 400,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Datelist()),
-                          );
-                        },
-                        child:
-                            Image.asset('assets/images/right.png', height: 60),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  height: 100,
-                  //color:Colors.amber,
-                  child: Bag(),
-                ),
-              ],
+                  Container(
+                    height: 100,
+                    //color:Colors.amber,
+                    child: Bag(),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 400,
+              right: 10,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Datelist()),
+                  );
+                },
+                child: Image.asset('assets/images/right.png',
+                    height: 60),
+              ),
             ),
           ],
         ),
@@ -371,6 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //     vertical: 0, // 세로축
                 //     horizontal: 40 // 가로축
                 // ),
+
                 height: 180,
                 width: 230,
                 child: Image.asset(
@@ -493,7 +498,7 @@ class _MyHomePageState extends State<MyHomePage> {
               curve: Curves.easeInOut,
               transform: Matrix4.translationValues(value, 0, 0),
               child: IconButton(
-                icon: Image.asset("assets/images/spoon.png"),
+                icon: Image.asset("assets/images/food.png"),
                 iconSize: 65,
                 onPressed: () => setState(() {
                   //setEndPressed(40);
@@ -582,35 +587,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget Progress() {
-    return Container(
-        height: 450,
-        width: 80,
-        //color: Colors.amber,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-          child: Row(
-            children: <Widget>[
-              FAProgressBar(
-                currentValue: _currentValue,
-                maxValue: 150,
-                size: 40,
-                animatedDuration: const Duration(milliseconds: 400),
-                direction: Axis.vertical,
-                verticalDirection: VerticalDirection.up,
-                borderRadius: BorderRadius.circular(0),
-                border: Border.all(
-                  color: Colors.indigo,
-                  width: 0.5,
-                ),
-                backgroundColor: Colors.white,
-                progressColor: Colors.green,
-                changeColorValue: 90,
-                changeProgressColor: Colors.red,
-                displayText: '점',
-              ),
-            ],
-          ),
-        ));
-  }
 }

@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'friend_home.dart';
-import 'home.dart';
+import 'Datelist.dart';
 
 class Friends extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class Friends extends StatefulWidget {
 }
 
 class _Friends extends State<Friends> {
-  int _friend_cnt = 9;
+  int _friend_cnt = 3;
   List myFriend = ['영주', '혜원', '찬영', '광휘', '지연', '은진'];
 
   void _minus() {
@@ -22,6 +22,7 @@ class _Friends extends State<Friends> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightBlueAccent,
       body: SafeArea(
         child: Stack(
           children: [
@@ -32,7 +33,7 @@ class _Friends extends State<Friends> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MyHomePage()),
+                    MaterialPageRoute(builder: (context) => Datelist()),
                   );
                 },
                 child: Image.asset('assets/images/left.png', height: 55),
@@ -59,14 +60,14 @@ class _Friends extends State<Friends> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            for (int j = 0; j < 3; j++) ...[
+
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(myFriend[i + j].toString(),
+                                  Text(myFriend[i].toString(),
                                       style: TextStyle(fontSize: 20)),
-                                  Image.asset('assets/images/character.png',
-                                      width: 100),
+                                  Image.asset('assets/images/first_octo.gif',
+                                      width: 100, height: 100,),
                                   Container(
                                     width: 100,
                                     height: 30,
@@ -83,7 +84,7 @@ class _Friends extends State<Friends> {
                                   )
                                 ],
                               ),
-                            ],
+
                           ],
                         ),
                       ],
