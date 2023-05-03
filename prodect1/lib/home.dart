@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:prodect1/setting.dart';
 
 //import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'Datelist.dart';
@@ -151,7 +152,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                       icon: Icon(Icons.settings),
                                       color: Colors.grey, // Icon 색상 설정
                                       iconSize: 30.0, //아이콘 크기
-                                      onPressed: () {}, //클릭시 실행할 코드
+                                      onPressed: () {
+                                        Navigator.of(context).push(MaterialPageRoute(
+                                            builder: (context) => Setting(title: '설정')));
+                                      }, //클릭시 실행할 코드
                                     ),
                                   ],
                                 ),
