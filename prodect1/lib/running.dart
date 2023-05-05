@@ -250,7 +250,7 @@ class _myrunning extends State<myrunnig> {
             children: [
               Padding(
               padding: const EdgeInsets.only(bottom: 5, top: 20),
-              child: 
+              child:
               Text("기록", style: TextStyle(fontSize: 16),),
             ),
               Center(

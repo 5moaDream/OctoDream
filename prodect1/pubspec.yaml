@@ -28,21 +28,30 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+
+  kakao_flutter_sdk: ^1.4.1
+  dio: ^4.0.6
+  json_annotation: ^4.8.0
+  shared_preferences: ^2.1.0
+  platform: ^3.1.0
+  package_info_plus: ^3.1.0
+
   table_calendar: ^3.0.6
-  intl: ^0.17.0
+  intl: ^0.18.0
   flutter_speed_dial: ^6.2.0
   flutter_animation_progress_bar: ^2.3.1
   fl_chart: ^0.61.0
+  http: ^0.13.5
 
   flutter:
     sdk: flutter
-  flutter_localizations:
-    sdk: flutter
+  android_intent: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  url_launcher: ^6.0.3
 
 dev_dependencies:
   flutter_test:
@@ -67,9 +76,35 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+     - assets/images/speech-bubble.png
+     - assets/images/bagIcon.png
+     - assets/images/ball.png
+     - assets/images/hand.png
+     - assets/images/spoon.png
+     - assets/images/calendar.png
+     - assets/images/light1.png
+     - assets/images/octopus.png
+     - assets/images/running.png
+     - assets/images/light2.png
+     - assets/images/right.png
+     - assets/images/left.png
+     - assets/images/character.png
+     - assets/images/shadow.png
+     - assets/images/kakao_login.png
+     - assets/images/kakao_friend.png
+     - assets/images/speech.png
+     - assets/images/mainOctopus.gif
+     - assets/images/background.gif
+     - assets/images/first_octo.gif
+     - assets/images/octo_icon.png
+     - assets/images/light_on.png
+     - assets/images/light_off.png
+     - assets/images/food.png
+     - assets/images/setting.png
+     - assets/images/letters.png
+     - assets/images/treasure_close.png
+     - assets/images/chest.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -82,6 +117,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Neo
+      fonts:
+        - asset: assets/fonts/font1.ttf
+          weight: 700
   # fonts:
   #   - family: Schyler
   #     fonts:
