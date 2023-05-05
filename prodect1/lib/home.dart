@@ -107,149 +107,137 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //상중하를 나눠주는 위젯
-      backgroundColor: Colors.white,
-      body: SafeArea(
-          //body는 중간 내용 영역
-          // color: Colors.blue,
-          // height: 750,
-          //padding: EdgeInsets.fromLTRB(0, 0, 0, 0),//padding을 통해 좌우 여백 지정
-          child: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/background.gif'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
+      body: Container(
+          padding: EdgeInsets.only(top: 40),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.gif'),
+              fit: BoxFit.fill,
             ),
-            Positioned(
-              child: Column(
-                //crossAxisAlignment: CrossAxisAlignment.stretch,
+          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 170,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    height: 170,
-                    //color: Colors.cyan,
-                    padding:
-                        EdgeInsets.only(bottom: 0, left: 0, top: 0, right: 0),
-                    child: Row(
-                      children: [
-                        Container(
-                          //color: Colors.red,
-                          height: 160,
-                          width: 190,
-                          padding: EdgeInsets.only(
-                              bottom: 0, left: 20, top: 90, right: 0),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        user.getNickName(),
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 2.0,
-                                            fontFamily: 'Neo'),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: Image.asset('assets/images/setting.png',
-                                            height: 25),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              bottom: 0, left: 0, top: 0, right: 0),
-                          height: 160,
-                          width: 190,
-                          //color: Colors.deepOrange,
-                          child: Menu(),
-                        ),
+                    height: 160,
+                    width: 190,
+                    padding: EdgeInsets.only(
+                        bottom: 0, left: 20, top: 90, right: 0),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            Text(
+                              user.getNickName(),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 2.0,
+                                  fontFamily: 'Neo'),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => Setting(title: '설정',)));
+                              },
+                              child: Image.asset('assets/images/setting.png',
+                                  height: 25),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        height: 500,
-                        //color: Colors.green,
-                        child: Row(
-                          children: [
-                            Column(
-                              children: [
-                                Answer(),
-                                ColorFiltered(
-                                  colorFilter: ColorFilter.mode(
-                                      Colors.transparent, BlendMode.color),
-                                  child: Image.asset(
-                                      'assets/images/first_octo.gif',
-                                      height: 120),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
                   Container(
-                    height: 100,
-                    //color:Colors.amber,
-                    child: Bag(),
+                    height: 160,
+                    width: 190,
+                    //color: Colors.deepOrange,
+                    child: Menu(),
                   ),
                 ],
               ),
             ),
-            Positioned(
-              top: 400,
-              right: 10,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Datelist()),
-                  );
-                },
-                child: Image.asset('assets/images/right.png',
-                    height: 60),
+            SizedBox(
+              height: 380,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(child: Container()),
+                  Column(
+                    children: [
+                      Answer(),
+                      ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                            Colors.transparent, BlendMode.color),
+                        child: Image.asset(
+                            'assets/images/first_octo.gif',
+                            height: 120),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Datelist()),
+                              );
+                            },
+                            child: Image.asset('assets/images/right.png',
+                                height: 60),
+                          ),
+                        ],
+                      )
+                  )
+                ],
               ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: Text("경험치", style: TextStyle(
+                      fontWeight: FontWeight.bold,fontSize: 16),),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width*0.75,
+                  child: FAProgressBar(
+                    backgroundColor: Colors.grey[100]!,
+                    borderRadius: BorderRadius.circular(30),
+                    currentValue: 56,
+                    displayText: '%',
+                    size: 26,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              height: 80,
+              child: Bag(),
             ),
           ],
         ),
-      )),
+      ),
     );
   }
 
   Widget Menu() {
     return Container(
         padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-        // margin: EdgeInsets.symmetric( //가로 세로 값 설정
-        //   vertical: 50, // 세로축
-        //   horizontal: 0, // 가로축
-        // ),
         height: 135,
         width: 160,
         decoration: BoxDecoration(
-          color: Colors.grey,
+          color: Colors.blueGrey.withOpacity(0.5),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -367,21 +355,14 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         Stack(
           children: [
-            Positioned(
-              child: Container(
-                //color: Colors.blue,
-                margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                // margin: EdgeInsets.symmetric( //가로 세로 값 설정
-                //     vertical: 0, // 세로축
-                //     horizontal: 40 // 가로축
-                // ),
-
-                height: 180,
-                width: 230,
-                child: Image.asset(
-                  "assets/images/speech.png",
-                  fit: BoxFit.fill,
-                ),
+            Container(
+              //color: Colors.blue,
+              margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+              height: 180,
+              width: 230,
+              child: Image.asset(
+                "assets/images/speech.png",
+                fit: BoxFit.fill,
               ),
             ),
             Positioned(
@@ -414,14 +395,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             title: Text('다이어리'),
                             content: SingleChildScrollView(
                                 child: Column(
-                              children: [
-                                TextField(
-                                  controller: myController,
-                                  decoration:
+                                  children: [
+                                    TextField(
+                                      controller: myController,
+                                      decoration:
                                       InputDecoration(hintText: '내용을 입력해 주세요'),
-                                ),
-                              ],
-                            )),
+                                    ),
+                                  ],
+                                )),
                             actions: [
                               TextButton(
                                 child: Text('닫기'),
@@ -438,9 +419,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                         barrierDismissible: false,
                                         builder: (BuildContext context) {
                                           Future.delayed(Duration(seconds: 1),
-                                              () {
-                                            Navigator.pop(context);
-                                          });
+                                                  () {
+                                                Navigator.pop(context);
+                                              });
                                           return AlertDialog(
                                             content: SingleChildScrollView(
                                                 child: new Text("내용을 입력하세요.")),
@@ -457,7 +438,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             shape: RoundedRectangleBorder(
                               //다이어로그 창 둥글게
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
+                              BorderRadius.all(Radius.circular(20)),
                             ));
                       });
                 },
@@ -479,7 +460,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: AnimatedContainer(
                   margin: EdgeInsets.fromLTRB(0, 10, 100, 0),
                   height: 65,
-                  width: 300,
+                  width: 294,
                   decoration: BoxDecoration(
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(50),
@@ -491,7 +472,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
                 child: AnimatedContainer(
               // color: Colors.deepPurple,
-              margin: EdgeInsets.fromLTRB(60, 10, 0, 0),
+              margin: EdgeInsets.fromLTRB(70, 10, 0, 0),
               height: 65,
               width: 65,
               duration: const Duration(seconds: 1),

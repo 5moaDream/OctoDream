@@ -31,103 +31,96 @@ class _datelist extends State<datelist> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Stack(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.gif'),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/background.gif'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 400,
-              left: 0,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyHomePage()),
-                  );
-                },
-                child: Image.asset('assets/images/left.png', height: 55),
-              ),
-            ),
-            Container(
-              height: 150,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+            SizedBox(
+              width: MediaQuery.of(context).size.width*0.2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InkWell(
+                  Padding(padding: EdgeInsets.only(top: 80)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
                     child: GestureDetector(
-                      onTap: () => {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => letters()))
-                      },
-                      child:
-                          Image.asset('assets/images/letters.png', height: 80),
-                    ),
-                  )
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyHomePage()),);},
+                      child: Image.asset('assets/images/left.png', height: 55),),
+                  ),
+                  Container(),
                 ],
               ),
             ),
-            Stack(
-              children: [
-                Positioned(
-                  bottom: 75,
-                  left: 100,
-                  child: GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: ((context) {
-                            return AlertDialog(
-                              title: Row(
-                                mainAxisAlignment:
+            Expanded(
+                child:
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 50),
+                    child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: ((context) {
+                                return AlertDialog(
+                                  title: Row(
+                                    mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('2023.2.3 (수)'),
-                                  IconButton(
-                                    icon: Icon(Icons.close),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  )
-                                ],
-                              ),
-                              content: Text(
-                                  '네 문어는 수면 문어구나! 너 수면 목표를 30일이나 지켰어?? 개부럽다 문어 잘 보고 간다! -지연-'),
-                            );
-                          }));
-                    },
-                    child: Image.asset('assets/images/chest.png',
-                        height: 200),
-                  ),
+                                    children: [
+                                      Text('2023.2.3 (수)'),
+                                      IconButton(
+                                        icon: Icon(Icons.close),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                  content: Text(
+                                      '네 문어는 수면 문어구나! 너 수면 목표를 30일이나 지켰어?? 개부럽다 문어 잘 보고 간다! -지연-'),
+                                );
+                              }));
+                        },
+                        child: Image.asset('assets/images/chest.png',
+                            height: 200),
+                    ),
+                  ),),
+            SizedBox(
+              width: MediaQuery.of(context).size.width*0.2,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      child: GestureDetector(
+                        onTap: () => {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => letters()))},
+                        child:
+                        Image.asset('assets/images/letters.png', height: 80),),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Friends()),);                    },
+                      child: Image.asset('assets/images/right.png', height: 60),),
+                    Container()
+                  ],
                 ),
-              ],
-            ),
-            Positioned(
-              top: 400,
-              right: 0,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Friends()),
-                  );
-                },
-                child: Image.asset('assets/images/right.png', height: 60),
               ),
-            ),
+            )
           ],
-        ),
+        )
       ),
     );
   }
