@@ -39,49 +39,64 @@ class _mydiary extends State<mydiary> {
   @override
   Widget build(BuildContext context) {
     // ListView.builder()에 구분선이 추가된 형태 => ListView.separated()
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.only(top: 20, left: 30, bottom: 10),
-          child: Text("일기",
-            style: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/background.gif'),
+          fit: BoxFit.fill,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 20, left: 30, bottom: 10),
+            child: Text("일기",
+              style: TextStyle(
+                fontSize: 22, fontWeight: FontWeight.bold
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: ListView.separated(
-            padding: const EdgeInsets.fromLTRB(10, 8, 8, 8),
-            itemCount: mylist.length, //리스트 개수
-            // itemBuilder 리스트에서 반복되는 Contaniner(항목) 형태
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                leading: Icon(Icons.hourglass_bottom,
-                  color: Colors.blueGrey[200], size: 40,),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(mylist[index].day,
-                      style: TextStyle(
-                        fontSize: 18,
-                        // fontWeight: FontWeight.bold 폰트 굵기
-                      ),),
-                    Text(mylist[index].text,
-                      style: TextStyle(
-                        fontSize: 16,
-                        // fontWeight: FontWeight.bold 폰트 굵기
-                      ),),
-                  ],
+          Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width*0.9,
+              height: MediaQuery.of(context).size.height*0.85,
+              color:Colors.white.withOpacity(0.82),
+              child: ListView.separated(
+                padding: EdgeInsets.fromLTRB(10, 12, 8, 8),
+                itemCount: mylist.length, //리스트 개수
+                // itemBuilder 리스트에서 반복되는 Contaniner(항목) 형태
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: Icon(Icons.hourglass_bottom,
+                      color: Colors.blueGrey, size: 40,),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(mylist[index].day,
+                          style: TextStyle(
+                            fontSize: 18,
+                            // fontWeight: FontWeight.bold 폰트 굵기
+                          ),),
+                        Text(mylist[index].text,
+                          style: TextStyle(
+                            fontSize: 16,
+                            // fontWeight: FontWeight.bold 폰트 굵기
+                          ),),
+                      ],
+                    ),
+                    onTap: (){},
+                  ); },
+                separatorBuilder: (BuildContext context, int index) => const Divider(
+                  color: Colors.black12, // 리스트 구분선 색
                 ),
-                onTap: (){},
-              ); },
-            separatorBuilder: (BuildContext context, int index) => const Divider(
-              color: Colors.black12, // 리스트 구분선 색
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

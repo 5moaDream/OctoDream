@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:prodect1/dictionary.dart';
 import 'package:prodect1/setting.dart';
 
 //import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
@@ -203,19 +204,21 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: Text("경험치", style: TextStyle(
-                      fontWeight: FontWeight.bold,fontSize: 16),),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 8, right: 8),
+                //   child: Text("경험치", style: TextStyle(
+                //       fontWeight: FontWeight.bold,fontSize: 16),),
+                // ),
                 Container(
                   width: MediaQuery.of(context).size.width*0.75,
                   child: FAProgressBar(
+                    progressColor : Colors.yellow,
                     backgroundColor: Colors.grey[100]!,
                     borderRadius: BorderRadius.circular(30),
                     currentValue: 56,
-                    displayText: '%',
+                    displayText: '경험치',
                     size: 26,
                   ),
                 ),
@@ -253,7 +256,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 60,
                   ),
                   iconSize: 55,
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false, //바깥영역 터치시 닫을지
+                      builder: (BuildContext context) {
+                        return dictionary();
+                      });
+                    }
                 ),
                 IconButton(
                   icon: Image.asset(

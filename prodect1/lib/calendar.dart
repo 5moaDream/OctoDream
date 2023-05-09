@@ -58,191 +58,200 @@ class _Calendar extends State<Calendar> {
       appBar: null,
       floatingActionButton: floatingButton(),
 
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: TableCalendar(
-                locale: 'ko_KR',
-                firstDay: DateTime.utc(2023, 1, 16),
-                lastDay: DateTime.utc(2030, 3, 14),
-                focusedDay: focusedDay,
-                onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-                  // 선택된 날짜의 상태를 갱신합니다.
-                  setState(() {
-                    this.selectedDay = selectedDay;
-                    this.focusedDay = focusedDay;
-                  });
-                },
-                selectedDayPredicate: (DateTime day) {
-                  // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
-                  return isSameDay(selectedDay, day);
-                },
-                calendarStyle: CalendarStyle(
-                  isTodayHighlighted: false,
-                  selectedDecoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.deepPurple, width: 1.0),
-                  ),
-                  outsideDecoration: BoxDecoration(shape: BoxShape.rectangle),
-                  defaultTextStyle: defaultTextStyle,
-                  weekendTextStyle: defaultTextStyle,
-                  selectedTextStyle: defaultTextStyle.copyWith(color: Colors.deepPurple),
-                ),
-                headerStyle: HeaderStyle(
-                  titleCentered: true,
-                  titleTextFormatter: (date, locale) =>
-                      DateFormat.yMMMM(locale).format(date),
-                  formatButtonVisible: false,
-                  titleTextStyle: const TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                  headerPadding: const EdgeInsets.symmetric(vertical: 4.0),
-                  leftChevronIcon: const Icon(
-                    Icons.arrow_left,
-                    size: 30.0,
-                  ),
-                  rightChevronIcon: const Icon(
-                    Icons.arrow_right,
-                    size: 30.0,
-                  ),
-                ),
-                eventLoader: _getEventsForDay,
-                calendarBuilders: CalendarBuilders(
-                  markerBuilder: (context, date, events) {
-                    if (events.isNotEmpty) {
-                      return _buildEventsMarker(date, events);
-                    }
-                    return null;
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.gif'),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TableCalendar(
+                  locale: 'ko_KR',
+                  firstDay: DateTime.utc(2023, 1, 16),
+                  lastDay: DateTime.utc(2030, 3, 14),
+                  focusedDay: focusedDay,
+                  onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+                    // 선택된 날짜의 상태를 갱신합니다.
+                    setState(() {
+                      this.selectedDay = selectedDay;
+                      this.focusedDay = focusedDay;
+                    });
                   },
+                  selectedDayPredicate: (DateTime day) {
+                    // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
+                    return isSameDay(selectedDay, day);
+                  },
+                  calendarStyle: CalendarStyle(
+                    isTodayHighlighted: false,
+                    selectedDecoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.deepPurple, width: 1.0),
+                    ),
+                    outsideDecoration: BoxDecoration(shape: BoxShape.rectangle),
+                    defaultTextStyle: defaultTextStyle,
+                    weekendTextStyle: defaultTextStyle,
+                    selectedTextStyle: defaultTextStyle.copyWith(color: Colors.deepPurple),
+                  ),
+                  headerStyle: HeaderStyle(
+                    titleCentered: true,
+                    titleTextFormatter: (date, locale) =>
+                        DateFormat.yMMMM(locale).format(date),
+                    formatButtonVisible: false,
+                    titleTextStyle: const TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    headerPadding: const EdgeInsets.symmetric(vertical: 4.0),
+                    leftChevronIcon: const Icon(
+                      Icons.arrow_left,
+                      size: 30.0,
+                    ),
+                    rightChevronIcon: const Icon(
+                      Icons.arrow_right,
+                      size: 30.0,
+                    ),
+                  ),
+                  eventLoader: _getEventsForDay,
+                  calendarBuilders: CalendarBuilders(
+                    markerBuilder: (context, date, events) {
+                      if (events.isNotEmpty) {
+                        return _buildEventsMarker(date, events);
+                      }
+                      return null;
+                    },
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: ListView(
-                children: _getEventsForDay(selectedDay)
-                    .map((event) => Container(
-                    padding: EdgeInsets.only(top: 5),
-                    child: Column(
-                      children: [
-                        Container(
-                            padding: EdgeInsets.fromLTRB(20, 10, 16, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  DateFormat('yyyy.MM.dd', 'ko').format(selectedDay)
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold,
-                                      height: 2.0
-                                  ),
-                                ),
-                              ],
-                            )
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.94,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15), //모서리를 둥글게
-                              border: Border.all(color: Colors.black12, width: 3),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Icon(Icons.account_balance_wallet,
-                                  color: Colors.deepPurple, size: 34,),
-                                Container(
-                                  padding: EdgeInsets.only(left: 16),
-                                  width: MediaQuery.of(context).size.width*0.8,
-                                  child: Text("${event.diary}",
+              Expanded(
+                child: ListView(
+                  children: _getEventsForDay(selectedDay)
+                      .map((event) => Container(
+                      padding: EdgeInsets.only(top: 5),
+                      child: Column(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.fromLTRB(20, 10, 16, 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    DateFormat('yyyy.MM.dd', 'ko').format(selectedDay)
+                                        .toString(),
                                     style: TextStyle(
-                                      fontSize: 16,
-                                    ),),
-                                )
-                              ],
+                                        fontSize: 20, fontWeight: FontWeight.bold,
+                                        height: 2.0
+                                    ),
+                                  ),
+                                ],
+                              )
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width*0.94,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15), //모서리를 둥글게
+                                border: Border.all(color: Colors.cyan[100]!, width: 2),
+                              color: Colors.white.withOpacity(0.7),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.account_balance_wallet,
+                                    color: Colors.deepPurple, size: 34,),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 16),
+                                    width: MediaQuery.of(context).size.width*0.8,
+                                    child: Text("${event.diary}",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                padding: EdgeInsets.only(top: 20,left: 20),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text("수면: ",
-                                          style: TextStyle(
-                                              fontSize: 14, fontWeight: FontWeight.bold
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.only(top: 20,left: 20),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text("수면: ",
+                                            style: TextStyle(
+                                                fontSize: 14, fontWeight: FontWeight.bold
+                                            ),
                                           ),
-                                        ),
-                                        Text("8시간",
-                                          style: TextStyle(
-                                              fontSize: 18, fontWeight: FontWeight.bold
+                                          Text("8시간",
+                                            style: TextStyle(
+                                                fontSize: 18, fontWeight: FontWeight.bold
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 10),
-                                      child: CustomPaint( // CustomPaint를 그리고 이 안에 차트를 그려줍니다..
-                                        size: Size(120, 120), // CustomPaint의 크기는 가로 세로 150, 150으로 합니다.
-                                        painter: PieChart(
-                                          goal: 12,
-                                          percentage: 8, // 파이 차트가 얼마나 칠해져 있는지 정하는 변수입니다.
-                                          textScaleFactor: 1.0,),
+                                        ],
                                       ),
-                                    )
-                                  ],
-                                )
-                            ),
-                            Container(
-                                padding: EdgeInsets.only(top: 20,right: 40),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text("러닝: ",
-                                          style: TextStyle(
-                                              fontSize: 14, fontWeight: FontWeight.bold
-                                          ),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 10),
+                                        child: CustomPaint( // CustomPaint를 그리고 이 안에 차트를 그려줍니다..
+                                          size: Size(120, 120), // CustomPaint의 크기는 가로 세로 150, 150으로 합니다.
+                                          painter: PieChart(
+                                            goal: 12,
+                                            percentage: 8, // 파이 차트가 얼마나 칠해져 있는지 정하는 변수입니다.
+                                            textScaleFactor: 1.0,),
                                         ),
-                                        Text("0.78km",
-                                          style: TextStyle(
-                                              fontSize: 18, fontWeight: FontWeight.bold
+                                      )
+                                    ],
+                                  )
+                              ),
+                              Container(
+                                  padding: EdgeInsets.only(top: 20,right: 40),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text("러닝: ",
+                                            style: TextStyle(
+                                                fontSize: 14, fontWeight: FontWeight.bold
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 10),
-                                      child: CustomPaint( // CustomPaint를 그리고 이 안에 차트를 그려줍니다..
-                                        size: Size(120, 120), // CustomPaint의 크기는 가로 세로 150, 150으로 합니다.
-                                        painter: PieChart(
-                                          goal: 1,
-                                          percentage: 0.78, // 파이 차트가 얼마나 칠해져 있는지 정하는 변수입니다.
-                                          textScaleFactor: 1.0,),
+                                          Text("0.78km",
+                                            style: TextStyle(
+                                                fontSize: 18, fontWeight: FontWeight.bold
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    )
-                                  ],
-                                )
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                ))
-                    .toList(),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 10),
+                                        child: CustomPaint( // CustomPaint를 그리고 이 안에 차트를 그려줍니다..
+                                          size: Size(120, 120), // CustomPaint의 크기는 가로 세로 150, 150으로 합니다.
+                                          painter: PieChart(
+                                            goal: 1,
+                                            percentage: 0.78, // 파이 차트가 얼마나 칠해져 있는지 정하는 변수입니다.
+                                            textScaleFactor: 1.0,),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                  ))
+                      .toList(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

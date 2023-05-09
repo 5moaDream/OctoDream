@@ -15,10 +15,6 @@ void main() async{
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget{
-  _dreamApp createState() => _dreamApp();
-}
-
 class MyApp extends StatelessWidget{
   const MyApp({Key? key}) : super(key: key);
 

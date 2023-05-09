@@ -48,124 +48,122 @@ class _myrunning extends State<myrunnig> {
     // ListView.builder()에 구분선이 추가된 형태 => ListView.separated()
     return Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFFffd194),
-                //Color(0xFF556270),
-                Color(0xFF70e1f5),
-              ]
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.gif'),
+            fit: BoxFit.fill,
           ),
         ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-                padding: EdgeInsets.only(top: 35, left: 30, bottom: 10),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: Colors.white70),
-                    )),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text("금요일",
-                      style: TextStyle(
-                        fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xff373b44),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text("2023.05.12",
-                        style: TextStyle(
-                          fontSize: 20, color: Colors.blueGrey,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-            ),
-
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding:EdgeInsets.only(left:35, top:16),
+          child: Container(
+            color: Colors.blue.withOpacity(0.4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                  padding: EdgeInsets.only(top: 35, left: 30, bottom: 10),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.white70),
+                      )),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("러닝 거리 : ",
+                      Text("금요일",
                         style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueGrey
+                          fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xff373b44),
                         ),
                       ),
-                      Text("0.56km",
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff373b44)
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 12),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width*0.75,
-                        child: FAProgressBar(
-                          progressColor: Color(0xFF4facfe),
-                          backgroundColor: Colors.grey[100]!,
-                          borderRadius: BorderRadius.circular(30),
-                          currentValue: 56,
-                          displayText: '%',
-                          size: 40,
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top:5),
-                        width: MediaQuery.of(context).size.width*0.78,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("0",
-                            style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold,
-                              color: Color(0xff373b44)
-                            ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text("2023.05.12",
+                          style: TextStyle(
+                            fontSize: 20, color: Colors.blueGrey,
                           ),
-                          Text("목표 : 1km",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold,
-                              color: Color(0xff373b44)
-                            ),
-                          )
-                        ],
-                        )
+                        ),
                       ),
-                      _runninglist(),
                     ],
                   )
-                ),
-                Center(
-                  child: Padding(
-                      padding: EdgeInsets.only(top: 24),
-                      child: SizedBox(
-                        height: 254,
-                        width: MediaQuery.of(context).size.width,
-                        child: BarChartSample(),
-                      )
+              ),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding:EdgeInsets.only(left:35, top:16),
+                    child: Row(
+                      children: [
+                        Text("러닝 거리 : ",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueGrey
+                          ),
+                        ),
+                        Text("0.56km",
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff373b44)
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],),
-    ])
+                  Padding(
+                    padding: EdgeInsets.only(top: 12),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.75,
+                          child: FAProgressBar(
+                            progressColor: Color(0xFF4facfe),
+                            backgroundColor: Colors.grey[100]!,
+                            borderRadius: BorderRadius.circular(30),
+                            currentValue: 56,
+                            displayText: '%',
+                            size: 40,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top:5),
+                          width: MediaQuery.of(context).size.width*0.78,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("0",
+                              style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold,
+                                color: Color(0xff373b44)
+                              ),
+                            ),
+                            Text("목표 : 1km",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold,
+                                color: Color(0xff373b44)
+                              ),
+                            )
+                          ],
+                          )
+                        ),
+                        _runninglist(),
+                      ],
+                    )
+                  ),
+                  Center(
+                    child: Padding(
+                        padding: EdgeInsets.only(top: 24),
+                        child: SizedBox(
+                          height: 254,
+                          width: MediaQuery.of(context).size.width,
+                          child: BarChartSample(),
+                        )
+                    ),
+                  ),
+                ],),
+    ]),
+          )
         );
   }
 

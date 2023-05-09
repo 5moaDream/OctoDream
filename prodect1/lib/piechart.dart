@@ -69,7 +69,7 @@ class PieChartSample3State extends State {
           );
         case 1:
           return PieChartSectionData(
-            color: Color(0xFFEAECFF),
+            color: Color(0xFFEAECFF).withOpacity(0.7),
             value: 40,
             title: "",
             radius: radius,

@@ -336,7 +336,7 @@ class _LineChartState extends State<sleepLineChart> {
             show: true,
             gradient: LinearGradient(
               colors: gradientColors
-                  .map((color) => color.withOpacity(0.3))
+                  .map((color) => color.withOpacity(0.4))
                   .toList(),
             ),
           ),
@@ -458,7 +458,7 @@ class _LineChartState extends State<sleepLineChart> {
             show: true,
             gradient: LinearGradient(
                colors: arggradientColors
-                   .map((color) => color.withOpacity(0.3))
+                   .map((color) => color.withOpacity(0.4))
                    .toList(),
               // [
               //   ColorTween(begin: arggradientColors[0], end: arggradientColors[1])
