@@ -472,24 +472,39 @@ class _MyHomePageState extends State<MyHomePage> {
               child: AnimatedContainer(
                   margin: EdgeInsets.fromLTRB(0, 10, 100, 0),
                   height: 65,
-                  width: 294,
+                  width: 300,
                   decoration: BoxDecoration(
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(50),
                   ),
                   duration: const Duration(seconds: 1),
                   curve: Curves.easeInOut,
-                  transform: Matrix4.translationValues(value, 0, 0)),
+                  transform: Matrix4.translationValues(value-10, 0, 0)),
+            ),
+            Positioned(
+              child: AnimatedContainer(
+                // color: Colors.deepPurple,
+                margin: EdgeInsets.fromLTRB(66, 15, 0, 0),
+                height: 65,
+                width: 4,
+                duration: const Duration(seconds: 1),
+                curve: Curves.easeInOut,
+                transform: Matrix4.translationValues(value-5, 0, 0),
+                child: Text(
+                  '|',
+                  style: TextStyle(fontSize: 45)
+                ),
+              ),
             ),
             Positioned(
                 child: AnimatedContainer(
               // color: Colors.deepPurple,
-              margin: EdgeInsets.fromLTRB(75, 10, 0, 0),
+              margin: EdgeInsets.fromLTRB(80, 10, 0, 0),
               height: 65,
               width: 65,
               duration: const Duration(seconds: 1),
               curve: Curves.easeInOut,
-              transform: Matrix4.translationValues(value, 0, 0),
+              transform: Matrix4.translationValues(value-5, 0, 0),
               child: IconButton(
                 icon: Image.asset("assets/images/food.png"),
                 iconSize: 65,
@@ -508,12 +523,12 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               child: AnimatedContainer(
                 // color: Colors.deepPurple,
-                margin: EdgeInsets.fromLTRB(135, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(140, 10, 0, 0),
                 height: 65,
                 width: 65,
                 duration: const Duration(seconds: 1),
                 curve: Curves.easeInOut,
-                transform: Matrix4.translationValues(value, 0, 0),
+                transform: Matrix4.translationValues(value-5, 0, 0),
                 child: IconButton(
                   icon: Image.asset("assets/images/hand.png"),
                   iconSize: 65,
@@ -532,12 +547,12 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               child: AnimatedContainer(
                 // color: Colors.deepPurple,
-                margin: EdgeInsets.fromLTRB(205, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(210, 10, 0, 0),
                 height: 65,
                 width: 65,
                 duration: const Duration(seconds: 1),
                 curve: Curves.easeInOut,
-                transform: Matrix4.translationValues(value, 0, 0),
+                transform: Matrix4.translationValues(value-5, 0, 0),
                 child: IconButton(
                   icon: Image.asset("assets/images/ball.png"),
                   iconSize: 65,
