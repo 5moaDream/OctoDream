@@ -74,6 +74,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool _diaryState = false;
   bool _isDisplayed = false;
+  int _octoState = 0;
 
   void _displayAnswer() {
     setState(() {
@@ -183,17 +184,37 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Expanded(child: Container()),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (_isDisplayed) Answer(),
-                      ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                            Colors.transparent, BlendMode.color),
-                        child: Image.asset(
-                            'assets/images/first_octo.gif',
-                            height: 120),
-                      ),
-                      SizedBox(height: 40),
+                      if (_octoState == 1)
+                        ColorFiltered(
+                          colorFilter: ColorFilter.mode(
+                              Colors.transparent, BlendMode.color),
+                          child: Image.asset(
+                              'assets/images/baby_food.gif', height: 145),
+                        )
+                      else if (_octoState == 2)
+                        ColorFiltered(
+                          colorFilter: ColorFilter.mode(
+                              Colors.transparent, BlendMode.color),
+                          child: Image.asset(
+                              'assets/images/baby_hand.gif', height: 120),
+                        )
+                      else if (_octoState == 3)
+                          ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                                Colors.transparent, BlendMode.color),
+                            child: Image.asset(
+                                'assets/images/baby_ball.gif', height: 150),
+                          )
+                        else
+                          ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                                Colors.transparent, BlendMode.color),
+                            child: Image.asset(
+                                'assets/images/first_octo.gif', height: 120),
+                          ),
                     ],
                   ),
                   Expanded(
@@ -530,11 +551,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           //setEndPressed(40);
                           String temp = coment.coment;
                           _displayAnswer();
+                          _octoState = 1;
                           coment.setComment('맛나요');
-                          Future.delayed(Duration(seconds: 1), () {
+                          Future.delayed(Duration(seconds: 3), () {
                             setState(() {
                               coment.setComment(temp);
                               _isDisplayed = false;
+                              _octoState = 0;
                             });
                           });
                         }),
@@ -556,11 +579,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         String temp = coment.coment;
                         coment.setComment('꺅');
+                        _octoState = 2;
                         _displayAnswer();
-                        Future.delayed(Duration(seconds: 1), () {
+                        Future.delayed(Duration(seconds: 3), () {
                           setState(() {
                             coment.setComment(temp);
                             _isDisplayed = false;
+                            _octoState = 0;
                           });
                         });
                       }),
@@ -583,11 +608,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         String temp = coment.coment;
                         coment.setComment('개신나노');
+                        _octoState = 3;
                         _displayAnswer();
-                        Future.delayed(Duration(seconds: 1), () {
+                        Future.delayed(Duration(seconds: 3), () {
                           setState(() {
                             coment.setComment(temp);
                             _isDisplayed = false;
+                            _octoState = 0;
                           });
                         });
                       }),
