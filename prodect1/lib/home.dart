@@ -117,6 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
@@ -225,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             Container(
-              height: 80,
+              height: 100,
               child: Bag(),
             ),
           ],
@@ -235,12 +236,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget Menu() {
+    Color blueColor = Color(0xFF00BFFF).withOpacity(0.5);
     return Container(
         padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
         height: 135,
         width: 160,
         decoration: BoxDecoration(
-          color: Colors.blueGrey.withOpacity(0.5),
+          color: blueColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -371,7 +373,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 180,
               width: 230,
               child: Image.asset(
-                "assets/images/speech.png",
+                "assets/images/chat.png",
                 fit: BoxFit.fill,
               ),
             ),
@@ -482,7 +484,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
                 child: AnimatedContainer(
               // color: Colors.deepPurple,
-              margin: EdgeInsets.fromLTRB(70, 10, 0, 0),
+              margin: EdgeInsets.fromLTRB(75, 10, 0, 0),
               height: 65,
               width: 65,
               duration: const Duration(seconds: 1),
@@ -506,7 +508,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               child: AnimatedContainer(
                 // color: Colors.deepPurple,
-                margin: EdgeInsets.fromLTRB(130, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(135, 10, 0, 0),
                 height: 65,
                 width: 65,
                 duration: const Duration(seconds: 1),
@@ -530,7 +532,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               child: AnimatedContainer(
                 // color: Colors.deepPurple,
-                margin: EdgeInsets.fromLTRB(200, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(205, 10, 0, 0),
                 height: 65,
                 width: 65,
                 duration: const Duration(seconds: 1),
