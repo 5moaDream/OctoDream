@@ -72,17 +72,19 @@ class _Friends extends State<Friends> {
                                 ),
                                 Image.asset('assets/images/first_octo.gif',
                                   width: 100, height: 100,),
-                                Container(
-                                  width: 100,
-                                  height: 26,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      colorFilter: ColorFilter.mode(
-                                          Colors.black.withOpacity(0.1),
-                                          BlendMode.modulate),
-                                      fit: BoxFit.fill,
-                                      image: AssetImage(
-                                          'assets/images/shadow.png'),
+                                Expanded(
+                                  child: Container(
+                                    width: 100,
+                                    height: 26,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        colorFilter: ColorFilter.mode(
+                                            Colors.black.withOpacity(0.1),
+                                            BlendMode.modulate),
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            'assets/images/shadow.png'),
+                                      ),
                                     ),
                                   ),
                                 )
