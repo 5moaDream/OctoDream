@@ -72,7 +72,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  bool _diaryState = false;
   bool _isDisplayed = false;
 
   void _displayAnswer() {
@@ -412,11 +412,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   )),
             ),
             Positioned(
-              bottom: 0,
+              bottom: 60,
               right: 10,
-              child: ElevatedButton(
-                //답변하면 지워야 하는데...
-                onPressed: () {
+              child: _diaryState ? GestureDetector(
+                onTap: () {
                   showDialog(
                       context: context,
                       barrierDismissible: false, //바깥영역 터치시 닫을지
@@ -472,8 +471,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ));
                       });
                 },
-                child: Text("답변하기"),
-              ),
+                child: Image.asset('assets/images/pencil.png', height: 30),
+              ): Container(),
             )
           ],
         )

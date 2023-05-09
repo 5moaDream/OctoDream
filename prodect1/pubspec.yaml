@@ -77,35 +77,27 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     - assets/images/speech-bubble.png
-     - assets/images/bagIcon.png
-     - assets/images/ball.png
-     - assets/images/hand.png
-     - assets/images/spoon.png
-     - assets/images/calendar.png
-     - assets/images/light1.png
-     - assets/images/octopus.png
-     - assets/images/running.png
-     - assets/images/light2.png
-     - assets/images/right.png
-     - assets/images/left.png
-     - assets/images/character.png
-     - assets/images/shadow.png
-     - assets/images/kakao_login.png
-     - assets/images/kakao_friend.png
-     - assets/images/speech.png
-     - assets/images/mainOctopus.gif
-     - assets/images/background.gif
-     - assets/images/first_octo.gif
-     - assets/images/octo_icon.png
-     - assets/images/light_on.png
-     - assets/images/light_off.png
-     - assets/images/food.png
-     - assets/images/setting.png
-     - assets/images/letters.png
-     - assets/images/treasure_close.png
-     - assets/images/chest.png
-     - assets/images/chat.png
+     - assets/images/bagIcon.png # 문어 상호작용 아이콘 모음
+     - assets/images/ball.png # 문어 놀아주기 아이콘
+     - assets/images/hand.png # 문어 만지기 아이콘
+     - assets/images/calendar.png # 캘린더 아이콘
+     - assets/images/octopus.png # 문어 아이콘
+     - assets/images/running.png # 러닝 아이콘
+     - assets/images/right.png # 오른쪽 화살표
+     - assets/images/left.png # 왼쪽 화살표
+     - assets/images/shadow.png # 친구목록 문어 그림자
+     - assets/images/kakao_login.png # 카카오 로그인 버튼
+     - assets/images/background.gif # 배경
+     - assets/images/first_octo.gif # 메인 문어
+     - assets/images/light_on.png # 조명 on
+     - assets/images/light_off.png # 조명 off
+     - assets/images/food.png # 음식
+     - assets/images/setting.png # 설정
+     - assets/images/letters.png # 전체 방명록
+     - assets/images/treasure_close.png # 새 방명록 미존재
+     - assets/images/chest.png # 새 방명록 존재
+     - assets/images/chat.png # 말풍선
+     - assets/images/pencil.png # 다이어리 작성 아이콘
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
