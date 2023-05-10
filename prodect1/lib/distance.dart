@@ -40,9 +40,13 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
   }
 
   void _updateDistance(Position position) {
+    if (_lastPosition == null) {
+      _lastPosition = position;
+      return;
+    }
     double newDistance = _distance + Geolocator.distanceBetween(
-      _distance == 0 ? position.latitude : _lastPosition.latitude,
-      _distance == 0 ? position.longitude : _lastPosition.longitude,
+      _lastPosition.latitude,
+      _lastPosition.longitude,
       position.latitude,
       position.longitude,
     );
