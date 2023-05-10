@@ -60,7 +60,7 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
       position.longitude,
     );
     setState(() {
-      _distance = newDistance;
+      _distance = newDistance / 1000;
     });
     _lastPosition = position;
   }
@@ -74,25 +74,37 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      //backgroundColor: Colors.indigo,
+      backgroundColor: Colors.white70,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('거리 측정'),
+          Text('거리 측정',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 23,
+              color: Colors.black87,
+            ),
+          ),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
                   visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
-                  icon: Icon(Icons.settings),
+                  icon: Icon(Icons.settings,
+                    color: Colors.black87,
+                    size: 28,
+                  ),
                   onPressed: () {
                     //달리기 설정 화면
                   },
                 ),
                 IconButton(
                   visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
-                  icon: Icon(Icons.close),
+                  icon: Icon(Icons.close,
+                    color: Colors.black87,
+                    size: 30,
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -110,23 +122,24 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
               Positioned(
                 child: Image.asset('assets/images/playground.png'),
               ),
-              Positioned(
-                top: 30,
-                left: 100,
-                child: Text(_isMeasuring ? '측정 중' : '측정 시작'),
-              ),
+              // Positioned(
+              //   top: 30,
+              //   left: 100,
+              //   child: Text(_isMeasuring ? '측정 중' : '측정 시작'),
+              // ),
               Positioned(
                 top: 70,
-                left: 50,
-                child: Text('${_distance.toStringAsFixed(2)}m / ${goalDistance}km',
+                left: 45,
+                child: Text('${_distance.toStringAsFixed(2)}km / ${goalDistance}km',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 27
+                      fontSize: 25,
+                      color: Colors.black54,
                   ),),
               ),
             ],
           ),
-          OutlinedButton(
+          TextButton(
             onPressed: () {
               if (!_isMeasuring) {
                 _startMeasuringDistance();
@@ -135,7 +148,12 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
                 _stopMeasuringDistance();
               }
             },
-            child: Text(_isMeasuring ? "FINISH!" : "START!"),
+            child: Text(_isMeasuring ? "FINISH..." : "START!",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.red,
+              ),),
           )
         ],
       ),
