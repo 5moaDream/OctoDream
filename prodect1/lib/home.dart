@@ -7,6 +7,7 @@ import 'package:prodect1/setting.dart';
 //import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'Datelist.dart';
 import 'calendar.dart';
+import 'distance.dart';
 
 void main() {
   runApp(const MyApp());
@@ -350,7 +351,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 60,
                       ),
                       iconSize: 55,
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return DistanceTrackerDialog();
+                            }
+                        );
+                      },
                     )
                   ],
                 )
