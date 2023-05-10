@@ -17,10 +17,19 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
   bool _isMeasuring = false;
   late Position _lastPosition;
 
-  void _startMeasuringDistance() {
+  void _startMeasuringDistance() async{
     setState(() {
       _isMeasuring = true;
     });
+
+    // Get the initial position
+    Geolocator.getCurrentPosition().then((position) {
+      if (position != null) {
+        _lastPosition = position;
+      }
+    });
+
+    LocationPermission permission = await Geolocator.checkPermission();
     _positionStreamSubscription = Geolocator.getPositionStream().listen((position) {
       if (position != null) {
         _updateDistance(position);
@@ -45,8 +54,8 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
       return;
     }
     double newDistance = _distance + Geolocator.distanceBetween(
-      _lastPosition.latitude,
-      _lastPosition.longitude,
+      _lastPosition == null ? position.latitude : _lastPosition!.latitude,
+      _lastPosition == null ? position.longitude : _lastPosition!.longitude,
       position.latitude,
       position.longitude,
     );
@@ -111,8 +120,8 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
                 left: 50,
                 child: Text('${_distance.toStringAsFixed(2)}m / ${goalDistance}km',
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 27
+                      fontWeight: FontWeight.bold,
+                      fontSize: 27
                   ),),
               ),
             ],
