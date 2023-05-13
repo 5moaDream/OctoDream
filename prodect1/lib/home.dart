@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:prodect1/dictionary.dart';
 import 'package:prodect1/setting.dart';
 
+
 //import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'Datelist.dart';
 import 'calendar.dart';
@@ -165,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             SizedBox(
-              height: 380,
+              height: 400,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -179,6 +180,47 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Image.asset(
                             'assets/images/first_octo.gif',
                             height: 120),
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 26)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width*0.8,
+                            height: 26,
+                            decoration:BoxDecoration(
+                                color: Colors.white.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Colors.blueGrey,
+                                    width: 2
+                                )
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10, right: 5),
+                                  child: Icon(Icons.favorite, color: Colors.blue, size: 22,),
+                                ),
+                                Expanded(
+                                  child: FAProgressBar(
+                                    backgroundColor: Colors.white.withOpacity(0.2),
+                                    progressColor: Colors.cyan,
+                                    borderRadius: BorderRadius.circular(30),
+                                    currentValue: 56,
+                                    displayText: '  ',
+                                    displayTextStyle: TextStyle(
+                                      color: Colors.black, fontSize: 16,
+                                    ),
+                                    size: 22,
+                                    formatValueFixed: 0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -195,34 +237,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               );
                             },
                             child: Image.asset('assets/images/right.png',
-                                height: 60),
+                                height: 60, color: Colors.black38.withOpacity(0.2),),
                           ),
                         ],
                       )
                   )
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8, right: 8),
-                //   child: Text("경험치", style: TextStyle(
-                //       fontWeight: FontWeight.bold,fontSize: 16),),
-                // ),
-                Container(
-                  width: MediaQuery.of(context).size.width*0.75,
-                  child: FAProgressBar(
-                    progressColor : Colors.yellow,
-                    backgroundColor: Colors.grey[100]!,
-                    borderRadius: BorderRadius.circular(30),
-                    currentValue: 56,
-                    displayText: '경험치',
-                    size: 26,
-                  ),
-                ),
-              ],
             ),
             Container(
               height: 80,
