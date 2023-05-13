@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.prodect1">
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
         android:label="prodect1"
         android:name="${applicationName}"
@@ -10,7 +13,7 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="kakao 0d8641b383ce6ac9788b8c877fdd33fb" android:host="oauth"/>
+                <data android:scheme="kakao0d8641b383ce6ac9788b8c877fdd33fb" android:host="oauth"/>
             </intent-filter>
         </activity>
         <activity
