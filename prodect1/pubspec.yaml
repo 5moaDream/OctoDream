@@ -102,7 +102,6 @@ flutter:
      - assets/images/baby_ball.gif # 아기문어 놀아주기
      - assets/images/baby_food.gif # 아기문어 먹이주기
      - assets/images/baby_hand.gif # 아기문어 쓰다듬기
-     - assets/images/playground.png
      - assets/images/playground.png #달리기 트랙
 
   # An image asset can refer to one or more resolution-specific "variants", see
