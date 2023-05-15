@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:prodect1/dictionary.dart';
 import 'package:prodect1/setting.dart';
 
+
 //import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'Datelist.dart';
 import 'calendar.dart';
@@ -62,8 +63,8 @@ class MyApp extends StatelessWidget {
         //   scaffoldBackgroundColor: Colors.white,
         // ),
         home: MyHomePage()
-        //const MyHomePage(title: 'Flutter Demo Home Page'),
-        );
+      //const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
   }
 }
 
@@ -111,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget buildFloatingButton(String text, VoidCallback callback) {
     TextStyle roundTextStyle =
-        const TextStyle(fontSize: 16.0, color: Colors.white);
+    const TextStyle(fontSize: 16.0, color: Colors.white);
     return new FloatingActionButton(
         child: new Text(text, style: roundTextStyle), onPressed: callback);
   }
@@ -140,8 +141,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   Container(
                     height: 160,
                     width: 190,
-                    padding:
-                        EdgeInsets.only(bottom: 0, left: 20, top: 90, right: 0),
+                    padding: EdgeInsets.only(
+                        bottom: 0, left: 20, top: 90, right: 0),
                     child: Column(
                       children: <Widget>[
                         Row(
@@ -158,9 +159,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => Setting(
-                                          title: '설정',
-                                        )));
+                                    builder: (context) =>
+                                        Setting(title: '설정',)));
                               },
                               child: Image.asset('assets/images/setting.png',
                                   height: 25),
@@ -180,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             SizedBox(
-              height: 380,
+              height: 400,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -193,27 +193,50 @@ class _MyHomePageState extends State<MyHomePage> {
                         ColorFiltered(
                           colorFilter: ColorFilter.mode(
                               Colors.transparent, BlendMode.color),
-                          child: Image.asset('assets/images/first_octo.gif',
-                              height: 120),
-                        ),
+                          child: Image.asset(
+                              'assets/images/baby_food.gif', height: 145),
+                        )
+                      else if (_octoState == 2)
+                        ColorFiltered(
+                          colorFilter: ColorFilter.mode(
+                              Colors.transparent, BlendMode.color),
+                          child: Image.asset(
+                              'assets/images/baby_hand.gif', height: 120),
+                        )
+                      else if (_octoState == 3)
+                          ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                                Colors.transparent, BlendMode.color),
+                            child: Image.asset(
+                                'assets/images/baby_ball.gif', height: 150),
+                          )
+                        else
+                          ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                                Colors.transparent, BlendMode.color),
+                            child: Image.asset(
+                                'assets/images/first_octo.gif', height: 120),
+                          ),
                     ],
                   ),
                   Expanded(
                       child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Datelist()),
-                          );
-                        },
-                        child:
-                            Image.asset('assets/images/right.png', height: 60),
-                      ),
-                    ],
-                  ))
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Datelist()),
+                              );
+                            },
+                            child: Image.asset('assets/images/right.png',
+                                height: 60, color: Colors.black38.withOpacity(0.2),),
+                          ),
+                        ],
+                      )
+                  )
                 ],
               ),
             ),
@@ -226,7 +249,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 //       fontWeight: FontWeight.bold,fontSize: 16),),
                 // ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.75,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.75,
                   child: FAProgressBar(
                     progressColor: Colors.yellow,
                     backgroundColor: Colors.grey[100]!,
@@ -278,7 +304,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           builder: (BuildContext context) {
                             return dictionary();
                           });
-                    }),
+                    }
+                ),
                 IconButton(
                   icon: Image.asset(
                     "assets/images/calendar.png",
@@ -323,17 +350,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                       ElevatedButton(
                                         child: Text('예'),
-                                        onPressed: () => setState(() {
-                                          state = 1;
-                                          coment.setComment('나 자께요');
-                                          Navigator.of(context).pop();
-                                        }),
+                                        onPressed: () =>
+                                            setState(() {
+                                              state = 1;
+                                              coment.setComment('나 자께요');
+                                              Navigator.of(context).pop();
+                                            }),
                                       )
                                     ],
                                     shape: RoundedRectangleBorder(
                                       //다이얼로그 창 둥글게
                                       borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
+                                      BorderRadius.all(Radius.circular(20)),
                                     ));
                               } else {
                                 return AlertDialog(
@@ -342,16 +370,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                     actions: [
                                       ElevatedButton(
                                         child: Text('예'),
-                                        onPressed: () => setState(() {
-                                          state = 0;
-                                          Navigator.of(context).pop();
-                                        }),
+                                        onPressed: () =>
+                                            setState(() {
+                                              state = 0;
+                                              Navigator.of(context).pop();
+                                            }),
                                       )
                                     ],
                                     shape: RoundedRectangleBorder(
                                       //다이얼로그 창 둥글게
                                       borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
+                                      BorderRadius.all(Radius.circular(20)),
                                     ));
                               }
                             });
@@ -369,7 +398,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             context: context,
                             builder: (BuildContext context) {
                               return DistanceTrackerDialog();
-                            });
+                            }
+                        );
                       },
                     )
                   ],
@@ -414,70 +444,65 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               bottom: 60,
               right: 10,
-              child: _diaryState
-                  ? GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false, //바깥영역 터치시 닫을지
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: Text('다이어리'),
-                                  content: SingleChildScrollView(
-                                      child: Column(
-                                    children: [
-                                      TextField(
-                                        controller: myController,
-                                        decoration: InputDecoration(
-                                            hintText: '내용을 입력해 주세요'),
-                                      ),
-                                    ],
-                                  )),
-                                  actions: [
-                                    TextButton(
-                                      child: Text('닫기'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
+              child: _diaryState ? GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false, //바깥영역 터치시 닫을지
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                            title: Text('다이어리'),
+                            content: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    TextField(
+                                      controller: myController,
+                                      decoration:
+                                      InputDecoration(hintText: '내용을 입력해 주세요'),
                                     ),
-                                    ElevatedButton(
-                                      child: Text('저장'),
-                                      onPressed: () {
-                                        if (myController.text == "") {
-                                          showDialog(
-                                              context: context,
-                                              barrierDismissible: false,
-                                              builder: (BuildContext context) {
-                                                Future.delayed(
-                                                    Duration(seconds: 1), () {
-                                                  Navigator.pop(context);
-                                                });
-                                                return AlertDialog(
-                                                  content:
-                                                      SingleChildScrollView(
-                                                          child: new Text(
-                                                              "내용을 입력하세요.")),
-                                                );
-                                              });
-                                        } else {
-                                          diary.saveDiary(myController.text);
-                                          diary.printDiary();
-                                          Navigator.of(context).pop();
-                                        }
-                                      },
-                                    )
                                   ],
-                                  shape: RoundedRectangleBorder(
-                                    //다이어로그 창 둥글게
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
-                                  ));
-                            });
-                      },
-                      child:
-                          Image.asset('assets/images/pencil.png', height: 30),
-                    )
-                  : Container(),
+                                )),
+                            actions: [
+                              TextButton(
+                                child: Text('닫기'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              ElevatedButton(
+                                child: Text('저장'),
+                                onPressed: () {
+                                  if (myController.text == "") {
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          Future.delayed(Duration(seconds: 1),
+                                                  () {
+                                                Navigator.pop(context);
+                                              });
+                                          return AlertDialog(
+                                            content: SingleChildScrollView(
+                                                child: new Text("내용을 입력하세요.")),
+                                          );
+                                        });
+                                  } else {
+                                    diary.saveDiary(myController.text);
+                                    diary.printDiary();
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                              )
+                            ],
+                            shape: RoundedRectangleBorder(
+                              //다이어로그 창 둥글게
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20)),
+                            ));
+                      });
+                },
+                child: Image.asset('assets/images/pencil.png', height: 30),
+              ): Container(),
             )
           ],
         )
@@ -512,37 +537,41 @@ class _MyHomePageState extends State<MyHomePage> {
                 duration: const Duration(seconds: 1),
                 curve: Curves.easeInOut,
                 transform: Matrix4.translationValues(value - 5, 0, 0),
-                child: Text('|', style: TextStyle(fontSize: 45)),
+                child: Text(
+                    '|',
+                    style: TextStyle(fontSize: 45)
+                ),
               ),
             ),
             Positioned(
                 child: AnimatedContainer(
-              // color: Colors.deepPurple,
-              margin: EdgeInsets.fromLTRB(80, 10, 0, 0),
-              height: 65,
-              width: 65,
-              duration: const Duration(seconds: 1),
-              curve: Curves.easeInOut,
-              transform: Matrix4.translationValues(value - 5, 0, 0),
-              child: IconButton(
-                icon: Image.asset("assets/images/food.png"),
-                iconSize: 65,
-                onPressed: () => setState(() {
-                  //setEndPressed(40);
-                  String temp = coment.coment;
-                  _displayAnswer();
-                  // _octoState = 1;
-                  coment.setComment('맛나요');
-                  Future.delayed(Duration(seconds: 3), () {
-                    setState(() {
-                      coment.setComment(temp);
-                      _isDisplayed = false;
-                      // _octoState = 0;
-                    });
-                  });
-                }),
-              ),
-            )),
+                  // color: Colors.deepPurple,
+                  margin: EdgeInsets.fromLTRB(80, 10, 0, 0),
+                  height: 65,
+                  width: 65,
+                  duration: const Duration(seconds: 1),
+                  curve: Curves.easeInOut,
+                  transform: Matrix4.translationValues(value - 5, 0, 0),
+                  child: IconButton(
+                    icon: Image.asset("assets/images/food.png"),
+                    iconSize: 65,
+                    onPressed: () =>
+                        setState(() {
+                          //setEndPressed(40);
+                          String temp = coment.coment;
+                          _displayAnswer();
+                          _octoState = 1;
+                          coment.setComment('맛나요');
+                          Future.delayed(Duration(seconds: 3), () {
+                            setState(() {
+                              coment.setComment(temp);
+                              _isDisplayed = false;
+                              _octoState = 0;
+                            });
+                          });
+                        }),
+                  ),
+                )),
             Positioned(
               child: AnimatedContainer(
                 // color: Colors.deepPurple,
@@ -555,19 +584,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: IconButton(
                   icon: Image.asset("assets/images/hand.png"),
                   iconSize: 65,
-                  onPressed: () => setState(() {
-                    String temp = coment.coment;
-                    coment.setComment('꺅');
-                    // _octoState = 2;
-                    _displayAnswer();
-                    Future.delayed(Duration(seconds: 3), () {
+                  onPressed: () =>
                       setState(() {
-                        coment.setComment(temp);
-                        _isDisplayed = false;
-                        // _octoState = 0;
-                      });
-                    });
-                  }),
+                        String temp = coment.coment;
+                        coment.setComment('꺅');
+                        _octoState = 2;
+                        _displayAnswer();
+                        Future.delayed(Duration(seconds: 3), () {
+                          setState(() {
+                            coment.setComment(temp);
+                            _isDisplayed = false;
+                            _octoState = 0;
+                          });
+                        });
+                      }),
                 ),
               ),
             ),
@@ -583,19 +613,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: IconButton(
                   icon: Image.asset("assets/images/ball.png"),
                   iconSize: 65,
-                  onPressed: () => setState(() {
-                    String temp = coment.coment;
-                    coment.setComment('개신나노');
-                    // _octoState = 3;
-                    _displayAnswer();
-                    Future.delayed(Duration(seconds: 3), () {
+                  onPressed: () =>
                       setState(() {
-                        coment.setComment(temp);
-                        _isDisplayed = false;
-                        // _octoState = 0;
-                      });
-                    });
-                  }),
+                        String temp = coment.coment;
+                        coment.setComment('개신나노');
+                        _octoState = 3;
+                        _displayAnswer();
+                        Future.delayed(Duration(seconds: 3), () {
+                          setState(() {
+                            coment.setComment(temp);
+                            _isDisplayed = false;
+                            _octoState = 0;
+                          });
+                        });
+                      }),
                 ),
               ),
             ),
@@ -610,13 +641,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: IconButton(
                   icon: Image.asset("assets/images/bagIcon.png"),
                   iconSize: 65,
-                  onPressed: () => setState(() {
-                    if (value == 0.0) {
-                      value = -200.0;
-                    } else {
-                      value = 0.0;
-                    }
-                  }),
+                  onPressed: () =>
+                      setState(() {
+                        if (value == 0.0) {
+                          value = -200.0;
+                        } else {
+                          value = 0.0;
+                        }
+                      }),
                 ),
               ),
             )
@@ -625,4 +657,5 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
+
 }

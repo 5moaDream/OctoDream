@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:prodect1/letters.dart';
 import 'home.dart';
 
 class LogIn extends StatefulWidget {
@@ -44,7 +45,14 @@ class _LogInState extends State<LogIn> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyApp()),
+                MaterialPageRoute(builder: (context) =>
+                    PageView(
+                      children: [
+                        MyApp(),
+                        letters(),
+                      ],
+                    )
+               ),
               );
             },
           ),
