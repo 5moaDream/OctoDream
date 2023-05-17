@@ -44,13 +44,13 @@ class Diary {
   }
 }
 
-class Useri {
-  var nickName = '무너무너';
-  var score; //경험치
-  String getNickName() {
-    return nickName;
-  }
-}
+// class Useri {
+//   var nickName = '무너무너';
+//   var score; //경험치
+//   String getNickName() {
+//     return nickName;
+//   }
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -104,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Coment coment = new Coment();
   Diary diary = new Diary();
-  Useri useri = new Useri();
+  // Useri useri = new Useri();
 
   double _currentValue = 20;
 
@@ -119,6 +119,20 @@ class _MyHomePageState extends State<MyHomePage> {
     const TextStyle(fontSize: 16.0, color: Colors.white);
     return new FloatingActionButton(
         child: new Text(text, style: roundTextStyle), onPressed: callback);
+  }
+
+  Widget userInfo() {
+    return FutureBuilder<Info>(
+      future: info,
+      builder: (context, AsyncSnapshot<Info> snapshot) {
+        if (snapshot.hasData) {
+          // return
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}에러!!");
+        }
+        return CircularProgressIndicator();
+      },
+    );
   }
 
   @override
@@ -152,7 +166,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         Row(
                           children: [
                             Text(
-                              useri.getNickName(),
+                              "d",
+                              // useri.getNickName(),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 28,

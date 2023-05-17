@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
+// access_token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg0MzE0NTg2fQ.2z8DaPUKrZFF0GnsLOZcarn6fxjs3QLyVVRvt-ovTgcWCAj3PacZsMQc5e3c0vChaAi03tHobUL9lJUzTA_7_g"
+// refresh_token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg2OTAyOTg2fQ.3dE34IWPE58KXoJ-gF9cksm-DN8BL6TK-3fzpyJvbvCr79xYJuUs6ejMqLdWHHlxBtREOPRwhIvMYkxlK7o_1w"}
 var logger = Logger(
   printer: PrettyPrinter(),
 );
@@ -14,10 +16,31 @@ Future<Info> fetchInfo() async {
   //   'userId': 2713582482,
   // };
   // var url = Uri.http('http://3.39.126.140:8000', '/user', queryParameters);
-  var url = 'http://3.39.126.140:8000/user?userId=2713582482';
+  // var url = 'http://3.39.126.140:8000/user';
   // var url = 'http://3.39.126.140/?urls.primaryName=user-service#/user?userId=2713582482';
-  final response = await http.get(Uri.parse(url));
+
+  // var url = 'http://3.39.126.140:8000/unauthorization/kakao-login';
+  // final response = await http.get(Uri.parse(url));
+
   // final response = await http.get(url);
+
+  String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg0MzE0NTg2fQ.2z8DaPUKrZFF0GnsLOZcarn6fxjs3QLyVVRvt-ovTgcWCAj3PacZsMQc5e3c0vChaAi03tHobUL9lJUzTA_7_g';
+  Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $token',
+  };
+
+  var url = Uri.parse('http://3.39.126.140:8000/user-service/user');
+  var response = await http.get(url, headers: headers);
+  if (response.statusCode == 200) {
+    // Request was successful
+    var responseBody = response.body;
+    // Parse the response body here
+  } else {
+    // Request failed
+    print('Request failed with status: ${response.statusCode}');
+  }
+
 
   var statusCode = response.statusCode;
   var responseHeaders = response.headers;
@@ -74,69 +97,3 @@ class Info {
     );
   }
 }
-
-
-// class userService {
-//   // RequestPayment requestPayment = new RequestPayment();
-//   //Payment payment = new Payment();
-//
-//   //final String userUrl = 'http://3.39.126.140:8000/user';
-//   final String userUrl = 'http://192.168.0.34:8080/user';
-//   // final String cancelUrl = 'http://192.168.0.34:8080/cancel'; // 결제 취소 API 요청 URL
-//   // final String completionUrl = 'http://192.168.0.34:8080/completion'; // 결제 완료 API 요청 URL
-//
-//   //유저 정보 조회
-//   Future<String?> userInfo() async {
-//     try {
-//       final response = await http.post(Uri.parse(userUrl));
-//       final responseData = json.decode(response.body); //응답 결과 json으로 파싱
-//       final responseD = responseData['response'];
-//       final userId = responseD['userId'];
-//       final characterName = responseD['characterName'];
-//       final characterUrl = responseD['characterUrl'];
-//       final experienceValue = responseD['experienceValue'];
-//       final stateMsg = responseD['stateMsg'];
-//       final thumbnailImageUrl = responseD['thumbnailImageUrl'];
-//       final sleepTime = responseD['sleepTime'];
-//       final distance = responseD['distance'];
-//       final dday = responseD['dday'];
-//       return '$userId|$characterName|$characterUrl|$experienceValue|$stateMsg'
-//           '|$thumbnailImageUrl|$sleepTime|$distance|$dday'; //문자열로 반환
-//     } catch (error) { //예외발생
-//       print('error: $error');
-//       return null;
-//     }
-//   }
-// }
-//
-// class User {
-//   final userService _service = userService();
-//   late String userId = '';
-//   late String characterName = '';
-//   late String characterUrl = '';
-//   late String experienceValue = '';
-//   late String stateMsg = '';
-//   late String thumbnailImageUrl = '';
-//   late String sleepTime = '';
-//   late String distance = '';
-//   late String dday = '';
-//
-//   //유저 정보 조회
-//   Future<void> userInfo() async {
-//     final data = await _service.userInfo();
-//     logger.d(data);
-//     if (data != null) {
-//       final splitData = data.split('|');
-//       userId = splitData[0];
-//       characterName = splitData[1];
-//       characterUrl = splitData[2];
-//       experienceValue = splitData[3];
-//       stateMsg = splitData[4];
-//       thumbnailImageUrl = splitData[5];
-//       sleepTime = splitData[6];
-//       distance = splitData[7];
-//       dday = splitData[8];
-//     }
-//   }
-//
-// }
