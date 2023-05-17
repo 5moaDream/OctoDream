@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:prodect1/dictionary.dart';
+import 'package:prodect1/payCallbackscreen.dart';
+import 'package:prodect1/paySevice.dart';
 import 'package:prodect1/setting.dart';
 
 
@@ -62,8 +64,11 @@ class MyApp extends StatelessWidget {
         //   primarySwatch: Colors.blue,
         //   scaffoldBackgroundColor: Colors.white,
         // ),
-        home: MyHomePage()
+        home: MyHomePage(),
       //const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: <String, WidgetBuilder>{
+      '/result': (BuildContext context)=>Result()
+    },
     );
   }
 }
@@ -163,6 +168,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                         Setting(title: '설정',)));
                               },
                               child: Image.asset('assets/images/setting.png',
+                                  height: 25),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        Paymentscreen()));
+                              },
+                              child: Image.asset('assets/images/coin.png',
                                   height: 25),
                             ),
                           ],
