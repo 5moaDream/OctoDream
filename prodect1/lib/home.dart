@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:prodect1/Service/userService.dart';
 import 'package:prodect1/dictionary.dart';
 import 'package:prodect1/setting.dart';
 
@@ -9,6 +10,7 @@ import 'package:prodect1/setting.dart';
 import 'Datelist.dart';
 import 'calendar.dart';
 import 'distance.dart';
+import 'Service/userService.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,7 +44,7 @@ class Diary {
   }
 }
 
-class User {
+class Useri {
   var nickName = '무너무너';
   var score; //경험치
   String getNickName() {
@@ -74,6 +76,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<Info>? info;
   bool _diaryState = false;
   bool _isDisplayed = false;
   int _octoState = 0;
@@ -96,11 +99,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _isDisplayed = false;
+    info = fetchInfo();
   }
 
   Coment coment = new Coment();
   Diary diary = new Diary();
-  User user = new User();
+  Useri useri = new Useri();
 
   double _currentValue = 20;
 
@@ -148,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Row(
                           children: [
                             Text(
-                              user.getNickName(),
+                              useri.getNickName(),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 28,
