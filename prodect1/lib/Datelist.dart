@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prodect1/newletters.dart';
 import 'letters.dart';
 import 'home.dart';
 import 'friends.dart';
@@ -13,7 +14,7 @@ class Datelist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: '방명록',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
@@ -66,28 +67,8 @@ class _datelist extends State<datelist> {
                     padding: const EdgeInsets.only(bottom: 50),
                     child: GestureDetector(
                         onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: ((context) {
-                                return AlertDialog(
-                                  title: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('2023.2.3 (수)'),
-                                      IconButton(
-                                        icon: Icon(Icons.close),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                  content: Text(
-                                      '네 문어는 수면 문어구나! 너 수면 목표를 30일이나 지켰어?? 개부럽다 문어 잘 보고 간다! -지연-'),
-                                );
-                              }));
-                        },
+                          Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => newletter()));},
                         child: Image.asset('assets/images/chest.png',
                             height: 200),
                     ),

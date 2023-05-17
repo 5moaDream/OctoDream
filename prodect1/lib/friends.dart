@@ -54,74 +54,17 @@ class _Friends extends State<Friends> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width*0.8,
                       child: GridView.builder(
-                        itemCount: myFriend.length,
+                        itemCount: myFriend.length, // 아이템 개수
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1 / 1,
-                          mainAxisSpacing: 10, //수평 Padding
-                          crossAxisSpacing: 10,
+                          crossAxisCount: 1, // 가로 방향 아이템 수
+                          childAspectRatio: 1 / 1, // 아이템 가로 세로 비율
+                          mainAxisSpacing: 10, // 세로 방향 간격
+                          crossAxisSpacing: 10, // 가로 방향 간격
                         ),
                           itemBuilder: (BuildContext context, int i) {  //item 의 반목문 항목 형성
-                          return Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(bottom: 4),
-                                  child: Text(myFriend[i].toString(),
-                                      style: TextStyle(fontSize: 20)),
-                                ),
-                                Image.asset('assets/images/first_octo.gif',
-                                  width: 100, height: 100,),
-                                Expanded(
-                                  child: Container(
-                                    width: 100,
-                                    height: 26,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        colorFilter: ColorFilter.mode(
-                                            Colors.black.withOpacity(0.1),
-                                            BlendMode.modulate),
-                                        fit: BoxFit.fill,
-                                        image: AssetImage(
-                                            'assets/images/shadow.png'),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ]
-                          );
+                            return buildFriendItem(i);
                         }),
                       ),
-                    // for (int i = 0; i <myFriend.length; i++) ...[
-                    //   Row(
-                    //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //       children: [
-                    //         Column(
-                    //             mainAxisAlignment: MainAxisAlignment.start,
-                    //             children: [
-                    //               Text(myFriend[i].toString(),
-                    //                   style: TextStyle(fontSize: 20)),
-                    //               Image.asset('assets/images/first_octo.gif',
-                    //                 width: 100, height: 100,),
-                    //               Container(
-                    //                 width: 100,
-                    //                 height: 30,
-                    //                 decoration: BoxDecoration(
-                    //                   image: DecorationImage(
-                    //                     colorFilter: ColorFilter.mode(
-                    //                         Colors.black.withOpacity(0.1),
-                    //                         BlendMode.modulate),
-                    //                     fit: BoxFit.fill,
-                    //                     image: AssetImage(
-                    //                         'assets/images/shadow.png'),
-                    //                   ),
-                    //                 ),
-                    //               )
-                    //             ]
-                    //         )
-                    //       ]
-                    //  ),
-                    //],
                     SizedBox(
                         width: MediaQuery.of(context).size.width*0.1,
                     ),
@@ -131,6 +74,52 @@ class _Friends extends State<Friends> {
           ],
         )
       ),
+    );
+  }
+
+  Widget buildFriendItem(int index) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Text(
+            myFriend[index].toString(),
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            // 페이지 변경 로직을 작성합니다.
+            // 예를 들어, 다른 페이지로 이동하는 코드를 작성할 수 있습니다.
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => FriendHome()),
+            );
+          },
+          child: Image.asset(
+            'assets/images/first_octo.gif',
+            width: 100,
+            height: 100,
+          ),
+        ),
+        Expanded(
+          child: Container(
+            width: 100,
+            height: 26,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.1),
+                  BlendMode.modulate,
+                ),
+                fit: BoxFit.fill,
+                image: AssetImage('assets/images/shadow.png'),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:prodect1/Datelist.dart';
 
-class letters extends StatefulWidget{
-  _letters createState() => _letters();
+class newletterlist extends StatefulWidget{
+  _newletterlist createState() => _newletterlist();
 }
 
-class _letters extends State<letters> {
+class _newletterlist extends State<newletterlist> {
   @override
   Widget build(BuildContext context){
     return MaterialApp(
-        title: 'letterlist',
+        title: 'newletter',
         theme: ThemeData(primarySwatch: Colors.blue,),
-        home: letterlist()
+        home: newletter()
     );
   }
 }
 
-class letterlist extends StatefulWidget{
+class newletter extends StatefulWidget{
   @override
-  State<letterlist> createState()=>_letterlist();
+  State<newletter> createState()=>_newletter();
 }
 
 class one{
@@ -33,12 +33,10 @@ List<one>One=<one>[
   one('너 문어 짱 멋지다', '-승희-')
 ];
 
-class _letterlist extends State<letterlist>{
+class _newletter extends State<newletter>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-        //배경은 이미지로
-        // backgroundColor: Colors.lightBlueAccent,
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -54,11 +52,12 @@ class _letterlist extends State<letterlist>{
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('방명록',style: TextStyle(fontSize: 25),),
+                      Text('새로운 쪽지',style: TextStyle(fontSize: 25),),
                       IconButton(
                           onPressed: () {
-                            Navigator.push(context,MaterialPageRoute(builder: (context) => Datelist()));
-                            },
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => Datelist()));
+                          },
                           icon: Icon(Icons.close)
                       )
                     ],
@@ -73,7 +72,7 @@ class _letterlist extends State<letterlist>{
                     children: [
                       Container(
                         margin: EdgeInsets.only(left: 3,top: 7,bottom: 7),
-                        child: Text('2023년3월12일'),
+                        child: Text('새로운 쪽지를 확인해보세요!'),
                       ),
                       lett(context)],
                   )
@@ -98,7 +97,7 @@ lett(BuildContext context) {
             margin: EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(70.0),
-                color: Colors.lightBlueAccent),
+                color: Colors.lightGreenAccent),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -114,13 +113,13 @@ lett(BuildContext context) {
             margin: EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(70.0),
-                color: Colors.lightBlueAccent),
+                color: Colors.lightGreenAccent),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Icon(Icons.star),
-                Text(One[1].context),
-                Text(One[1].name),
+                Text(One[2].context),
+                Text(One[2].name),
               ],
             ),
           ),
@@ -128,4 +127,3 @@ lett(BuildContext context) {
       )
   );
 }
-
