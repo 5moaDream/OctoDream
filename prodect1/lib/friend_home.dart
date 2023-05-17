@@ -18,7 +18,7 @@ class _FriendHome extends State<FriendHome> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               GestureDetector(
                 onTap: () {

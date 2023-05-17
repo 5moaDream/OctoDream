@@ -25,29 +25,84 @@ class _LogInState extends State<LogIn> {
     });
   }
 
-  Future<void> _loginWithKakaoApp() async {
+  // 인증 토큰 및 리프레시 토큰을 저장하는 함수
+  Future<void> saveTokens(String accessToken, String refreshToken) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('accessToken', accessToken);
+    await prefs.setString('refreshToken', refreshToken);
+  }
+
+// 저장된 인증 토큰 및 리프레시 토큰을 가져오는 함수
+  Future<Map<String, String>> getTokens() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    String? refreshToken = prefs.getString('refreshToken');
+
+    return {
+      'accessToken': accessToken ?? '',
+      'refreshToken': refreshToken ?? ''
+    };
+  }
+
+  // 카카오 로그인을 시도하고 토큰을 가져오는 함수
+  Future<void> loginWithKakao() async {
     try {
-      OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
-      print('카카오톡으로 로그인 성공 ${token.accessToken}');
-      _saveTokens(token.accessToken, token.refreshToken); // 토큰 저장
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PageView(
-                  children: [
-                    MyApp(),
-                  ],
-                )),
-      );
-    } catch (error) {
-      _showPopup(context, '카카오 로그인에 실패했습니다.');
+      // 이전에 저장된 토큰 가져오기
+      Map<String, String> tokens = await getTokens();
+      String accessToken = tokens['accessToken']!;
+      String refreshToken = tokens['refreshToken']!;
+
+      // 토큰이 없는 경우 또는 만료된 경우
+      if (!await AuthApi.instance.hasToken()) {
+        if (refreshToken.isNotEmpty) {
+          // 리프레시 토큰을 사용하여 토큰 갱신
+          try {
+            OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
+            accessToken = token.accessToken;
+            refreshToken = token.refreshToken!;
+
+            // 갱신된 토큰 저장
+            await saveTokens(accessToken, refreshToken);
+
+            // 토큰을 사용하여 로그인 성공 처리
+            handleLoginSuccess();
+          } catch (e) {
+            // 토큰 갱신 실패
+            handleLoginFailure();
+          }
+        } else {
+          // 토큰이 없거나 만료되었고, 리프레시 토큰도 없는 경우
+          handleLoginFailure();
+        }
+      } else {
+        // 토큰이 유효한 경우
+        handleLoginSuccess();
+      }
+    } catch (e) {
+      // 로그인 실패
+      handleLoginFailure();
     }
   }
 
-  void _saveTokens(String? accessToken, String? refreshToken) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('accessToken', accessToken ?? '');
-    await prefs.setString('refreshToken', refreshToken ?? '');
+  // 로그인 성공 처리
+  Future<void> handleLoginSuccess() async {
+    // TODO: 로그인 성공 시 동작 정의
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => PageView(
+                children: [
+                  MyApp(),
+                ],
+              )
+      ),
+    );
+  }
+
+// 로그인 실패 처리
+  void handleLoginFailure() {
+    // TODO: 로그인 실패 시 동작 정의
+    _showPopup(context, '카카오 로그인에 실패했습니다.');
   }
 
   @override
@@ -74,7 +129,7 @@ class _LogInState extends State<LogIn> {
           GestureDetector(
             onTap: () async {
               if (_isKaKaoTalkInstalled) {
-                _loginWithKakaoApp();
+                loginWithKakao();
               } else {
                 // 카카오 계정으로 로그인
                 _showPopup(context, '카카오톡을 설치해주세요.');
