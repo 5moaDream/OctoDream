@@ -1,8 +1,38 @@
+import 'dart:convert';
+
 import'package:flutter/material.dart';
 import 'floatingbutton.dart';
+import 'package:http/http.dart' as http;
+
+class Diary {
+  final DateTime today;
+  final String content;
+
+  Diary({required this.today,required this.content});
+
+  factory Diary.fromJson(Map<String, dynamic> json){
+    return Diary(
+      today: json["day"],
+      content: json["content"],
+    );
+  }
+}
+
+Future<Diary> fetchDiary() async {
+  http.Response response = await http.get(
+    Uri.parse('http://3.39.126.140:8000/collection/diary/userId'));
+
+  if (response.statusCode == 200) {
+    // json 데이터를 수신해서 User 객체로 변환
+    final diaryMap = json.decode(response.body);
+    return Diary.fromJson(diaryMap);
+  }
+
+  throw Exception('데이터 수신 실패!');
+}
 
 class diary extends StatelessWidget {
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +81,16 @@ class _mydiary extends State<mydiary> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          FutureBuilder(
+              future: fetchDiary(),
+              builder: (context, snapshot) {
+                if(snapshot.hasData){
+                  final content = snapshot.data?.content;
+                  return Text(content!);
+                }
+                return CircularProgressIndicator();
+              }
+          ),
           Container(
             padding: EdgeInsets.only(top: 20, left: 30, bottom: 10),
             child: Text("일기",
