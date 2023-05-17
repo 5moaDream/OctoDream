@@ -560,7 +560,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           //setEndPressed(40);
                           String temp = coment.coment;
                           _displayAnswer();
-                          _octoState = 1;
+                          _octoState = 0;
                           coment.setComment('맛나요');
                           Future.delayed(Duration(seconds: 3), () {
                             setState(() {
@@ -588,7 +588,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         String temp = coment.coment;
                         coment.setComment('꺅');
-                        _octoState = 2;
+                        _octoState = 0;
                         _displayAnswer();
                         Future.delayed(Duration(seconds: 3), () {
                           setState(() {
@@ -617,7 +617,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         String temp = coment.coment;
                         coment.setComment('개신나노');
-                        _octoState = 3;
+                        _octoState = 0;
                         _displayAnswer();
                         Future.delayed(Duration(seconds: 3), () {
                           setState(() {
