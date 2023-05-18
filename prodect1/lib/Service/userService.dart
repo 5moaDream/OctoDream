@@ -12,19 +12,9 @@ var logger = Logger(
 
 
 Future<Info> fetchInfo() async {
-  // final queryParameters = {
-  //   'userId': 2713582482,
-  // };
-  // var url = Uri.http('http://3.39.126.140:8000', '/user', queryParameters);
-  // var url = 'http://3.39.126.140:8000/user';
-  // var url = 'http://3.39.126.140/?urls.primaryName=user-service#/user?userId=2713582482';
 
-  // var url = 'http://3.39.126.140:8000/unauthorization/kakao-login';
-  // final response = await http.get(Uri.parse(url));
+  String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg2OTAyOTg2fQ.3dE34IWPE58KXoJ-gF9cksm-DN8BL6TK-3fzpyJvbvCr79xYJuUs6ejMqLdWHHlxBtREOPRwhIvMYkxlK7o_1w';
 
-  // final response = await http.get(url);
-
-  String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg0MzE0NTg2fQ.2z8DaPUKrZFF0GnsLOZcarn6fxjs3QLyVVRvt-ovTgcWCAj3PacZsMQc5e3c0vChaAi03tHobUL9lJUzTA_7_g';
   Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $token',
@@ -41,7 +31,6 @@ Future<Info> fetchInfo() async {
     print('Request failed with status: ${response.statusCode}');
   }
 
-
   var statusCode = response.statusCode;
   var responseHeaders = response.headers;
   var responseBody = response.body;
@@ -51,10 +40,10 @@ Future<Info> fetchInfo() async {
 
   if (response.statusCode == 200) {
     //만약 서버가 ok응답을 반환하면, json을 파싱합니다
-    print('응답했다');
-    print(json.decode(response.body));
-    logger.d(json.decode(response.body));
+    print(utf8.decode(response.bodyBytes));
+    logger.d(utf8.decode(response.bodyBytes));
     return Info.fromJson(json.decode(response.body));
+    //jsonDecode(utf8.decode(response.bodyBytes))
   } else {
     //만약 응답이 ok가 아니면 에러를 던집니다.
     throw Exception('실패');

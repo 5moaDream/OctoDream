@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  iamport_flutter: ^0.10.9
 
   kakao_flutter_sdk: ^1.4.1
   dio: ^4.0.6
@@ -104,7 +105,7 @@ flutter:
      - assets/images/baby_food.gif # 아기문어 먹이주기
      - assets/images/baby_hand.gif # 아기문어 쓰다듬기
      - assets/images/playground.png #달리기 트랙
-
+     - assets/images/coin.png #결제
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
