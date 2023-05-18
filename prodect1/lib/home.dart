@@ -128,7 +128,6 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Text(text, style: roundTextStyle), onPressed: callback);
   }
 
-<<<<<<< Updated upstream
   Widget userInfo() {
     return FutureBuilder<Info>(
       future: info,
@@ -142,188 +141,6 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
-
-=======
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      //상중하를 나눠주는 위젯
-      body: Container(
-        padding: EdgeInsets.only(top: 40),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/background.gif'),
-            fit: BoxFit.fill,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 170,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    height: 160,
-                    width: 190,
-                    padding: EdgeInsets.only(
-                        bottom: 0, left: 20, top: 90, right: 0),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          children: [
-                            Text(
-                              "d",
-                              // useri.getNickName(),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2.0,
-                                  fontFamily: 'Neo'),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        Setting(title: '설정',)));
-                              },
-                              child: Image.asset('assets/images/setting.png',
-                                  height: 25),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        Paymentscreen()));
-                              },
-                              child: Image.asset('assets/images/coin.png',
-                                  height: 25),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 160,
-                    width: 190,
-                    //color: Colors.deepOrange,
-                    child: Menu(),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 400,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(child: Container()),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (_isDisplayed) Answer(),
-                      if (_octoState == 1)
-                        ColorFiltered(
-                          colorFilter: ColorFilter.mode(
-                              Colors.transparent, BlendMode.color),
-                          child: Image.asset(
-                              'assets/images/baby_food.gif', height: 145),
-                        )
-                      else if (_octoState == 2)
-                        ColorFiltered(
-                          colorFilter: ColorFilter.mode(
-                              Colors.transparent, BlendMode.color),
-                          child: Image.asset(
-                              'assets/images/baby_hand.gif', height: 120),
-                        )
-                      else if (_octoState == 3)
-                          ColorFiltered(
-                            colorFilter: ColorFilter.mode(
-                                Colors.transparent, BlendMode.color),
-                            child: Image.asset(
-                                'assets/images/baby_ball.gif', height: 150),
-                          )
-                        else
-                          ColorFiltered(
-                            colorFilter: ColorFilter.mode(
-                                Colors.transparent, BlendMode.color),
-                            child: Image.asset(
-                                'assets/images/first_octo.gif', height: 120),
-                          ),
-                    ],
-                  ),
-                  Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Datelist()),
-                              );
-                            },
-                            child: Image.asset('assets/images/right.png',
-                                height: 60, color: Colors.black38.withOpacity(0.2),),
-                          ),
-                        ],
-                      )
-                  )
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8, right: 8),
-                //   child: Text("경험치", style: TextStyle(
-                //       fontWeight: FontWeight.bold,fontSize: 16),),
-                // ),
-                Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.75,
-                  child: FAProgressBar(
-                    progressColor: Colors.yellow,
-                    backgroundColor: Colors.grey[100]!,
-                    borderRadius: BorderRadius.circular(30),
-                    currentValue: 56,
-                    displayText: '경험치',
-                    size: 26,
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              height: 100,
-              child: Bag(),
-            ),
-          ],
-        ),
-      ),
-=======
-  // Widget userInfo() {
-  //   return FutureBuilder<Info>(
-  //     future: info,
-  //     builder: (context, AsyncSnapshot<Info> snapshot) {
-  //       if (snapshot.hasData) {
-  //         return List<Info>snapshot.data;
-  //       } else if (snapshot.hasError) {
-  //         return Text("${snapshot.error}에러!!");
-  //       }
-  //       return CircularProgressIndicator();
-  //     },
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -373,6 +190,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                           Setting(title: '설정',)));
                                 },
                                 child: Image.asset('assets/images/setting.png',
+                                    height: 25),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          Paymentscreen()));
+                                },
+                                child: Image.asset('assets/images/coin.png',
                                     height: 25),
                               ),
                             ],
@@ -484,16 +310,15 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
     return FutureBuilder<Info>(
-      future: info,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return _homeView(snapshot.data!);
-        } else if (snapshot.hasError) {
-          return Text("${snapshot.error}에러!!");
-        }
-        return CircularProgressIndicator();
-      },
->>>>>>> Stashed changes
+        future: info,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _homeView(snapshot.data!);
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}에러!!");
+          }
+          return CircularProgressIndicator();
+        },
     );
   }
 
@@ -882,4 +707,3 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 }
-
