@@ -102,7 +102,7 @@ class _LogInState extends State<LogIn> {
 // 로그인 실패 처리
   void handleLoginFailure() {
     // TODO: 로그인 실패 시 동작 정의
-    _showPopup(context, '카카오 로그인에 실패했습니다.');
+    _showPopup(context, '카카오 로그인에 실패했습니다. 다시 로그인 해주세요.');
   }
 
   @override

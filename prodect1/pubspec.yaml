@@ -103,6 +103,9 @@ flutter:
      - assets/images/baby_food.gif # 아기문어 먹이주기
      - assets/images/baby_hand.gif # 아기문어 쓰다듬기
      - assets/images/playground.png #달리기 트랙
+     - assets/images/open.gif # 보물상자 열리는 모션
+     - assets/images/close.gif # 보물상자 닫히는 모션
+     - assets/images/꿈삼.jpg # 로그인 화면
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
