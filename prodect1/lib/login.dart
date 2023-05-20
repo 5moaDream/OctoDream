@@ -16,6 +16,7 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
     _initKaKaoTalkInstalled();
+    loginWithKakao();
   }
 
   Future<void> _initKaKaoTalkInstalled() async {
@@ -94,8 +95,7 @@ class _LogInState extends State<LogIn> {
                 children: [
                   MyApp(),
                 ],
-              )
-      ),
+              )),
     );
   }
 
@@ -107,39 +107,46 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          ElevatedButton(
-            child: const Text('로그인'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PageView(
-                          children: [
-                            MyApp(),
-                          ],
-                        )),
-              );
-            },
+    return MaterialApp(
+        theme: ThemeData(
+          primaryColor: Colors.blue, // 변경 가능한 주 색상
+        ),
+        home: Scaffold(
+          backgroundColor: Color(0xFFB8E9FF),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Image.asset('assets/images/꿈삼.jpg', height: 300),
+              SizedBox(height: 40),
+              ElevatedButton(
+                child: const Text('로그인'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PageView(
+                              children: [
+                                MyApp(),
+                              ],
+                            )),
+                  );
+                },
+              ),
+              GestureDetector(
+                onTap: () async {
+                  if (_isKaKaoTalkInstalled) {
+                    loginWithKakao();
+                  } else {
+                    // 카카오 계정으로 로그인
+                    _showPopup(context, '카카오톡을 설치해주세요.');
+                  }
+                },
+                child: Image.asset('assets/images/kakao_login.png'),
+              ),
+            ],
           ),
-          GestureDetector(
-            onTap: () async {
-              if (_isKaKaoTalkInstalled) {
-                loginWithKakao();
-              } else {
-                // 카카오 계정으로 로그인
-                _showPopup(context, '카카오톡을 설치해주세요.');
-              }
-            },
-            child: Image.asset('assets/images/kakao_login.png'),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   void _showPopup(BuildContext context, String message) {
