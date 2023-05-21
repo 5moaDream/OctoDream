@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:prodect1/Service/diaryService.dart';
 import 'package:prodect1/Service/firstSetService.dart';
 import 'package:prodect1/Service/userService.dart';
 import 'package:prodect1/dictionary.dart';
@@ -10,6 +11,8 @@ import 'package:prodect1/payCallbackscreen.dart';
 import 'package:prodect1/paySevice.dart';
 import 'package:prodect1/setting.dart';
 import 'package:prodect1/firstDisplay.dart';
+
+import 'package:intl/intl.dart';
 
 //import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'Datelist.dart';
@@ -32,22 +35,6 @@ class Coment {
 
 final myController = TextEditingController();
 
-class Diary {
-  var now;
-  var today;
-  var contents;
-
-  void saveDiary(String contents) {
-    now = DateTime.now();
-    this.today = "${now.year}-${now.month}-${now.day}";
-    this.contents = contents;
-  }
-
-  void printDiary() {
-    print(contents);
-    print(today);
-  }
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -77,17 +64,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<Info>? info;
-  bool _diaryState = false;
+
+  bool _diaryState = true;
+  // bool _playState = false;
+
   bool _isDisplayed = false;
   int _octoState = 0;
 
-  void _displayAnswer() {
+  void _displayBubble() {
     setState(() {
       _isDisplayed = true;
+      _diaryState = false;
     });
   }
 
   int state = 0;
+
   List<String> Light = [
     "assets/images/light_on.png", //0
     "assets/images/light_off.png", //1
@@ -98,20 +90,32 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _isDisplayed = false;
+    // _isDisplayed = true;
+    checkTime();
     info = fetchInfo();
   }
 
-  Coment coment = new Coment();
-  Diary diary = new Diary();
+  void checkTime() {
+    DateTime now = DateTime.now();
+    DateTime tenPm = DateTime(now.year, now.month, now.day, 22, 0); // 밤 10시 설정
+    DateTime elevenFiftyNinePm = DateTime(now.year, now.month, now.day, 23, 59); // 밤 11시 59분 설정
 
-  double _currentValue = 20;
-
-  setEndPressed(double value) {
-    setState(() {
-      _currentValue = value;
-    });
+    if (now.isAfter(tenPm) && now.isBefore(elevenFiftyNinePm)) {
+      setState(() {
+        _diaryState = true;
+      });
+    }
   }
+
+  Coment coment = new Coment();
+
+  // double _currentValue = 20;
+  //
+  // setEndPressed(double value) {
+  //   setState(() {
+  //     _currentValue = value;
+  //   });
+  // }
 
   Widget buildFloatingButton(String text, VoidCallback callback) {
     TextStyle roundTextStyle =
@@ -120,19 +124,6 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Text(text, style: roundTextStyle), onPressed: callback);
   }
 
-  Widget userInfo() {
-    return FutureBuilder<Info>(
-      future: info,
-      builder: (context, AsyncSnapshot<Info> snapshot) {
-        if (snapshot.hasData) {
-          // return
-        } else if (snapshot.hasError) {
-          return Text("${snapshot.error}에러!!");
-        }
-        return CircularProgressIndicator();
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _homeView(Info info) {
     return Scaffold(
       //상중하를 나눠주는 위젯
+      resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.only(top: 40),
         decoration: BoxDecoration(
@@ -218,7 +210,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (_isDisplayed) Answer(),
+                      if (_diaryState == true) Answer(),
+                      if (_isDisplayed == true) Answer(),
                       if (_octoState == 1)
                         ColorFiltered(
                           colorFilter: ColorFilter.mode(
@@ -305,22 +298,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildMyFutureBuilderWidget(Future<Info> info, TextEditingController myController, BuildContext context) {
+    bool isCharacterNameMissing = false;
+
     return FutureBuilder<Info>(
-        future: info,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data?.characterName == null) { //캐릭터이름 없으면 캐릭터 이름 put
-              Navigator.of(context).pop();
-              Navigator.push(context,
+      future: info,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data?.characterName == null && !isCharacterNameMissing) {
+            isCharacterNameMissing = true;
+            WidgetsBinding.instance?.addPostFrameCallback((_) {
+              Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => firstDisplay()),
               );
-            }
-            return _homeView(snapshot.data!);
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}에러!!");
+            });
           }
-          return CircularProgressIndicator();
+          return _homeView(snapshot.data!);
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error} 에러!!");
         }
+        return CircularProgressIndicator();
+      },
     );
   }
 
@@ -461,6 +458,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget Answer() {
+    // _diaryState = true;
     return Column(
       children: [
         Stack(
@@ -537,8 +535,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                           );
                                         });
                                   } else {
-                                    diary.saveDiary(myController.text);
-                                    diary.printDiary();
+                                    writeDiary(myController.text); //다이어리 저장
+                                    _diaryState = false;
+                                    // _isDisplayed = false;
                                     Navigator.of(context).pop();
                                   }
                                 },
@@ -596,7 +595,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
                 child: AnimatedContainer(
                   // color: Colors.deepPurple,
-                  margin: EdgeInsets.fromLTRB(80, 10, 0, 0),
+                  margin: EdgeInsets.fromLTRB(75, 10, 0, 0),
                   height: 65,
                   width: 65,
                   duration: const Duration(seconds: 1),
@@ -609,7 +608,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(() {
                           //setEndPressed(40);
                           String temp = coment.coment;
-                          _displayAnswer();
+                          _displayBubble();
                           _octoState = 0;
                           coment.setComment('맛나요');
                           Future.delayed(Duration(seconds: 3), () {
@@ -625,7 +624,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               child: AnimatedContainer(
                 // color: Colors.deepPurple,
-                margin: EdgeInsets.fromLTRB(140, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(130, 10, 0, 0),
                 height: 65,
                 width: 65,
                 duration: const Duration(seconds: 1),
@@ -639,7 +638,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         String temp = coment.coment;
                         coment.setComment('꺅');
                         _octoState = 0;
-                        _displayAnswer();
+                        _displayBubble();
                         Future.delayed(Duration(seconds: 3), () {
                           setState(() {
                             coment.setComment(temp);
@@ -654,7 +653,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               child: AnimatedContainer(
                 // color: Colors.deepPurple,
-                margin: EdgeInsets.fromLTRB(210, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(190, 10, 0, 0),
                 height: 65,
                 width: 65,
                 duration: const Duration(seconds: 1),
@@ -668,7 +667,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         String temp = coment.coment;
                         coment.setComment('개신나노');
                         _octoState = 0;
-                        _displayAnswer();
+                        _displayBubble();
                         Future.delayed(Duration(seconds: 3), () {
                           setState(() {
                             coment.setComment(temp);
@@ -694,7 +693,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () =>
                       setState(() {
                         if (value == 0.0) {
-                          value = -200.0;
+                          value = -190.0;
                         } else {
                           value = 0.0;
                         }

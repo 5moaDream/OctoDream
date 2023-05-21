@@ -18,21 +18,26 @@ class _firstDisplay extends State<firstDisplay> {
 
     // 2초 후에 텍스트가 서서히 나타나도록 설정
     Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        _isTextVisible = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          _isTextVisible = true;
+        });
       });
+
     });
   }
 
   void _showButton() {
-    setState(() {
-      _isButtonVisible = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _isButtonVisible = true;
+      });
     });
+
   }
 
   @override
   Widget build(BuildContext context) {
-    //다이얼로그 뒤로 오류뜨는데이거뭐노. ..
     return GestureDetector(
         onTap: () {
           if (_isTextVisible) {
@@ -113,7 +118,7 @@ class _firstDisplay extends State<firstDisplay> {
                                                         });
                                                   } else {
                                                     fetchName(myController.text);
-                                                    Future.delayed(Duration(seconds: 1));
+                                                    Future.delayed(Duration(seconds: 3));
                                                     Navigator.of(context).pop();
                                                     Navigator.push(context,
                                                       MaterialPageRoute(builder: (context) => MyHomePage()),
@@ -123,6 +128,7 @@ class _firstDisplay extends State<firstDisplay> {
                                                         context: context,
                                                         barrierDismissible: false,
                                                         builder: (BuildContext context) {
+                                                          Future.delayed(Duration(seconds: 2));
                                                           return AlertDialog(
                                                             content: SingleChildScrollView(
                                                                 child: new Text("수면 시간과 러닝 거리를 \n 설정해 주세요.",
@@ -157,7 +163,6 @@ class _firstDisplay extends State<firstDisplay> {
                                 },
                               ),
                             )
-
                           ],
                         ),
                       )
