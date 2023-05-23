@@ -12,14 +12,13 @@ import 'package:prodect1/payCallbackscreen.dart';
 import 'package:prodect1/paySevice.dart';
 import 'package:prodect1/setting.dart';
 import 'package:prodect1/firstDisplay.dart';
-
-import 'package:intl/intl.dart';
+import 'package:prodect1/sleepButton.dart';
 
 //import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'Datelist.dart';
 import 'calendar.dart';
 import 'distance.dart';
-import 'Service/userService.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -78,13 +77,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _diaryState = false;
     });
   }
-
-  int state = 0;
-
-  List<String> Light = [
-    "assets/images/light_on.png", //0
-    "assets/images/light_off.png", //1
-  ];
 
   double value = 0.0;
 
@@ -374,98 +366,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Row(
                   children: [
-                    IconButton(
-                      padding: EdgeInsets.fromLTRB(0, 0, 25, 0),
-                      icon: Image.asset(
-                        Light[state],
-                        width: 60,
-                        height: 60,
-                      ),
-                      iconSize: 55,
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false, //바깥영역 터치시 닫을지
-                            builder: (BuildContext context) {
-                              if (state == 0) {
-                                return AlertDialog(
-                                    title: Text('불 끄기'),
-                                    content: Text('수면을 시작하시겠습니까?'),
-                                    actions: [
-                                      TextButton(
-                                        child: Text('시간설정'),
-                                        onPressed: () {
-                                          Navigator.of(context).push(MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Setting(title: '설정',)));
-                                        },
-                                      ),
-                                      ElevatedButton(
-                                        child: Text('예'),
-                                        onPressed: () =>
-                                            setState(() {
-                                              // 시간 측정 시작해야담
-                                              // var sleptTime = DateTime.now().millisecondsSinceEpoch;
-
-                                              state = 1;
-                                              Navigator.of(context).pop();
-                                              String temp = coment.coment;
-                                              coment.setComment('나 자께요');
-                                              _displayBubble();
-                                              Future.delayed(Duration(seconds: 3), () {
-                                                setState(() {
-                                                  coment.setComment(temp);
-                                                  _isDisplayed = false;
-                                                });
-                                              });
-                                            }),
-                                      )
-                                    ],
-                                    shape: RoundedRectangleBorder(
-                                      //다이얼로그 창 둥글게
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                    ));
-                              } else {
-                                return AlertDialog(
-                                    title: Text('불 켜기'),
-                                    content: Text('수면을 종료하시겠습니까?'),
-                                    actions: [
-                                      ElevatedButton(
-                                        child: Text('예'),
-                                        onPressed: () =>
-                                            setState(() {
-                                              //시간 측정 끝내고
-                                              //recodeSleep
-
-                                              var sleptTime = DateTime.now().millisecondsSinceEpoch;
-                                              var wakeUpTime = DateTime.now().millisecondsSinceEpoch;
-
-                                              recodeSleep(sleptTime, wakeUpTime, 480);
-                                              
-                                              state = 0;
-                                              Navigator.of(context).pop();
-                                              String temp = coment.coment;
-                                              coment.setComment('좋은 아침이네~');
-                                              _displayBubble();
-                                              Future.delayed(Duration(seconds: 3), () {
-                                                setState(() {
-                                                  coment.setComment(temp);
-                                                  _isDisplayed = false;
-                                                });
-                                              });
-                                            }),
-                                      )
-                                    ],
-                                    shape: RoundedRectangleBorder(
-                                      //다이얼로그 창 둥글게
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                    ));
-                              }
-                            });
-                      },
-                    ),
+                    SleepTimerPage(),
                     IconButton(
                       icon: Image.asset(
                         "assets/images/running.png",
