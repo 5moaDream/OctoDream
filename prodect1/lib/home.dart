@@ -5,6 +5,7 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:http/http.dart' as http;
 import 'package:prodect1/Service/diaryService.dart';
 import 'package:prodect1/Service/firstSetService.dart';
+import 'package:prodect1/Service/sleepService.dart';
 import 'package:prodect1/Service/userService.dart';
 import 'package:prodect1/dictionary.dart';
 import 'package:prodect1/payCallbackscreen.dart';
@@ -161,10 +162,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         Row(
                           children: [
                             Text(
-                              info.characterName + ' ',
+                              info.characterName,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 28,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 2.0,
                                   fontFamily: 'Neo'),
@@ -393,15 +394,30 @@ class _MyHomePageState extends State<MyHomePage> {
                                     actions: [
                                       TextButton(
                                         child: Text('시간설정'),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.of(context).push(MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Setting(title: '설정',)));
+                                        },
                                       ),
                                       ElevatedButton(
                                         child: Text('예'),
                                         onPressed: () =>
                                             setState(() {
+                                              // 시간 측정 시작해야담
+                                              // var sleptTime = DateTime.now().millisecondsSinceEpoch;
+
                                               state = 1;
-                                              coment.setComment('나 자께요');
                                               Navigator.of(context).pop();
+                                              String temp = coment.coment;
+                                              coment.setComment('나 자께요');
+                                              _displayBubble();
+                                              Future.delayed(Duration(seconds: 3), () {
+                                                setState(() {
+                                                  coment.setComment(temp);
+                                                  _isDisplayed = false;
+                                                });
+                                              });
                                             }),
                                       )
                                     ],
@@ -419,8 +435,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: Text('예'),
                                         onPressed: () =>
                                             setState(() {
+                                              //시간 측정 끝내고
+                                              //recodeSleep
+
+                                              var sleptTime = DateTime.now().millisecondsSinceEpoch;
+                                              var wakeUpTime = DateTime.now().millisecondsSinceEpoch;
+
+                                              recodeSleep(sleptTime, wakeUpTime, 480);
+                                              
                                               state = 0;
                                               Navigator.of(context).pop();
+                                              String temp = coment.coment;
+                                              coment.setComment('좋은 아침이네~');
+                                              _displayBubble();
+                                              Future.delayed(Duration(seconds: 3), () {
+                                                setState(() {
+                                                  coment.setComment(temp);
+                                                  _isDisplayed = false;
+                                                });
+                                              });
                                             }),
                                       )
                                     ],
