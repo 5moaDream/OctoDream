@@ -1,18 +1,26 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:prodect1/home.dart';
 import 'main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class FriendHome extends StatefulWidget {
+  final String imageName;
+  final String Octoname;
+  final String ID;
+
+  FriendHome({required this.ID, required this.imageName, required this.Octoname});
+
   @override
   _FriendHome createState() =>
       _FriendHome(); // StatefulWidget은 상태를 생성하는 createState() 메서드로 구현한다.
 }
 
 class _FriendHome extends State<FriendHome> {
+
   TextEditingController _textEditingController = TextEditingController();
   String enteredText = "";
 
@@ -40,7 +48,7 @@ class _FriendHome extends State<FriendHome> {
     };
 
     var body = jsonEncode({
-      'userId': 1,
+      'userId': widget.ID,
       'content': enteredText,
     });
 
@@ -79,6 +87,7 @@ class _FriendHome extends State<FriendHome> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -86,11 +95,12 @@ class _FriendHome extends State<FriendHome> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
+                    MaterialPageRoute(builder: (context) => MyHomePage()),
                   );
                 },
                 child: Image.asset('assets/images/home.png', width: 60),
               ),
+              SizedBox(width: 10),
               GestureDetector(
                 onTap: () {
                   showDialog(
@@ -113,8 +123,7 @@ class _FriendHome extends State<FriendHome> {
                               child: const Text('보내기'),
                               onPressed: () {
                                 enteredText = _textEditingController.text; // 입력된 내용 가져오기
-                                print('입력된 내용: $enteredText');
-
+                                _textEditingController.clear(); // 수정된 부분
                                 Navigator.of(context).pop();
                               },
                             ),
@@ -124,6 +133,33 @@ class _FriendHome extends State<FriendHome> {
                 },
                 child:
                     Image.asset('assets/images/communication.png', width: 50),
+              ),
+              SizedBox(width: 10),
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              SizedBox(width: 10),
+              Text(widget.Octoname,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.0,
+                    fontFamily: 'Neo'),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(height: 240),
+              Image.asset(
+                'assets/images/${widget.imageName}',
+                width: 120,
+                height: 120,
               ),
             ],
           ),

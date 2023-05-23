@@ -10,7 +10,7 @@ class Friends extends StatefulWidget {
 
 class _Friends extends State<Friends> {
   List myFriend = ['영주', '혜원', '찬영', '광휘', '지연', '은진'];
-  List OctoFriend = ['달밤영' '감자 러버', '어쩌라고', '평화주의자', '뷁뚫꺕ㅎ', '분위기메이커'];
+  List OctoFriend = ['달밤영', '감자 러버', '어쩌라고', '평화주의자', '뷁뚫꺕ㅎ', '분위기메이커'];
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class _Friends extends State<Friends> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width*0.8,
                       child: GridView.builder(
-                        itemCount: myFriend.length-1, // 아이템 개수
+                        itemCount: myFriend.length, // 아이템 개수
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1, // 가로 방향 아이템 수
                           childAspectRatio: 2 / 1, // 아이템 가로 세로 비율
@@ -106,11 +106,14 @@ class _Friends extends State<Friends> {
         ),
         InkWell(
           onTap: () {
+            String ID = myFriend[index].toString(); // 임의 지정 추후 변경
+            String Octoname = OctoFriend[index].toString();
+            String imageName = 'first_octo.gif';
             // 페이지 변경 로직을 작성합니다.
             // 예를 들어, 다른 페이지로 이동하는 코드를 작성할 수 있습니다.
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => FriendHome()),
+              MaterialPageRoute(builder: (context) => FriendHome(ID: ID, Octoname: Octoname, imageName: imageName)),
             );
           },
           child: Image.asset(
