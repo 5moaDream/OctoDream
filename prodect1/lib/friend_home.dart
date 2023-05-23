@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FriendHome extends StatefulWidget {
   @override
@@ -10,10 +13,69 @@ class FriendHome extends StatefulWidget {
 }
 
 class _FriendHome extends State<FriendHome> {
+  TextEditingController _textEditingController = TextEditingController();
+  String enteredText = "";
+
+  // 저장된 인증 토큰 및 리프레시 토큰을 가져오는 함수
+  Future<Map<String, String>> getTokens() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    String? refreshToken = prefs.getString('refreshToken');
+
+    return {
+      'accessToken': accessToken ?? '',
+      'refreshToken': refreshToken ?? ''
+    };
+  }
+
+  Future<void> Server() async {
+    var url = Uri.parse('http://3.39.126.140:8000/activity-service/user');
+
+    Map<String, String> tokens = await getTokens();
+    String accessToken = tokens['accessToken']!;
+
+    Map<String, String> headers = {
+      'Authorization': 'Bearer $accessToken', // 액세스 토큰을 Authorization 헤더에 포함시킴
+      'Content-Type': 'application/json',
+    };
+
+    var body = jsonEncode({
+      'userId': 1,
+      'content': enteredText,
+    });
+
+    try {
+      http.Response response = await http.post(
+        url,
+        headers: {'Authorization': 'Bearer $accessToken', // 액세스 토큰을 Authorization 헤더에 포함시킴
+                  'Content-Type': 'application/json'},
+        body: body,
+      );
+      if (response.statusCode == 200) { // 요청 성공
+      } else { // 요청 실패
+      }
+    } catch (e) { // 오류 발생
+
+    }
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
+        body: Container(
+      padding: EdgeInsets.only(top: 40),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/background.gif'),
+          fit: BoxFit.fill,
+        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -38,6 +100,7 @@ class _FriendHome extends State<FriendHome> {
                         return AlertDialog(
                           title: Text("방명록 작성", style: TextStyle(fontSize: 20)),
                           content: TextField(
+                            controller: _textEditingController, // TextEditingController 설정
                             decoration: InputDecoration(
                               suffixStyle: TextStyle(fontSize: 15),
                               hintText: '내용을 입력해주세요-',
@@ -49,6 +112,9 @@ class _FriendHome extends State<FriendHome> {
                             TextButton(
                               child: const Text('보내기'),
                               onPressed: () {
+                                enteredText = _textEditingController.text; // 입력된 내용 가져오기
+                                print('입력된 내용: $enteredText');
+
                                 Navigator.of(context).pop();
                               },
                             ),
