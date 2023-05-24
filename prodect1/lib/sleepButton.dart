@@ -25,12 +25,15 @@ class SleepTimerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SleepTimerPage(),
+      home: MyHomePage(),
     );
   }
 }
 
 class SleepTimerPage extends StatefulWidget {
+  final Function toggleDarkenScreen;
+  SleepTimerPage({required this.toggleDarkenScreen});
+
   @override
   _SleepTimerPageState createState() => _SleepTimerPageState();
 }
@@ -89,6 +92,7 @@ class _SleepTimerPageState extends State<SleepTimerPage> {
               ElevatedButton(
                 child: Text('예'),
                 onPressed: () {
+                  widget.toggleDarkenScreen();
                   setState(() {
                     sleepStartTime = DateTime.now();
                     sleepEndTime = null;
@@ -140,7 +144,7 @@ class _SleepTimerPageState extends State<SleepTimerPage> {
           Light[0],
         ),
         iconSize: 55,
-        onPressed: toggleSleepMode,
+        onPressed: toggleSleepMode
       );
     } else {
       return IconButton(
@@ -149,7 +153,10 @@ class _SleepTimerPageState extends State<SleepTimerPage> {
           Light[1],
         ),
         iconSize: 55,
-        onPressed: toggleSleepMode,
+        onPressed: () {
+          widget.toggleDarkenScreen();
+          toggleSleepMode();
+        }
       );
     }
   }
