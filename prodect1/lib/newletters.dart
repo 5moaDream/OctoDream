@@ -56,7 +56,7 @@ class _newletter extends State<newletter>{
                       IconButton(
                           onPressed: () {
                             Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => Datelist()));
+                                MaterialPageRoute(builder: (context) => datelist()));
                           },
                           icon: Icon(Icons.close)
                       )

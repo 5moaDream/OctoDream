@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:prodect1/newletters.dart';
 import 'letters.dart';
@@ -28,6 +29,24 @@ class datelist extends StatefulWidget {
 }
 
 class _datelist extends State<datelist> {
+
+  void secondevent(){
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => newletter()));
+  }
+
+  bool isOpen = false;
+
+  void handleTap() {
+    setState(() {
+      isOpen = true;
+    });
+
+    Timer(Duration(seconds: 2), () {
+      secondevent();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,18 +80,20 @@ class _datelist extends State<datelist> {
                 ],
               ),
             ),
-            Expanded(
+         Expanded(
                 child:
                   Padding(
                     padding: const EdgeInsets.only(bottom: 50),
                     child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => newletter()));},
-                        child: Image.asset('assets/images/chest.png',
-                            height: 200),
+                        onTap:
+                         handleTap,
+                      child: Image.asset(
+                        isOpen ?
+                        'assets/images/chest.png' // 이미지 열기
+                        : 'assets/images/treasure_close.png', // 이미지 닫기
+                        height: 220,
                     ),
-                  ),),
+                  ),),),
             SizedBox(
               width: MediaQuery.of(context).size.width*0.2,
               child: Padding(
@@ -106,3 +127,5 @@ class _datelist extends State<datelist> {
     );
   }
 }
+
+
