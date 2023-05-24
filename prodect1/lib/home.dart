@@ -1,14 +1,24 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:prodect1/Service/diaryService.dart';
+import 'package:prodect1/Service/firstSetService.dart';
+import 'package:prodect1/Service/sleepService.dart';
+import 'package:prodect1/Service/userService.dart';
 import 'package:prodect1/dictionary.dart';
+import 'package:prodect1/payCallbackscreen.dart';
+import 'package:prodect1/paySevice.dart';
 import 'package:prodect1/setting.dart';
-
+import 'package:prodect1/firstDisplay.dart';
+import 'package:prodect1/sleepButton.dart';
 
 //import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'Datelist.dart';
 import 'calendar.dart';
 import 'distance.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -25,30 +35,6 @@ class Coment {
 
 final myController = TextEditingController();
 
-class Diary {
-  var now;
-  var today;
-  var contents;
-
-  void saveDiary(String contents) {
-    now = DateTime.now();
-    this.today = "${now.year}-${now.month}-${now.day}";
-    this.contents = contents;
-  }
-
-  void printDiary() {
-    print(contents);
-    print(today);
-  }
-}
-
-class User {
-  var nickName = '무너무너';
-  var score; //경험치
-  String getNickName() {
-    return nickName;
-  }
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -62,8 +48,11 @@ class MyApp extends StatelessWidget {
         //   primarySwatch: Colors.blue,
         //   scaffoldBackgroundColor: Colors.white,
         // ),
-        home: MyHomePage()
+        home: MyHomePage(),
       //const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: <String, WidgetBuilder>{
+      '/result': (BuildContext context)=>Result()
+    },
     );
   }
 }
@@ -74,41 +63,51 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<Info>? info;
+
   bool _diaryState = false;
+
   bool _isDisplayed = false;
   int _octoState = 0;
 
-  void _displayAnswer() {
+  void _displayBubble() {
     setState(() {
       _isDisplayed = true;
+      _diaryState = false;
     });
   }
-
-  int state = 0;
-  List<String> Light = [
-    "assets/images/light_on.png", //0
-    "assets/images/light_off.png", //1
-  ];
 
   double value = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _isDisplayed = false;
+    // _isDisplayed = true;
+    checkTime();
+    info = fetchInfo();
+  }
+
+  void checkTime() {
+    DateTime now = DateTime.now();
+    DateTime tenPm = DateTime(now.year, now.month, now.day, 22, 0); // 밤 10시 설정
+    DateTime elevenFiftyNinePm = DateTime(now.year, now.month, now.day, 23, 59); // 밤 11시 59분 설정
+
+    if (now.isAfter(tenPm) && now.isBefore(elevenFiftyNinePm)) {
+      setState(() {
+        _diaryState = true;
+      });
+    }
   }
 
   Coment coment = new Coment();
-  Diary diary = new Diary();
-  User user = new User();
 
-  double _currentValue = 20;
-
-  setEndPressed(double value) {
-    setState(() {
-      _currentValue = value;
-    });
-  }
+  // double _currentValue = 20;
+  //
+  // setEndPressed(double value) {
+  //   setState(() {
+  //     _currentValue = value;
+  //   });
+  // }
 
   Widget buildFloatingButton(String text, VoidCallback callback) {
     TextStyle roundTextStyle =
@@ -117,10 +116,16 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Text(text, style: roundTextStyle), onPressed: callback);
   }
 
+
   @override
   Widget build(BuildContext context) {
+    return buildMyFutureBuilderWidget(info!, myController, context);
+  }
+
+  Widget _homeView(Info info) {
     return Scaffold(
       //상중하를 나눠주는 위젯
+      resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.only(top: 40),
         decoration: BoxDecoration(
@@ -148,10 +153,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         Row(
                           children: [
                             Text(
-                              user.getNickName(),
+                              info.characterName,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 28,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 2.0,
                                   fontFamily: 'Neo'),
@@ -163,6 +168,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                         Setting(title: '설정',)));
                               },
                               child: Image.asset('assets/images/setting.png',
+                                  height: 25),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        Paymentscreen()));
+                              },
+                              child: Image.asset('assets/images/coin.png',
                                   height: 25),
                             ),
                           ],
@@ -188,7 +202,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (_isDisplayed) Answer(),
+                      if (_diaryState == true) Answer(),
+                      if (_isDisplayed == true) Answer(),
                       if (_octoState == 1)
                         ColorFiltered(
                           colorFilter: ColorFilter.mode(
@@ -232,7 +247,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               );
                             },
                             child: Image.asset('assets/images/right.png',
-                                height: 60, color: Colors.black38.withOpacity(0.2),),
+                              height: 60, color: Colors.black38.withOpacity(0.2),),
                           ),
                         ],
                       )
@@ -257,8 +272,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     progressColor: Colors.yellow,
                     backgroundColor: Colors.grey[100]!,
                     borderRadius: BorderRadius.circular(30),
-                    currentValue: 56,
-                    displayText: '경험치',
+                    currentValue: info.experienceValue.toDouble(),
+                    displayText: ' 경험치',
                     size: 26,
                   ),
                 ),
@@ -271,6 +286,30 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildMyFutureBuilderWidget(Future<Info> info, TextEditingController myController, BuildContext context) {
+    bool isCharacterNameMissing = false;
+
+    return FutureBuilder<Info>(
+      future: info,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data?.characterName == null && !isCharacterNameMissing) {
+            isCharacterNameMissing = true;
+            WidgetsBinding.instance?.addPostFrameCallback((_) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => firstDisplay()),
+              );
+            });
+          }
+          return _homeView(snapshot.data!);
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error} 에러!!");
+        }
+        return CircularProgressIndicator();
+      },
     );
   }
 
@@ -326,66 +365,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Row(
                   children: [
-                    IconButton(
-                      padding: EdgeInsets.fromLTRB(0, 0, 25, 0),
-                      icon: Image.asset(
-                        Light[state],
-                        width: 60,
-                        height: 60,
-                      ),
-                      iconSize: 55,
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false, //바깥영역 터치시 닫을지
-                            builder: (BuildContext context) {
-                              if (state == 0) {
-                                return AlertDialog(
-                                    title: Text('불 끄기'),
-                                    content: Text('수면을 시작하시겠습니까?'),
-                                    actions: [
-                                      TextButton(
-                                        child: Text('시간설정'),
-                                        onPressed: () {},
-                                      ),
-                                      ElevatedButton(
-                                        child: Text('예'),
-                                        onPressed: () =>
-                                            setState(() {
-                                              state = 1;
-                                              coment.setComment('나 자께요');
-                                              Navigator.of(context).pop();
-                                            }),
-                                      )
-                                    ],
-                                    shape: RoundedRectangleBorder(
-                                      //다이얼로그 창 둥글게
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                    ));
-                              } else {
-                                return AlertDialog(
-                                    title: Text('불 켜기'),
-                                    content: Text('수면을 종료하시겠습니까?'),
-                                    actions: [
-                                      ElevatedButton(
-                                        child: Text('예'),
-                                        onPressed: () =>
-                                            setState(() {
-                                              state = 0;
-                                              Navigator.of(context).pop();
-                                            }),
-                                      )
-                                    ],
-                                    shape: RoundedRectangleBorder(
-                                      //다이얼로그 창 둥글게
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                    ));
-                              }
-                            });
-                      },
-                    ),
+                    SleepTimerPage(),
                     IconButton(
                       icon: Image.asset(
                         "assets/images/running.png",
@@ -411,6 +391,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget Answer() {
+    // _diaryState = true;
     return Column(
       children: [
         Stack(
@@ -487,8 +468,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                           );
                                         });
                                   } else {
-                                    diary.saveDiary(myController.text);
-                                    diary.printDiary();
+                                    writeDiary(myController.text); //다이어리 저장
+                                    _diaryState = false;
+                                    // _isDisplayed = false;
                                     Navigator.of(context).pop();
                                   }
                                 },
@@ -546,7 +528,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
                 child: AnimatedContainer(
                   // color: Colors.deepPurple,
-                  margin: EdgeInsets.fromLTRB(80, 10, 0, 0),
+                  margin: EdgeInsets.fromLTRB(75, 10, 0, 0),
                   height: 65,
                   width: 65,
                   duration: const Duration(seconds: 1),
@@ -559,8 +541,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(() {
                           //setEndPressed(40);
                           String temp = coment.coment;
-                          _displayAnswer();
-                          _octoState = 0;
+                          _displayBubble();
+                          _octoState = 1;
                           coment.setComment('맛나요');
                           Future.delayed(Duration(seconds: 3), () {
                             setState(() {
@@ -575,7 +557,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               child: AnimatedContainer(
                 // color: Colors.deepPurple,
-                margin: EdgeInsets.fromLTRB(140, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(130, 10, 0, 0),
                 height: 65,
                 width: 65,
                 duration: const Duration(seconds: 1),
@@ -588,8 +570,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         String temp = coment.coment;
                         coment.setComment('꺅');
-                        _octoState = 0;
-                        _displayAnswer();
+                        _octoState = 2;
+                        _displayBubble();
                         Future.delayed(Duration(seconds: 3), () {
                           setState(() {
                             coment.setComment(temp);
@@ -604,7 +586,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               child: AnimatedContainer(
                 // color: Colors.deepPurple,
-                margin: EdgeInsets.fromLTRB(210, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(190, 10, 0, 0),
                 height: 65,
                 width: 65,
                 duration: const Duration(seconds: 1),
@@ -617,8 +599,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         String temp = coment.coment;
                         coment.setComment('개신나노');
-                        _octoState = 0;
-                        _displayAnswer();
+                        _octoState = 3;
+                        _displayBubble();
                         Future.delayed(Duration(seconds: 3), () {
                           setState(() {
                             coment.setComment(temp);
@@ -644,7 +626,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () =>
                       setState(() {
                         if (value == 0.0) {
-                          value = -200.0;
+                          value = -190.0;
                         } else {
                           value = 0.0;
                         }
