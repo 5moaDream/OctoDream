@@ -48,7 +48,8 @@ class _Friends extends State<Friends> {
                             MaterialPageRoute(builder: (context) => Datelist()),
                           );
                         },
-                        child: Image.asset('assets/images/left.png', height: 55),
+                        child: Image.asset('assets/images/left.png',
+                          height: 60, color: Colors.black38.withOpacity(0.2)),
                       ),
                     ),
                     SizedBox(
@@ -56,7 +57,7 @@ class _Friends extends State<Friends> {
                       child: GridView.builder(
                         itemCount: myFriend.length, // 아이템 개수
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1, // 가로 방향 아이템 수
+                          crossAxisCount: 2, // 가로 방향 아이템 수
                           childAspectRatio: 1 / 1, // 아이템 가로 세로 비율
                           mainAxisSpacing: 10, // 세로 방향 간격
                           crossAxisSpacing: 10, // 가로 방향 간격

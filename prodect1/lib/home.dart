@@ -180,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             SizedBox(
-              height: 400,
+              height: MediaQuery.of(context).size.height*0.5,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

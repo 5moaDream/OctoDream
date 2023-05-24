@@ -55,7 +55,8 @@ class _datelist extends State<datelist> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => MyHomePage()),);},
-                      child: Image.asset('assets/images/left.png', height: 55),),
+                      child: Image.asset('assets/images/left.png',
+                          height: 60, color: Colors.black38.withOpacity(0.2)),),
                   ),
                   Container(),
                 ],
@@ -94,7 +95,8 @@ class _datelist extends State<datelist> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Friends()),);                    },
-                      child: Image.asset('assets/images/right.png', height: 60),),
+                      child: Image.asset('assets/images/right.png',
+                          height: 60, color: Colors.black38.withOpacity(0.2)),),
                     Container()
                   ],
                 ),
