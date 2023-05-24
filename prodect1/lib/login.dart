@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:prodect1/letters.dart';
 import 'home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-String token = 'your_token_value';
+import 'dart:ui';
+import 'notification.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
     _initKaKaoTalkInstalled();
-    checkTokens(); // 토큰 확인
+    // checkTokens(); // 토큰 확인
   }
 
   Future<void> _initKaKaoTalkInstalled() async {
@@ -186,17 +187,7 @@ class _LogInState extends State<LogIn> {
               SizedBox(height: 40),
               ElevatedButton(
                 child: const Text('로그인'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PageView(
-                              children: [
-                                MyApp(),
-                              ],
-                            )),
-                  );
-                },
+                onPressed: () => FlutterLocalNotification.showNotification(),
               ),
               GestureDetector(
                 onTap: () async {
@@ -249,3 +240,6 @@ class _LogInState extends State<LogIn> {
     );
   }
 }
+
+
+

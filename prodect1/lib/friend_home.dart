@@ -1,11 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:prodect1/home.dart';
 import 'main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
 
 class FriendHome extends StatefulWidget {
   final String imageName;
@@ -37,7 +42,7 @@ class _FriendHome extends State<FriendHome> {
   }
 
   Future<void> Server() async {
-    var url = Uri.parse('http://3.39.126.140:8000/activity-service/user');
+    var url = Uri.parse('http://3.39.126.140:8000/activity-service/guest-book');
 
     Map<String, String> tokens = await getTokens();
     String accessToken = tokens['accessToken']!;
@@ -47,24 +52,21 @@ class _FriendHome extends State<FriendHome> {
       'Content-Type': 'application/json',
     };
 
-    var body = jsonEncode({
-      'userId': widget.ID,
-      'content': enteredText,
-    });
-
-    try {
+    Map<String, dynamic> requestBody = {
+      "userId": "5",
+      "content": "${enteredText}",
+    };
+    String jsonBody = jsonEncode(requestBody);
+    try{
       http.Response response = await http.post(
         url,
-        headers: {'Authorization': 'Bearer $accessToken', // 액세스 토큰을 Authorization 헤더에 포함시킴
-                  'Content-Type': 'application/json'},
-        body: body,
+        headers: headers,
+        body: jsonBody,
       );
       if (response.statusCode == 200) { // 요청 성공
       } else { // 요청 실패
       }
-    } catch (e) { // 오류 발생
-
-    }
+    }catch(e){}
   }
 
   @override
@@ -123,6 +125,7 @@ class _FriendHome extends State<FriendHome> {
                               child: const Text('보내기'),
                               onPressed: () {
                                 enteredText = _textEditingController.text; // 입력된 내용 가져오기
+                                Server();
                                 _textEditingController.clear(); // 수정된 부분
                                 Navigator.of(context).pop();
                               },

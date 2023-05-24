@@ -1,5 +1,10 @@
 buildscript {
     ext.kotlin_version = '1.7.10'
+    ext {
+        minSdkVersion = 21
+        compileSdkVersion = 31
+        targetSdkVersion = 31
+    }
     repositories {
         google()
         mavenCentral()
