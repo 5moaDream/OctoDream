@@ -120,6 +120,7 @@ class _firstDisplay extends State<firstDisplay> {
                                                     fetchName(myController.text);
                                                     Future.delayed(Duration(seconds: 3));
                                                     Navigator.of(context).pop();
+                                                    Future.delayed(Duration(seconds: 3));
                                                     Navigator.push(context,
                                                       MaterialPageRoute(builder: (context) => MyHomePage()),
                                                     );

@@ -8,6 +8,28 @@ var logger = Logger(
   printer: PrettyPrinter(),
 );
 
+Future<double> fetchDistance() async {
+  String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg3NDA4NTAyfQ.yizKabrMGyUpxrRvxPnw11XZu6dlB9lterq-4SxC_spYBhW2P7wvFq73v6kCs6T4mbTAGVvyjNZBvGQvM7XzJQ';
+  // String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzk0MDk2NTI2IiwiZXhwIjoxNjg3MzExMTgyfQ.O2UIaz23NQqE_vZ4YYUdFgaF7e0PJg29PNKxKfqMbgvQzRlJiexeOV1D9-ojhp2LtdM3RUzycuCyj_FiS4D3Xw';
+
+  Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $token',
+  };
+  var url = Uri.parse('http://3.39.126.140:8000/user-service/user');
+  // var url = Uri.parse('http://3.39.126.140:8000/unauthorization/kakao-login');
+  var response = await http.get(url, headers: headers);
+
+  if (response.statusCode == 200) {
+    var responseBody = response.body;
+    var decodedResponse = jsonDecode(responseBody);
+    var distance = decodedResponse['distance'];
+    return double.parse(distance.toString());
+  } else {
+    throw Exception('Failed to fetch distance');
+  }
+}
+
 
 Future<Info> fetchInfo() async {
 

@@ -65,8 +65,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Future<Info>? info;
 
-  bool _diaryState = true;
-  // bool _playState = false;
+  bool _diaryState = false;
 
   bool _isDisplayed = false;
   int _octoState = 0;

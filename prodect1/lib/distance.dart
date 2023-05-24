@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
+import 'Service/runningService.dart';
+import 'Service/userService.dart';
 
 class DistanceTrackerDialog extends StatefulWidget {
   @override
@@ -10,8 +14,22 @@ class DistanceTrackerDialog extends StatefulWidget {
 class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
   late StreamSubscription<Position> _positionStreamSubscription;
 
-  //final double goalDistance = await _getGoalDistanceFromDB();
-  final double goalDistance = 5.0;
+  Timer? _timer;
+  Duration _runningTime = Duration.zero;
+
+  double? goalDistance = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDistance().then((distance) {
+      setState(() {
+        goalDistance = distance;
+      });
+    }).catchError((error) {
+      print('Error fetching distance: $error');
+    });
+  }
 
   double _distance = 0; //하루 걸은 거리 받아와야 함
   bool _isMeasuring = false;
@@ -20,6 +38,7 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
   void _startMeasuringDistance() async{
     setState(() {
       _isMeasuring = true;
+      _runningTime = Duration.zero;
     });
 
     // Get the initial position
@@ -35,10 +54,28 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
         _updateDistance(position);
       }
     });
+
+    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      setState(() {
+        _runningTime += Duration(seconds: 1);
+      });
+    });
   }
 
   void _stopMeasuringDistance() {
     _positionStreamSubscription?.cancel();
+    _timer?.cancel();
+
+    Duration runningDuration = _runningTime;
+    double measuredDistance = _distance;
+    print('Total Running Time: ${runningDuration.inMinutes} minutes');
+    print('Total Running Distance: $measuredDistance km');
+
+    var createTime = DateTime.now().millisecondsSinceEpoch;
+
+    recodeSleep(createTime, runningDuration.inMinutes, measuredDistance);
+    //거리 서버로 보내줘야 댐
+    //러닝 시간도 측정해야 하구나...
     setState(() {
       _isMeasuring = false;
     });
