@@ -79,6 +79,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   double value = 0.0;
 
+  bool isDarkened = false;
+  void toggleDarkenScreen() {
+    setState(() {
+      isDarkened = !isDarkened;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -126,165 +133,184 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       //상중하를 나눠주는 위젯
       resizeToAvoidBottomInset: false,
-      body: Container(
-        padding: EdgeInsets.only(top: 40),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/background.gif'),
-            fit: BoxFit.fill,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 170,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    height: 160,
-                    width: 190,
-                    padding: EdgeInsets.only(
-                        bottom: 0, left: 20, top: 90, right: 0),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          children: [
-                            Text(
-                              info.characterName,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2.0,
-                                  fontFamily: 'Neo'),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        Setting(title: '설정',)));
-                              },
-                              child: Image.asset('assets/images/setting.png',
-                                  height: 25),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        Paymentscreen()));
-                              },
-                              child: Image.asset('assets/images/coin.png',
-                                  height: 25),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 160,
-                    width: 190,
-                    //color: Colors.deepOrange,
-                    child: Menu(),
-                  ),
-                ],
+      body: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 40),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/background.gif'),
+                fit: BoxFit.fill,
               ),
             ),
-            SizedBox(
-              height: 400,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(child: Container()),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 170,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      if (_diaryState == true) Answer(),
-                      if (_isDisplayed == true) Answer(),
-                      if (_octoState == 1)
-                        ColorFiltered(
-                          colorFilter: ColorFilter.mode(
-                              Colors.transparent, BlendMode.color),
-                          child: Image.asset(
-                              'assets/images/baby_food.gif', height: 145),
-                        )
-                      else if (_octoState == 2)
-                        ColorFiltered(
-                          colorFilter: ColorFilter.mode(
-                              Colors.transparent, BlendMode.color),
-                          child: Image.asset(
-                              'assets/images/baby_hand.gif', height: 120),
-                        )
-                      else if (_octoState == 3)
-                          ColorFiltered(
-                            colorFilter: ColorFilter.mode(
-                                Colors.transparent, BlendMode.color),
-                            child: Image.asset(
-                                'assets/images/baby_ball.gif', height: 150),
-                          )
-                        else
-                          ColorFiltered(
-                            colorFilter: ColorFilter.mode(
-                                Colors.transparent, BlendMode.color),
-                            child: Image.asset(
-                                'assets/images/first_octo.gif', height: 120),
-                          ),
+                      Container(
+                        height: 160,
+                        width: 190,
+                        padding: EdgeInsets.only(
+                            bottom: 0, left: 20, top: 90, right: 0),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                Text(
+                                  info.characterName,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 2.0,
+                                      fontFamily: 'Neo'),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            Setting(title: '설정',)));
+                                  },
+                                  child: Image.asset('assets/images/setting.png',
+                                      height: 25),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            Paymentscreen()));
+                                  },
+                                  child: Image.asset('assets/images/coin.png',
+                                      height: 25),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 160,
+                        width: 190,
+                        //color: Colors.deepOrange,
+                        child: Menu(),
+                      ),
                     ],
                   ),
-                  Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                ),
+                SizedBox(
+                  height: 400,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(child: Container()),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Datelist()),
-                              );
-                            },
-                            child: Image.asset('assets/images/right.png',
-                              height: 60, color: Colors.black38.withOpacity(0.2),),
-                          ),
+                          if (_diaryState == true) Answer(),
+                          if (_isDisplayed == true) Answer(),
+                          if (_octoState == 1)
+                            ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                  Colors.transparent, BlendMode.color),
+                              child: Image.asset(
+                                  'assets/images/baby_food.gif', height: 145),
+                            )
+                          else if (_octoState == 2)
+                            ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                  Colors.transparent, BlendMode.color),
+                              child: Image.asset(
+                                  'assets/images/baby_hand.gif', height: 120),
+                            )
+                          else if (_octoState == 3)
+                              ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                    Colors.transparent, BlendMode.color),
+                                child: Image.asset(
+                                    'assets/images/baby_ball.gif', height: 150),
+                              )
+                            else
+                              ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                    Colors.transparent, BlendMode.color),
+                                child: Image.asset(
+                                    'assets/images/first_octo.gif', height: 120),
+                              ),
                         ],
+                      ),
+                      Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Datelist()),
+                                  );
+                                },
+                                child: Image.asset('assets/images/right.png',
+                                  height: 60, color: Colors.black38.withOpacity(0.2),),
+                              ),
+                            ],
+                          )
                       )
-                  )
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8, right: 8),
-                //   child: Text("경험치", style: TextStyle(
-                //       fontWeight: FontWeight.bold,fontSize: 16),),
-                // ),
-                Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.75,
-                  child: FAProgressBar(
-                    progressColor: Colors.yellow,
-                    backgroundColor: Colors.grey[100]!,
-                    borderRadius: BorderRadius.circular(30),
-                    currentValue: info.experienceValue.toDouble(),
-                    displayText: ' 경험치',
-                    size: 26,
+                    ],
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 8, right: 8),
+                    //   child: Text("경험치", style: TextStyle(
+                    //       fontWeight: FontWeight.bold,fontSize: 16),),
+                    // ),
+                    Container(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.75,
+                      child: FAProgressBar(
+                        progressColor: Colors.yellow,
+                        backgroundColor: Colors.grey[100]!,
+                        borderRadius: BorderRadius.circular(30),
+                        currentValue: info.experienceValue.toDouble(),
+                        displayText: ' 경험치',
+                        size: 26,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  height: 100,
+                  child: Bag(),
                 ),
               ],
             ),
-            Container(
-              height: 100,
-              child: Bag(),
+          ),
+          if (isDarkened)
+            GestureDetector(
+              onTap: () {
+                // toggleDarkenScreen();
+              },
+              child: Container(
+                color: Colors.black54,
+                width: double.infinity,
+                height: double.infinity,
+              ),
             ),
-          ],
-        ),
+          Container(
+            padding: EdgeInsets.fromLTRB(220, 140, 0, 0),
+            child: SleepTimerPage(toggleDarkenScreen: toggleDarkenScreen),
+          )
+        ],
       ),
     );
   }
@@ -365,8 +391,9 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Row(
                   children: [
-                    SleepTimerPage(),
+                    // SleepTimerPage(toggleDarkenScreen: toggleDarkenScreen),
                     IconButton(
+                      padding: EdgeInsets.fromLTRB(90, 10, 0, 0),
                       icon: Image.asset(
                         "assets/images/running.png",
                         width: 60,
