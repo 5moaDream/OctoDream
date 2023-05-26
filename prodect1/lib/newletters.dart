@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prodect1/Datelist.dart';
+import 'package:http/http.dart' as http;
+import 'letterservice/newletterservice.dart';
+
 
 class newletterlist extends StatefulWidget{
   _newletterlist createState() => _newletterlist();
@@ -21,19 +25,26 @@ class newletter extends StatefulWidget{
   State<newletter> createState()=>_newletter();
 }
 
-class one{
-  late String context;
-  late String name;
-  one(this.context,this.name);
-}
-
-List<one>One=<one>[
-  one('안녕 너 문어 구경했어', '-지연-'),
-  one('우리 친구 됐다!', '-유라-'),
-  one('너 문어 짱 멋지다', '-승희-')
-];
+List<newletterList> list =[];
 
 class _newletter extends State<newletter>{
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      List<newlettone> newdata = await fetchdata();
+      setState(() {
+        list = convertToMyList(newdata);
+      });
+    } catch (error) {
+      print('Error: $error');
+      // 에러 처리 로직 추가
+    }
+  }
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -74,7 +85,7 @@ class _newletter extends State<newletter>{
                         margin: EdgeInsets.only(left: 3,top: 7,bottom: 7),
                         child: Text('새로운 쪽지를 확인해보세요!'),
                       ),
-                      lett(context)],
+                      newlett(context)],
                   )
               )
             ],
@@ -82,10 +93,11 @@ class _newletter extends State<newletter>{
         )
     );
   }
-}
-
-lett(BuildContext context) {
-  return Container(
+  Widget newlett(BuildContext context){
+    if (list.isEmpty) {
+      return Container(); // 또는 적절한 로딩 또는 에러 표시 위젯을 반환하세요.
+    }
+    return Container(
       padding: EdgeInsets.all(5),
       width: 400,
       height: 450,
@@ -102,8 +114,9 @@ lett(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Icon(Icons.star),
-                Text(One[0].context),
-                Text(One[0].name),
+                Text(list[0].content),
+                Text(list[0].name),
+                Text('${list[0].year}-${list[0].month}-${list[0].day}')
               ],
             ),
           ),
@@ -115,15 +128,17 @@ lett(BuildContext context) {
                 borderRadius: BorderRadius.circular(70.0),
                 color: Colors.lightGreenAccent),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Icon(Icons.star),
-                Text(One[2].context),
-                Text(One[2].name),
+                Text(list[1].content),
+                Text(list[1].name),
+                Text('${list[1].year}-${list[1].month}-${list[1].day}')
               ],
             ),
-          ),
+          )
         ],
-      )
-  );
+      ),
+    );
+  }
 }

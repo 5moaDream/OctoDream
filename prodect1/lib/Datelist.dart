@@ -83,15 +83,15 @@ class _datelist extends State<datelist> {
          Expanded(
                 child:
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 50),
+                    padding: const EdgeInsets.only(bottom:10),
                     child: GestureDetector(
                         onTap:
                          handleTap,
                       child: Image.asset(
                         isOpen ?
-                        'assets/images/chest.png' // 이미지 열기
-                        : 'assets/images/treasure_close.png', // 이미지 닫기
-                        height: 220,
+                        'assets/images/open.gif'
+                        : 'assets/images/closeSet5.png',
+                        height: 200,
                     ),
                   ),),),
             SizedBox(
