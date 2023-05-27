@@ -9,14 +9,8 @@ class Friends extends StatefulWidget {
 }
 
 class _Friends extends State<Friends> {
-  int _friend_cnt = 3;
   List myFriend = ['영주', '혜원', '찬영', '광휘', '지연', '은진'];
-
-  void _minus() {
-    setState(() {
-      _friend_cnt--;
-    });
-  }
+  List OctoFriend = ['달밤영', '감자 러버', '어쩌라고', '평화주의자', '뷁뚫꺕ㅎ', '분위기메이커'];
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +42,7 @@ class _Friends extends State<Friends> {
                             MaterialPageRoute(builder: (context) => Datelist()),
                           );
                         },
-                        child: Image.asset('assets/images/left.png',
-                          height: 60, color: Colors.black38.withOpacity(0.2)),
+                        child: Image.asset('assets/images/left.png', height: 55),
                       ),
                     ),
                     SizedBox(
@@ -57,8 +50,8 @@ class _Friends extends State<Friends> {
                       child: GridView.builder(
                         itemCount: myFriend.length, // 아이템 개수
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // 가로 방향 아이템 수
-                          childAspectRatio: 1 / 1, // 아이템 가로 세로 비율
+                          crossAxisCount: 1, // 가로 방향 아이템 수
+                          childAspectRatio: 2 / 1, // 아이템 가로 세로 비율
                           mainAxisSpacing: 10, // 세로 방향 간격
                           crossAxisSpacing: 10, // 가로 방향 간격
                         ),
@@ -79,23 +72,48 @@ class _Friends extends State<Friends> {
   }
 
   Widget buildFriendItem(int index) {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Text(
+                myFriend[index].toString(),
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black12,
+              ),
+            ),
+          ],
+        ),
+      Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.only(bottom: 4),
           child: Text(
-            myFriend[index].toString(),
+            OctoFriend[index].toString(),
             style: TextStyle(fontSize: 20),
           ),
         ),
         InkWell(
           onTap: () {
+            String ID = myFriend[index].toString(); // 임의 지정 추후 변경
+            String Octoname = OctoFriend[index].toString();
+            String imageName = 'first_octo.gif';
             // 페이지 변경 로직을 작성합니다.
             // 예를 들어, 다른 페이지로 이동하는 코드를 작성할 수 있습니다.
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => FriendHome()),
+              MaterialPageRoute(builder: (context) => FriendHome(ID: ID, Octoname: Octoname, imageName: imageName)),
             );
           },
           child: Image.asset(
@@ -107,7 +125,7 @@ class _Friends extends State<Friends> {
         Expanded(
           child: Container(
             width: 100,
-            height: 26,
+            height: 20,
             decoration: BoxDecoration(
               image: DecorationImage(
                 colorFilter: ColorFilter.mode(
@@ -120,6 +138,8 @@ class _Friends extends State<Friends> {
             ),
           ),
         ),
+      ],
+    ),
       ],
     );
   }
