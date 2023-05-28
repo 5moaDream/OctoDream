@@ -488,6 +488,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.4"
+  progressive_time_picker:
+    dependency: "direct main"
+    description:
+      name: progressive_time_picker
+      sha256: "20b736b64d75a1463eb03316d18abeac710be7a9f0b033b70dcf962e486bede2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
   shared_preferences:
     dependency: "direct main"
     description:
