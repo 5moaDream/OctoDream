@@ -10,8 +10,8 @@ var logger = Logger(
 );
 
 
-//잠잘래
-Future<String> recodeSleep(int createTime, int totalRunning, double distance) async {
+//거리 기록
+Future<String> recodeRunning(int createTime, int totalRunning, double distance) async {
 
   String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg3NDA4NTAyfQ.yizKabrMGyUpxrRvxPnw11XZu6dlB9lterq-4SxC_spYBhW2P7wvFq73v6kCs6T4mbTAGVvyjNZBvGQvM7XzJQ';
 

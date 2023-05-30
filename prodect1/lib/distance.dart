@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:prodect1/DTO/runningDTO.dart';
 
 import 'Service/runningService.dart';
 import 'Service/userService.dart';
@@ -29,9 +30,38 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
     }).catchError((error) {
       print('Error fetching distance: $error');
     });
+
+    initializeDistanceView();
   }
 
-  double _distance = 0; //하루 걸은 거리 받아와야 함
+  double _distance = 0; //측정할 때 씀
+
+  double calculateTotalDistance(List<RunningDTO> runningList) {
+    double totalDistance = 0;
+    for (var runningDTO in runningList) {
+      totalDistance += runningDTO.distnace!;
+    }
+    return totalDistance;
+  }
+
+  Future<double> todayRunningData() async {
+    List<RunningDTO> runningList = await fetchtodayrunning();
+    double totalDistance = calculateTotalDistance(runningList);
+    double roundedDistance = double.parse(totalDistance.toStringAsFixed(2));
+    print('Total distance: $roundedDistance');
+
+    return roundedDistance;
+  }
+
+  double _distanceView = 0; //오늘 하루 걸은 거리에서 누적되게 보여줄라고. ..
+
+  Future<void> initializeDistanceView() async {
+    double totalDistance = await todayRunningData();
+    setState(() {
+      _distanceView = totalDistance;
+    });
+  }
+
   bool _isMeasuring = false;
   late Position _lastPosition;
 
@@ -68,16 +98,18 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
 
     Duration runningDuration = _runningTime;
     double measuredDistance = _distance;
+    double measuredDistanceDisplay = _distanceView;
     print('Total Running Time: ${runningDuration.inMinutes} minutes');
     print('Total Running Distance: $measuredDistance km');
 
     var createTime = DateTime.now().millisecondsSinceEpoch;
 
-    recodeSleep(createTime, runningDuration.inMinutes, measuredDistance);
+    recodeRunning(createTime, runningDuration.inMinutes, measuredDistance);
     //거리 서버로 보내줘야 댐
     //러닝 시간도 측정해야 하구나...
     setState(() {
       _isMeasuring = false;
+      _distance = 0;
     });
 
     //double measuredDistance = _distance;
@@ -96,15 +128,26 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
       position.latitude,
       position.longitude,
     );
+
+    double newDisplayDistance = _distanceView + Geolocator.distanceBetween(
+      _lastPosition == null ? position.latitude : _lastPosition!.latitude,
+      _lastPosition == null ? position.longitude : _lastPosition!.longitude,
+      position.latitude,
+      position.longitude,
+    );
+
     setState(() {
       _distance = newDistance / 1000;
+      _distanceView = newDisplayDistance / 1000;
     });
     _lastPosition = position;
   }
 
   @override
   void dispose() {
-    _stopMeasuringDistance();
+    if (_distance != 0) {
+      _stopMeasuringDistance();
+    }
     super.dispose();
   }
 
@@ -167,7 +210,7 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
               Positioned(
                 top: 70,
                 left: 45,
-                child: Text('${_distance.toStringAsFixed(2)}km / ${goalDistance}km',
+                child: Text('${_distanceView.toStringAsFixed(2)}km / ${goalDistance}km',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
