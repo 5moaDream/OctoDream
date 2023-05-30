@@ -67,41 +67,111 @@ class _SleepTimerPageState extends State<SleepTimerPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Row(
+          return Dialog(
+            elevation: 0,
+            backgroundColor: Color(0xffffffff),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text('불 끄기'),
-                IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            Setting(title: '설정',)));
-                  },
+                SizedBox(height: 15),
+                Text(
+                  "불 끄기",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 15),
+                Text("수면을 시작하시겠습니까?"),
+                SizedBox(height: 20),
+                Divider(
+                  height: 1,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: InkWell(
+                    highlightColor: Colors.grey[200],
+                    onTap: () {
+                      widget.toggleDarkenScreen();
+                      setState(() {
+                        sleepStartTime = DateTime.now();
+                        sleepEndTime = null;
+                        sleepModeActive = true;
+                        Navigator.of(context).pop();
+                      });
+                    },
+                    child: Center(
+                      child: Text(
+                        "Yes",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  height: 1,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: InkWell(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15.0),
+                      bottomRight: Radius.circular(15.0),
+                    ),
+                    highlightColor: Colors.grey[200],
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Center(
+                      child: Text(
+                        "No",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  height: 1,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: InkWell(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15.0),
+                      bottomRight: Radius.circular(15.0),
+                    ),
+                    highlightColor: Colors.grey[200],
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              Setting(title: '설정',)));
+                    },
+                    child: Center(
+                      child: Text(
+                        "Setting",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-            content: Text('수면을 시작하시겠습니까?'),
-            actions: [
-              TextButton(
-                child: Text('아니요'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              ElevatedButton(
-                child: Text('예'),
-                onPressed: () {
-                  widget.toggleDarkenScreen();
-                  setState(() {
-                    sleepStartTime = DateTime.now();
-                    sleepEndTime = null;
-                    sleepModeActive = true;
-                    Navigator.of(context).pop();
-                  });
-                },
-              ),
-            ],
           );
         },
       );

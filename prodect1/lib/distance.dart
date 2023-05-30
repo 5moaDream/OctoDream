@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:prodect1/DTO/runningDTO.dart';
+import 'package:prodect1/setting.dart';
 
 import 'Service/runningService.dart';
 import 'Service/userService.dart';
@@ -158,7 +159,7 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('거리 측정',
+          Text('Running Mode',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 23,
@@ -176,7 +177,9 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
                     size: 28,
                   ),
                   onPressed: () {
-                    //달리기 설정 화면
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            Setting(title: '설정',)));
                   },
                 ),
                 IconButton(
