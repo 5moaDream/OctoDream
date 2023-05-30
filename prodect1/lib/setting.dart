@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prodect1/home.dart';
+import 'package:prodect1/runningsetting.dart';
 import 'package:prodect1/sleepsetting.dart';
 import 'package:progressive_time_picker/progressive_time_picker.dart';
-
+import 'package:intl/intl.dart' as intl;
+import 'package:prodect1/sleepsetting.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Service/userService.dart';
 
 class Setting extends StatelessWidget {
@@ -30,11 +33,40 @@ class _SettingPageState extends State<SettingPage> {
   bool isAlimEnabled = false;
   Future<Info>? info;
 
+  PickedTime _inBedTime =PickedTime(h:0,m:0);
+  PickedTime _outBedTime =PickedTime(h:0,m:0);
+
+  double _currentDoubleValue = 0.0;
+
+  Future<void> loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int inBedTimeHour = prefs.getInt('inbedtime_hour') ?? 0;
+    int inBedTimeMinute = prefs.getInt('inbedtime_minute') ?? 0;
+    int outBedTimeHour = prefs.getInt('outbedtime_hour') ?? 0;
+    int outBedTimeMinute = prefs.getInt('outbedtime_minute') ?? 0;
+
+    setState(() {
+      _inBedTime = PickedTime(h: inBedTimeHour, m: inBedTimeMinute);
+      _outBedTime = PickedTime(h: outBedTimeHour, m: outBedTimeMinute);
+    });
+  }
+
+  Future<void> loadkm() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    double RunningKm = prefs.getDouble('runningkm') ?? 0;
+    setState(() {
+      _currentDoubleValue = RunningKm;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     info = fetchInfo();
+    loadData();
+    loadkm();
   }
+
   @override
   Widget build(BuildContext context) {
    return Scaffold(
@@ -141,12 +173,15 @@ class _SettingPageState extends State<SettingPage> {
                                      builder: (context, snapshot){
                                        if(snapshot.hasData){
                                          final stateMsg = snapshot.data!.stateMsg;
-                                         return Text(
-                                           stateMsg ?? '',
-                                           style: TextStyle(
-                                             fontSize: 30,
-                                             color: Colors.black,
-                                           ),);
+                                         return TextField(
+                                           decoration: InputDecoration(
+                                             labelText:  stateMsg ?? '',
+                                             /*style: TextStyle(
+                                               fontSize: 30,
+                                               color: Colors.black,
+                                             ),*/
+                                           ),
+                                          );
                                        }
                                        else if (snapshot.hasError) {
                                          // 데이터 가져오기 실패 시 에러 처리
@@ -161,6 +196,7 @@ class _SettingPageState extends State<SettingPage> {
                                    TextButton(
                                      onPressed: () {
                                        Navigator.of(context).pop(); // 팝업 닫기
+
                                      },
                                      child: Text('확인'),
                                    ),
@@ -229,59 +265,74 @@ class _SettingPageState extends State<SettingPage> {
      ),
    );
   }
+  Widget sleeptime(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(3),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('수면 시간',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w100),),
+              TextButton(
+                  onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => sleepsetting()),
+                );
+              },
+                  child: Text('수정',
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.lightBlueAccent,
+                        fontWeight: FontWeight.w600),)),
+            ],
+          ),
+          Text(
+            '취침 시간: ${_inBedTime.h}시 ${_inBedTime.m}분',
+            style: TextStyle(fontSize: 15),
+          ),
+          Text(
+            '기상 시간: ${_outBedTime.h}시 ${_outBedTime.m}분',
+            style: TextStyle(fontSize: 15),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget runningkm(BuildContext context){
+    return Container(
+      padding: EdgeInsets.all(5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children:[
+              Text('러닝 거리',
+                style: TextStyle(fontSize: 20,fontWeight: FontWeight.w100),),
+              TextButton(onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context){
+                      return AlertDialog(
+                        title: Text('러닝 거리 설정'),
+                        content: Runningsetting(),
+                      );
+                    });
+              }, child: Text('수정',
+                style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.lightBlueAccent,
+                    fontWeight: FontWeight.w600),)),
+            ],
+          ),
+          Text('$_currentDoubleValue 러닝을 합니다.'),
+        ],
+      ),
+    );
+  }
 }
 
-Widget sleeptime(BuildContext context){
-  return Container(
-    padding: EdgeInsets.all(3),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('수면 시간',
-              style: TextStyle(fontSize: 20,fontWeight: FontWeight.w100),),
-            TextButton(onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => sleepsetting()));
-            },
-                child: Text('수정',
-                  style: TextStyle(
-                      fontSize: 17,
-                      color: Colors.lightBlueAccent,
-                      fontWeight: FontWeight.w600),)),
-          ],
-        ),
-        Text('__시 __분부터 __시 __분까지 \n 수면을 취합니다.')
-      ],
-    ),
-  );
-}
-
-Widget runningkm(BuildContext context){
-  return Container(
-    padding: EdgeInsets.all(5),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children:[
-            Text('러닝 거리',
-              style: TextStyle(fontSize: 20,fontWeight: FontWeight.w100),),
-            TextButton(onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => sleepsetting()));
-            }, child: Text('수정',
-              style: TextStyle(
-                  fontSize: 17,
-                  color: Colors.lightBlueAccent,
-                  fontWeight: FontWeight.w600),)),
-          ],
-        ),
-        Text('_km 러닝을 합니다.'),
-      ],
-    ),
-  );
-}
