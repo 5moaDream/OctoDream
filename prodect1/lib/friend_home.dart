@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:prodect1/home.dart';
@@ -13,11 +15,11 @@ var logger = Logger(
 );
 
 class FriendHome extends StatefulWidget {
-  final String imageName;
-  final String Octoname;
-  final String ID;
+  final Long Id;
+  final String nickName;
+  final String characterImageUrl;
 
-  FriendHome({required this.ID, required this.imageName, required this.Octoname});
+  FriendHome({required this.Id, required this.nickName, required this.characterImageUrl});
 
   @override
   _FriendHome createState() =>
@@ -144,7 +146,7 @@ class _FriendHome extends State<FriendHome> {
           Row(
             children: [
               SizedBox(width: 10),
-              Text(widget.Octoname,
+              Text(widget.nickName,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
@@ -159,10 +161,10 @@ class _FriendHome extends State<FriendHome> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(height: 240),
-              Image.asset(
-                'assets/images/${widget.imageName}',
-                width: 120,
-                height: 120,
+              Image.network(
+                widget.characterImageUrl,
+                width: 100,
+                height: 100,
               ),
             ],
           ),
