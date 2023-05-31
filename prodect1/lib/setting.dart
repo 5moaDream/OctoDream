@@ -218,7 +218,7 @@ class _SettingPageState extends State<SettingPage> {
                      child: Row(
                        children: [
                          Text(
-                           '수면 알람 설정',
+                           '모닝콜 설정',
                            style: TextStyle(fontSize: 20,fontWeight: FontWeight.w100),
                          ),
                          Switch(
@@ -244,10 +244,10 @@ class _SettingPageState extends State<SettingPage> {
                          Switch(
                            onChanged: (bool value) {
                              setState(() {
-                               isAlarmEnabled = value;  // 사용자가 선택한 값을 저장
+                               isAlimEnabled = value;  // 사용자가 선택한 값을 저장
                              });
                            },
-                           value: isAlarmEnabled,  // 현재 설정값을 표시
+                           value: isAlimEnabled,  // 현재 설정값을 표시
                            activeColor: Colors.green,
                          ),
                        ],
