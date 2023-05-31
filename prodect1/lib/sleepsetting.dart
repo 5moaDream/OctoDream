@@ -59,10 +59,13 @@ class _sleepsetting extends State<sleepsetting> {
     prefs.setInt('inbedtime_minute', _inBedTime.m);
     prefs.setInt('outbedtime_hour', _outBedTime.h);
     prefs.setInt('outbedtime_minute', _outBedTime.m);
+    prefs.setInt('intervalBedTime_hour', _intervalBedTime.h);
+    prefs.setInt('intervalBedTime_minute', _intervalBedTime.m);
 
     setState(() {});
     print('In Bed Time: ${_inBedTime.h}:${_inBedTime.m}');
     print('Out Bed Time: ${_outBedTime.h}:${_outBedTime.m}');
+    print('수면 시간: ${_intervalBedTime.h}시간 ${_intervalBedTime.m}');
   }
 
   Future<void> loadData() async {
@@ -75,6 +78,7 @@ class _sleepsetting extends State<sleepsetting> {
     setState(() {
       _inBedTime = PickedTime(h: inBedTimeHour, m: inBedTimeMinute);
       _outBedTime = PickedTime(h: outBedTimeHour, m: outBedTimeMinute);
+
       _intervalBedTime = formatIntervalTime(
         init: _inBedTime,
         end: _outBedTime,

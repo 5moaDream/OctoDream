@@ -39,6 +39,7 @@ class _Runningsetting extends State<Runningsetting> {
   @override
   void initState(){
     super.initState();
+    savekm();
     loadkm();
   }
 
