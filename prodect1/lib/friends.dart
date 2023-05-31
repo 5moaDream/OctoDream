@@ -55,7 +55,7 @@ class _Friends extends State<Friends> {
                           MaterialPageRoute(builder: (context) => Datelist()),
                         );
                       },
-                      child: Image.asset('assets/images/left.png', height: 55),
+                      child: Image.asset('assets/images/left.png', height: 55, color: Colors.black38.withOpacity(0.2)),
                     ),
                   ),
                   FutureBuilder<List<Friend>>(

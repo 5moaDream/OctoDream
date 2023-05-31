@@ -41,7 +41,7 @@ class _SettingPageState extends State<SettingPage> {
 
   double _currentDoubleValue =3.0;
 
-  Future<void> loadData() async {
+  Future<void> loadData() async { // 목표 수면 시간 가져오기
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int inBedTimeHour = prefs.getInt('inbedtime_hour') ?? 0;
     int inBedTimeMinute = prefs.getInt('inbedtime_minute') ?? 0;
@@ -51,9 +51,9 @@ class _SettingPageState extends State<SettingPage> {
     int intervalbertimeMinute = prefs.getInt('intervalBedTime_minute') ?? 0;
 
     setState(() {
-      _inBedTime = PickedTime(h: inBedTimeHour, m: inBedTimeMinute);
-      _outBedTime = PickedTime(h: outBedTimeHour, m: outBedTimeMinute);
-      _intervalBedTime = PickedTime(h: intervalbedtimeHour, m: intervalbertimeMinute);
+      _inBedTime = PickedTime(h: inBedTimeHour, m: inBedTimeMinute); // 목표 수면 시작 시간
+      _outBedTime = PickedTime(h: outBedTimeHour, m: outBedTimeMinute); // 목표 수면 종료 시간
+      _intervalBedTime = PickedTime(h: intervalbedtimeHour, m: intervalbertimeMinute); // 총 목표 수면 시간
     });
   }
 
@@ -65,16 +65,16 @@ class _SettingPageState extends State<SettingPage> {
     });
   }
 
-  Future<void> switchsave() async {
+  Future<void> switchsave() async { // 스위치 설정값 저장하기
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isAlarmEnabled', isAlarmEnabled);
-    prefs.setBool('isAlimEnabled', isAlimEnabled);
+    prefs.setBool('isAlarmEnabled', isAlarmEnabled); // 수면 종료 알람
+    prefs.setBool('isAlimEnabled', isAlimEnabled); // 푸시 알림
   }
 
-  Future<void> loadswitch() async {
+  Future<void> loadswitch() async { // 스위치 설정값 가져오기
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool onAlam = prefs.getBool('isAlarmEnabled') ?? false;
-    bool onAlim = prefs.getBool('isAlimEnabled') ?? false;
+    bool onAlam = prefs.getBool('isAlarmEnabled') ?? false; // 수면 종료 알람
+    bool onAlim = prefs.getBool('isAlimEnabled') ?? false; // 푸시 알림
     setState(() {
       isAlarmEnabled = onAlam; // SharedPreferences에서 설정값 가져오기
       isAlimEnabled = onAlim;
