@@ -49,6 +49,7 @@ class _mydiary extends State<mydiary> {
               print("${list[1].day}, ${list[1].text}");
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     padding: EdgeInsets.only(top: 20, left: 30, bottom: 10),
@@ -58,34 +59,39 @@ class _mydiary extends State<mydiary> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(10, 8, 8, 8),
-                      itemCount: list.length, //리스트 개수
-                      // itemBuilder 리스트에서 반복되는 Contaniner(항목) 형태
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          leading: Icon(Icons.hourglass_bottom,
-                            color: Colors.blueGrey[200], size: 40,),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(list[index].day,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  // fontWeight: FontWeight.bold 폰트 굵기
-                                ),),
-                              Text(list[index].text,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  // fontWeight: FontWeight.bold 폰트 굵기
-                                ),),
-                            ],
-                          ),
-                          onTap: (){},
-                        ); },
-                      separatorBuilder: (BuildContext context, int index) => const Divider(
-                        color: Colors.black12, // 리스트 구분선 색
+                  Center(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height*0.82,
+                      width: MediaQuery.of(context).size.width*0.9,
+                      color: Colors.white.withOpacity(0.6),
+                      child: ListView.separated(
+                        padding: const EdgeInsets.fromLTRB(10, 8, 8, 8),
+                        itemCount: list.length, //리스트 개수
+                        // itemBuilder 리스트에서 반복되는 Contaniner(항목) 형태
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            leading: Icon(Icons.hourglass_bottom,
+                              color: Color(0xff0f2f4f), size: 40,),
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(list[index].day,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    // fontWeight: FontWeight.bold 폰트 굵기
+                                  ),),
+                                Text(list[index].text,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    // fontWeight: FontWeight.bold 폰트 굵기
+                                  ),),
+                              ],
+                            ),
+                            onTap: (){},
+                          ); },
+                        separatorBuilder: (BuildContext context, int index) => const Divider(
+                          color: Colors.black12, // 리스트 구분선 색
+                        ),
                       ),
                     ),
                   ),

@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:prodect1/Service/dictionaryService.dart';
 
 
 class dictionary extends StatefulWidget{
   @override
   State<dictionary> createState()=>_dictionary();
 }
+
+List<Dictionary> dic = [];
 
 class _dictionary extends State<dictionary>
 {
@@ -60,6 +63,18 @@ class _dictionary extends State<dictionary>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              FutureBuilder<List<Dictionary>>(
+                future: fetchDictionary(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    dic = snapshot.data!;
+                    return Text("hello");
+                  } else if (snapshot.hasError) {
+                    return Text("Error: ${snapshot.error}");
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              ),
               Text('문어 다이어리',
                 style: TextStyle(
                     color: Colors.white,
@@ -117,9 +132,9 @@ class _dictionary extends State<dictionary>
                                       ColorFiltered(
                                         colorFilter: ColorFilter.mode(
                                             Colors.transparent, BlendMode.color),
-                                        child: Image.asset(
-                                            'assets/images/first_octo.gif',
-                                            height: 100),
+                                        child: SizedBox(
+                                          width: 200,
+                                            child: Image.network(dic[0].characterImageUrl, width: 200, height: 100, fit: BoxFit.fill,))
                                       ),
                                       ElevatedButton(
                                           onPressed: () {},

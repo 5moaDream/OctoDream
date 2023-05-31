@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:prodect1/DTO/sleepDTO.dart';
 
 class sleepLineChart extends StatefulWidget {
   const sleepLineChart({super.key});
@@ -8,21 +9,8 @@ class sleepLineChart extends StatefulWidget {
   State<sleepLineChart> createState() => _LineChartState();
 }
 
-List<FlSpot> sleepdata = <FlSpot>[
-  FlSpot(0, 7),
-  FlSpot(1, 6),
-  FlSpot(2, 6),
-  FlSpot(3, 8),
-  FlSpot(4, 5),
-  FlSpot(5, 8),
-  FlSpot(6, 9),
-];
-
-List<FlSpot> monthsleepdata = <FlSpot>[
-  FlSpot(0, 7),
-  FlSpot(1, 6),
-  FlSpot(2, 6),
-];
+List<FlSpot> sleepdata = [];
+List<FlSpot> monthsleepdata = [];
 
 class _LineChartState extends State<sleepLineChart> {
   late double touchedValue;
@@ -70,22 +58,123 @@ class _LineChartState extends State<sleepLineChart> {
             ),
           ),
         ),
-        AspectRatio(
-          aspectRatio: 1.70,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              right: 30,
-              left: 12,
-              top: 10,
-              bottom: 12,
-            ),
-            child: LineChart(
-              showAvg ? avgData() : mainData(),
-            ),
-          ),
-        ),
+        hi(),
       ],
     );
+  }
+
+  Widget hi(){
+    if(showAvg == false)
+      return buildMyFutureBuilderWidget(context);
+    else
+      return monthBuildMyFutureBuilderWidget(context);
+  }
+
+  Widget buildMyFutureBuilderWidget(BuildContext context) {
+    return FutureBuilder<List<SleepDTO>>(
+      future: fetchweeksleep(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData && showAvg == false) {
+          sleepdata = [];
+          DateTime first = DateTime.now();
+          int b = first.day.toInt()-7;
+          int j = 0;
+          for (int i = 0; i < 7; i++) {
+            if(j<snapshot.data!.length){
+              int distance = snapshot.data![j].totalSleepTime!;
+              DateTime date = DateTime.parse(snapshot.data![j].wakeUpTime!);
+              if (b == date.day.toInt()) {
+                j++;
+                sleepdata.add(FlSpot(date.day.toDouble(), distance/60));
+              } else {
+                sleepdata.add(FlSpot(b.toDouble(), 0));
+              }
+              b++;
+            }
+            else {
+              sleepdata.add(FlSpot(b.toDouble(), 0));
+            }
+          }
+          return AspectRatio(
+            aspectRatio: 1.70,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                right: 30,
+                left: 12,
+                top: 10,
+                bottom: 12,
+              ),
+              child: LineChart(
+                showAvg ? avgData() : mainData(),
+              ),
+            ),
+          );
+        }
+        else if (snapshot.hasError) {
+          // Error occurred while fetching data
+          print(snapshot.error);
+          return Text('Error: ${snapshot.error}');
+        }
+        // Data is still being fetched
+        return CircularProgressIndicator();
+      },);
+  }
+
+  Widget monthBuildMyFutureBuilderWidget(BuildContext context) {
+    return FutureBuilder<List<SleepDTO>>(
+      future: fetchmonthsleep(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          monthsleepdata = [];
+
+          Map<String, Map<String, dynamic>> monthlyData = {};
+
+          for (var sleep in snapshot.data!) {
+            // running의 createdTime에서 월 정보 추출
+            String month = DateTime.parse(sleep.wakeUpTime!).month.toString();
+
+            if (!monthlyData.containsKey(month)) {
+              // 새로운 월을 만난 경우 맵에 추가
+              monthlyData[month] = {'sum': sleep.totalSleepTime, 'count': 1};
+            } else {
+              // 이미 있는 월인 경우 distance 합계와 개수 업데이트
+              monthlyData[month]!['sum'] += sleep.totalSleepTime;
+              monthlyData[month]!['count']++;
+            }
+          }
+
+          for (int month = 1; month <= 6; month++) {
+            if (monthlyData.containsKey(month.toString())) {
+              double average = monthlyData[month.toString()]!['sum'] /
+                  monthlyData[month.toString()]!['count'];
+              monthsleepdata.add(FlSpot(month.toDouble(), average/60));
+            } else {
+              monthsleepdata.add(FlSpot(month.toDouble(), 0));
+            }
+          }
+          return AspectRatio(
+            aspectRatio: 1.70,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                right: 30,
+                left: 12,
+                top: 10,
+                bottom: 12,
+              ),
+              child: LineChart(
+                showAvg ? avgData() : mainData(),
+              ),
+            ),
+          );
+        }
+        else if (snapshot.hasError) {
+          // Error occurred while fetching data
+          print(snapshot.error);
+          return Text('Error: ${snapshot.error}');
+        }
+        // Data is still being fetched
+        return CircularProgressIndicator();
+      },);
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
@@ -94,33 +183,26 @@ class _LineChartState extends State<sleepLineChart> {
         color:Colors.white70
     );
     Widget text;
+    int num = sleepdata[0].x.toInt();
 
-    switch (value.toInt()) {
-      case 0:
-        text = Text('${(sleepdata[0].x.toInt()+1).toString()}일', style: style);
-        break;
-      case 1:
-        text = Text('${(sleepdata[1].x.toInt()+1).toString()}일', style: style);
-        break;
-      case 2:
-        text = Text('${(sleepdata[2].x.toInt()+1).toString()}일', style: style);
-        break;
-      case 3:
-        text = Text('${(sleepdata[3].x.toInt()+1).toString()}일', style: style);
-        break;
-      case 4:
-        text = Text('${(sleepdata[4].x.toInt()+1).toString()}일', style: style);
-        break;
-      case 5:
-        text = Text('${(sleepdata[5].x.toInt()+1).toString()}일', style: style);
-        break;
-      case 6:
-        text = Text('${(sleepdata[6].x.toInt()+1).toString()}일', style: style);
-        break;
-      default:
-        text = const Text('', style: style);
-        break;
+    if (value.toInt() == num) {
+      text = Text('${(sleepdata[0].x.toInt()).toString()}일', style: style);
+    } else if (value.toInt() == num+1) {
+      text = Text('${(sleepdata[1].x.toInt()).toString()}일', style: style);
+    } else if (value.toInt() == num+2) {
+      text = Text('${(sleepdata[2].x.toInt()).toString()}일', style: style);
+    } else if (value.toInt() == num+3) {
+      text = Text('${(sleepdata[3].x.toInt()).toString()}일', style: style);
+    } else if (value.toInt() == num+4) {
+      text = Text('${(sleepdata[4].x.toInt()).toString()}일', style: style);
+    } else if (value.toInt() == num+5) {
+      text = Text('${(sleepdata[5].x.toInt()).toString()}일', style: style);
+    } else if (value.toInt() == num+6) {
+      text = Text('${(sleepdata[6].x.toInt()).toString()}일', style: style);
+    } else {
+      text = const Text('', style: style);
     }
+
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -164,7 +246,7 @@ class _LineChartState extends State<sleepLineChart> {
             (LineChartBarData barData, List<int> spotIndexes) {
           return spotIndexes.map((spotIndex) {
             final spot = barData.spots[spotIndex];
-            if (spot.x == 0 || spot.x == 6) {
+            if (spot.x == sleepdata[0].x || spot.x == sleepdata[6].x) {
               return null;
             }
             return TouchedSpotIndicatorData(
@@ -187,11 +269,11 @@ class _LineChartState extends State<sleepLineChart> {
           }).toList();
         },
         touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: Color(0xFF444974),
+          tooltipBgColor: Colors.black38,
           getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
             return touchedBarSpots.map((barSpot) {
               final flSpot = barSpot;
-              if (flSpot.x == 0 || flSpot.x == 6) {
+              if (flSpot.x == sleepdata[0].x || flSpot.x == sleepdata[6].x) {
                 return null;
               }
 
@@ -245,7 +327,7 @@ class _LineChartState extends State<sleepLineChart> {
           }
           final value = lineTouch.lineBarSpots![0].x;
 
-          if (value == 0 || value == 6) {
+          if (value == sleepdata[0].x || value == sleepdata[6].x) {
             setState(() {
               touchedValue = -1;
             });
@@ -315,15 +397,15 @@ class _LineChartState extends State<sleepLineChart> {
         show: true,
         border: Border.all(color: Colors.white10),
       ),
-      minX: 0,
-      maxX: 6,
+      minX: sleepdata[0].x,
+      maxX: sleepdata[6].x,
       minY: 0,
       maxY: 10,
       lineBarsData: [
         LineChartBarData(
           spots: sleepdata,
           // 그래프 선 둥글게
-          isCurved: true,
+          isCurved: false,
           gradient: LinearGradient(
             colors: gradientColors,
           ),
@@ -353,23 +435,23 @@ class _LineChartState extends State<sleepLineChart> {
     Widget text;
 
     switch (value.toInt()) {
-      case 0:
-        text = Text('${(sleepdata[0].x.toInt()+1).toString()}월', style: style);
-        break;
       case 1:
-        text = Text('${(sleepdata[1].x.toInt()+1).toString()}월', style: style);
+        text = Text('${(monthsleepdata[0].x.toInt()).toString()}월', style: style);
         break;
       case 2:
-        text = Text('${(sleepdata[2].x.toInt()+1).toString()}월', style: style);
+        text = Text('${(monthsleepdata[1].x.toInt()).toString()}월', style: style);
         break;
       case 3:
-        text = Text('${(sleepdata[3].x.toInt()+1).toString()}월', style: style);
+        text = Text('${(monthsleepdata[2].x.toInt()).toString()}월', style: style);
         break;
       case 4:
-        text = Text('${(sleepdata[4].x.toInt()+1).toString()}월', style: style);
+        text = Text('${(monthsleepdata[3].x.toInt()).toString()}월', style: style);
         break;
       case 5:
-        text = Text('${(sleepdata[5].x.toInt()+1).toString()}월', style: style);
+        text = Text('${(monthsleepdata[4].x.toInt()).toString()}월', style: style);
+        break;
+      case 6:
+        text = Text('${(monthsleepdata[5].x.toInt()).toString()}월', style: style);
         break;
       default:
         text = const Text('', style: style);
@@ -433,14 +515,14 @@ class _LineChartState extends State<sleepLineChart> {
         show: true,
         border: Border.all(color: Colors.white10),
       ),
-      minX: 0,
-      maxX: 5,
+      minX: 1,
+      maxX: 6,
       minY: 0,
       maxY: 10,
       lineBarsData: [
         LineChartBarData(
           spots: monthsleepdata,
-          isCurved: true,
+          isCurved: false,
           gradient: LinearGradient(
             colors: [
               ColorTween(begin: arggradientColors[0], end: arggradientColors[1])

@@ -58,7 +58,7 @@ List<myList> convertToMyList(List<DiaryDTO> diaryList) {
   List<myList> mylist = diaryList.map((diary) {
     DateTime date = DateTime.parse(diary.createdTime);
     String day = '${date.year}-${date.month}-${date.day+1}';
-    String text = diary.content;
+    String text = diary.content.replaceAll('"', '');
     return myList(day, text);
   }).toList();
 

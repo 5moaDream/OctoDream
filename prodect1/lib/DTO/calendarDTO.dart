@@ -135,6 +135,8 @@ Future<CalendarDTO> fetchtodaycalendar() async {
 
     CalendarDTO calendarDTO = CalendarDTO(diarylist: diarylist, runninglist: runninglist, sleeplist: sleeplist);
 
+    print(result);
+
     return calendarDTO;
   } else { // Request failed
     print('Request failed with status: ${response.statusCode}');
@@ -196,7 +198,6 @@ Map<DateTime, List<Event>> convertToEventMap(CalendarDTO calendarDTO) {
               0,
               sleep.sleepTime.toDouble(),
             ));
-            break;
           }
           else if (date != date1 && date == date2) {
             combineEvents(date, Event(
@@ -204,41 +205,24 @@ Map<DateTime, List<Event>> convertToEventMap(CalendarDTO calendarDTO) {
               running.totalDistance,
               sleep.sleepTime.toDouble(),
             ));
-            break;
           }
           else if (date != date1 && date != date2 && date1 == date2) {
-            print("왜 들어가?");
             combineEvents(date, Event(
               '',
               0,
               sleep.sleepTime.toDouble(),
             ));
-            break;
           }
         }
-        // else if (date != date1 && date != date2 && date1 != date2 && !events.containsKey(date)) {
-        //   print("왜 들어가?");
-        //   combineEvents(date, Event(
-        //     '',
-        //     0,
-        //     sleep.sleepTime.toDouble(),
-        //   ));
-        //   break;
-        // }
       }
       if (!events.containsKey(date2) && date2 == date1) {
-        print("왜 실행돼 ?");
         combineEvents(date2, Event(diary.content,running.totalDistance, 0));
-        break;
       }
       if (!events.containsKey(date2) && date2 != date1) {
-        print("왜 실행돼 ?");
         combineEvents(date2, Event('',running.totalDistance, 0));
-        break;
       }
     }
     if (!events.containsKey(date1)) {
-      print("왜 실행돼 ?");
       combineEvents(date1, Event(diary.content,0, 0));
     }
   }
