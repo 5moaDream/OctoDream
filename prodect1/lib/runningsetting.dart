@@ -3,6 +3,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Service/settingService.dart';
+import 'Service/userService.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -19,6 +20,7 @@ class Runningsetting extends StatefulWidget {
 }
 
 class _Runningsetting extends State<Runningsetting> {
+  Future<Info>? info;
   double _currentDoubleValue = 3.0;
 
   Future<void> savekm() async {
@@ -43,6 +45,7 @@ class _Runningsetting extends State<Runningsetting> {
     super.initState();
     savekm();
     loadkm();
+    info = fetchInfo();
   }
 
   @override
@@ -63,17 +66,32 @@ class _Runningsetting extends State<Runningsetting> {
             decimalPlaces: 1,
             onChanged: (value) => setState(() => _currentDoubleValue = value),
           ),
-          Container(
-            child:  TextButton(
-              child: Text('확인'),
-              onPressed: () {
-                savekm();
-                int sleepTime = 420; // 원래 sleeptime 넣어야함
-                double distance = _currentDoubleValue;
-                updateTarget(sleepTime, distance);
-                Navigator.of(context).pop();
-              },
-            ),
+          FutureBuilder(
+            future: info,
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  final mySleepTime = snapshot.data!.sleepTime;
+                  return Container(
+                    child:  TextButton(
+                      child: Text('확인'),
+                      onPressed: () {
+                        savekm();
+                        int sleepTime = mySleepTime;
+                        double distance = _currentDoubleValue;
+                        updateTarget(sleepTime, distance);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  );
+                }
+                else if (snapshot.hasError) {
+                  // 데이터 가져오기 실패 시 에러 처리
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  // 데이터 가져오는 동안 로딩 표시
+                  return CircularProgressIndicator();
+                }
+              }
           )
         ],
       ),
