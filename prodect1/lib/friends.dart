@@ -43,65 +43,78 @@ class _Friends extends State<Friends> {
               ),
             ),
             Expanded(
-              child: FutureBuilder<List<Friend>>(
-                future: friend,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(); // Show a loading indicator while fetching the friend list
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        '조회된 친구가 --\n'
-                            '-- 없습니닷 0 ^ 0',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.0,
-                            fontFamily: 'Neo'),
-                      ),
-                    );// Show an error message if fetching fails
-                  } else if (snapshot.hasData) {
-                    final friendList = snapshot.data!; // Access the friend list from the snapshot
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.1,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Datelist()),
+                        );
+                      },
+                      child: Image.asset('assets/images/left.png', height: 55),
+                    ),
+                  ),
+                  FutureBuilder<List<Friend>>(
+                    future: friend,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // Show a loading indicator while fetching the friend list
+                      } else if (snapshot.hasError) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(width: 80),
+                            Center(
+                              child: Text(
+                                '조회된 친구가\n'
+                                '-- 없습니닷 0 ^ 0',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.0,
+                                    fontFamily: 'Neo'),
+                              ),
+                            ), // Show an error message if fetching fails
+                          ],
+                        );
+                      } else if (snapshot.hasData) {
+                        final friendList = snapshot
+                            .data!; // Access the friend list from the snapshot
 
-                    return Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.1,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => Datelist()),
-                              );
-                            },
-                            child: Image.asset('assets/images/left.png', height: 55),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: GridView.builder(
-                            itemCount: friendList.length,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 1,
-                              childAspectRatio: 2 / 1,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
+                        return Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: GridView.builder(
+                                itemCount: friendList.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 1,
+                                  childAspectRatio: 2 / 1,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                ),
+                                itemBuilder: (BuildContext context, int i) {
+                                  return buildFriendItem(friendList, i);
+                                },
+                              ),
                             ),
-                            itemBuilder: (BuildContext context, int i) {
-                              return buildFriendItem(friendList, i);
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.1,
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Container(); // Return an empty container if no data is available
-                  }
-                },
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.1,
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Container(); // Return an empty container if no data is available
+                      }
+                    },
+                  ),
+                ],
               ),
             ),
           ],
@@ -109,7 +122,6 @@ class _Friends extends State<Friends> {
       ),
     );
   }
-
 
   Widget buildFriendItem(List<Friend> friend, int index) {
     return Row(
@@ -127,14 +139,16 @@ class _Friends extends State<Friends> {
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding( // 친구 문어 닉네임
+            Padding(
+              // 친구 문어 닉네임
               padding: EdgeInsets.only(bottom: 4),
               child: Text(
                 friend[index].nickName,
                 style: TextStyle(fontSize: 20),
               ),
             ),
-            InkWell( // 친구 문어 이미지
+            InkWell(
+              // 친구 문어 이미지
               onTap: () {
                 final Long Id = friend[index].Id; // 임의 지정 추후 변경
                 final String nickName = friend[index].nickName;
@@ -145,7 +159,9 @@ class _Friends extends State<Friends> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => FriendHome(
-                          Id: Id, nickName: nickName, characterImageUrl: characterImageUrl)),
+                          Id: Id,
+                          nickName: nickName,
+                          characterImageUrl: characterImageUrl)),
                 );
               },
               child: Image.network(
