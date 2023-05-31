@@ -40,7 +40,7 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
   double calculateTotalDistance(List<RunningDTO> runningList) {
     double totalDistance = 0;
     for (var runningDTO in runningList) {
-      totalDistance += runningDTO.distnace!;
+      totalDistance += runningDTO.distance!;
     }
     return totalDistance;
   }
