@@ -37,8 +37,9 @@ class _SettingPageState extends State<SettingPage> {
 
   PickedTime _inBedTime =PickedTime(h:0,m:0);
   PickedTime _outBedTime =PickedTime(h:0,m:0);
+  PickedTime _intervalBedTime = PickedTime(h: 0, m: 0);
 
-  double _currentDoubleValue =0.0;
+  double _currentDoubleValue =3.0;
 
   Future<void> loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -46,10 +47,13 @@ class _SettingPageState extends State<SettingPage> {
     int inBedTimeMinute = prefs.getInt('inbedtime_minute') ?? 0;
     int outBedTimeHour = prefs.getInt('outbedtime_hour') ?? 0;
     int outBedTimeMinute = prefs.getInt('outbedtime_minute') ?? 0;
+    int intervalbedtimeHour = prefs.getInt('intervalBedTime_hour') ?? 0;
+    int intervalbertimeMinute = prefs.getInt('intervalBedTime_minute') ?? 0;
 
     setState(() {
       _inBedTime = PickedTime(h: inBedTimeHour, m: inBedTimeMinute);
       _outBedTime = PickedTime(h: outBedTimeHour, m: outBedTimeMinute);
+      _intervalBedTime = PickedTime(h: intervalbedtimeHour, m: intervalbertimeMinute);
     });
   }
 
@@ -194,7 +198,7 @@ class _SettingPageState extends State<SettingPage> {
              Container(
                padding: EdgeInsets.all(20),
                margin: EdgeInsets.all(20),
-               height: 400,
+               height: 450,
                width: 300,
                decoration: BoxDecoration(
                  color: Colors.white.withOpacity(0.8),
@@ -388,6 +392,10 @@ class _SettingPageState extends State<SettingPage> {
           ),
           Text(
             '기상 시간: ${_outBedTime.h}시 ${_outBedTime.m}분',
+            style: TextStyle(fontSize: 15),
+          ),
+          Text(
+            '총 수면 시간: ${_intervalBedTime.h}시간 ${_intervalBedTime.m}분',
             style: TextStyle(fontSize: 15),
           ),
         ],
