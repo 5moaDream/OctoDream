@@ -36,7 +36,7 @@ class _SettingPageState extends State<SettingPage> {
   PickedTime _inBedTime =PickedTime(h:0,m:0);
   PickedTime _outBedTime =PickedTime(h:0,m:0);
 
-  double _currentDoubleValue = 0.0;
+  double _currentDoubleValue =0.0;
 
   Future<void> loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,12 +59,30 @@ class _SettingPageState extends State<SettingPage> {
     });
   }
 
+  Future<void> switchsave() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isAlarmEnabled', isAlarmEnabled);
+    prefs.setBool('isAlimEnabled', isAlimEnabled);
+  }
+
+  Future<void> loadswitch() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool onAlam = prefs.getBool('isAlarmEnabled') ?? false;
+    bool onAlim = prefs.getBool('isAlimEnabled') ?? false;
+    setState(() {
+      isAlarmEnabled = onAlam; // SharedPreferences에서 설정값 가져오기
+      isAlimEnabled = onAlim;
+    });
+  }
+
+
   @override
   void initState() {
     super.initState();
     info = fetchInfo();
     loadData();
     loadkm();
+    loadswitch();
   }
 
   @override
@@ -88,30 +106,81 @@ class _SettingPageState extends State<SettingPage> {
                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                children: [
                  //이름
-                 FutureBuilder(
-                   future: info,
-                     builder: (context, snapshot){
-                     if(snapshot.hasData){
-                       final characterName = snapshot.data!.characterName;
-                       return Text(
-                         characterName,
-                         style: TextStyle(
-                           fontSize: 30,
-                           color: Colors.black,
-                           fontWeight: FontWeight.bold,
-                           letterSpacing: 2.0,
-                           fontFamily: 'Neo',
-                         ),
-                       );
-                     } else if (snapshot.hasError) {
-                       // 데이터 가져오기 실패 시 에러 처리
-                       return Text('Error: ${snapshot.error}');
-                     } else {
-                       // 데이터 가져오는 동안 로딩 표시
-                       return CircularProgressIndicator();
-                     }
-                   }
-                   ),
+                 Row(
+                   children: [
+                     FutureBuilder(
+                       future: info,
+                         builder: (context, snapshot){
+                         if(snapshot.hasData){
+                           final characterName = snapshot.data!.characterName;
+                           return Text(
+                             characterName,
+                             style: TextStyle(
+                               fontSize: 30,
+                               color: Colors.black,
+                               fontWeight: FontWeight.bold,
+                               letterSpacing: 2.0,
+                               fontFamily: 'Neo',
+                             ),
+                           );
+                         } else if (snapshot.hasError) {
+                           // 데이터 가져오기 실패 시 에러 처리
+                           return Text('Error: ${snapshot.error}');
+                         } else {
+                           // 데이터 가져오는 동안 로딩 표시
+                           return CircularProgressIndicator();
+                         }
+                       }
+                       ),
+                     /*TextButton(
+                         onPressed: () {
+                           showDialog(
+                             context: context,
+                             builder: (BuildContext context) {
+                               return AlertDialog(
+                                 title: Text('문어 이름 변경',style: TextStyle(fontSize: 15),),
+                                 content: FutureBuilder(
+                                     future: info,
+                                     builder: (context, snapshot){
+                                       if(snapshot.hasData){
+                                         final characterName = snapshot.data!.characterName;
+                                         return TextField(
+                                           decoration: InputDecoration(
+                                             labelText:  characterName ?? '',
+                                           ),
+                                         );
+                                       }
+                                       else if (snapshot.hasError) {
+                                         // 데이터 가져오기 실패 시 에러 처리
+                                         return Text('Error: ${snapshot.error}');
+                                       } else {
+                                         // 데이터 가져오는 동안 로딩 표시
+                                         return CircularProgressIndicator();
+                                       }
+                                     }
+                                 ),
+                                 actions: [
+                                   TextButton(
+                                     onPressed: () {
+                                       Navigator.of(context).pop(); // 팝업 닫기
+
+                                     },
+                                     child: Text('확인'),
+                                   ),
+                                 ],
+                               );
+                             },
+                           );
+                         },
+                         child: Text(
+                           '수정',style: TextStyle(
+                             fontSize: 16,
+                             color: Colors.black,
+                             fontWeight: FontWeight.w600),
+                         )),*/
+                   ],
+                 ),
+
                  IconButton(onPressed: () {
                    Navigator.push(context,
                        MaterialPageRoute(builder: (context) => MyHomePage()));
@@ -226,6 +295,7 @@ class _SettingPageState extends State<SettingPage> {
                              setState(() {
                                isAlarmEnabled = value;  // 사용자가 선택한 값을 저장
                              });
+                             switchsave();
                            },
                            value: isAlarmEnabled,  // 현재 설정값을 표시
                            activeColor: Colors.green,
@@ -246,6 +316,7 @@ class _SettingPageState extends State<SettingPage> {
                              setState(() {
                                isAlimEnabled = value;  // 사용자가 선택한 값을 저장
                              });
+                             switchsave();
                            },
                            value: isAlimEnabled,  // 현재 설정값을 표시
                            activeColor: Colors.green,
