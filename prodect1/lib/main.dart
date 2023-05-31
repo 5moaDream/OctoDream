@@ -87,6 +87,8 @@ class OctoApp extends StatefulWidget {
 }
 
 class _OctoAppState extends State<OctoApp> {
+  late Widget alarmButton;
+
   @override
   void initState() {
     super.initState();
