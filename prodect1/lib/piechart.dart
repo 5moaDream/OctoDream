@@ -1,14 +1,26 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+String date(int time){
+  int hour = (time/60).toInt();
+  int min = time%60;
+
+  if(min == 0)
+    return "${hour}시간";
+  else
+    return "${hour}시간 ${min}분";
+}
+
 class PieChartSample3 extends StatefulWidget {
-  const PieChartSample3({super.key});
+  final double sleep;
+
+  PieChartSample3({Key? key, required this.sleep}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => PieChartSample3State();
 }
 
-class PieChartSample3State extends State {
+class PieChartSample3State extends State<PieChartSample3> {
   int touchedIndex = 0;
 
   @override
@@ -28,8 +40,7 @@ class PieChartSample3State extends State {
                     touchedIndex = -1;
                     return;
                   }
-                  touchedIndex =
-                      pieTouchResponse.touchedSection!.touchedSectionIndex;
+                  touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
                 });
               },
             ),
@@ -38,14 +49,14 @@ class PieChartSample3State extends State {
             ),
             sectionsSpace: 0,
             centerSpaceRadius: 0,
-            sections: showingSections(),
+            sections: showingSections(widget.sleep),
           ),
         ),
       ),
     );
   }
 
-  List<PieChartSectionData> showingSections() {
+  List<PieChartSectionData> showingSections(double sleep) {
     return List.generate(2, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
@@ -56,21 +67,21 @@ class PieChartSample3State extends State {
         case 0:
           return PieChartSectionData(
             color: Color(0xFF444974),
-            value: 60,
-            title: '6시간',
+            value: sleep,
+            title: date(sleep.toInt()),
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
               color: const Color(0xffffffff),
-             // shadows: shadows,
+              // shadows: shadows,
             ),
             badgePositionPercentageOffset: .98,
           );
         case 1:
           return PieChartSectionData(
             color: Color(0xFFEAECFF).withOpacity(0.7),
-            value: 40,
+            value: 480-sleep,
             title: "",
             radius: radius,
             titleStyle: TextStyle(

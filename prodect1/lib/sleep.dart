@@ -1,7 +1,11 @@
 import'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'DTO/sleepDTO.dart';
 import 'floatingbutton.dart';
 import 'sleepchart.dart';
 import 'piechart.dart';
+
+DateTime focusedDay = DateTime.now();
 
 class sleep extends StatelessWidget {
 
@@ -10,12 +14,21 @@ class sleep extends StatelessWidget {
     return Scaffold(
       appBar: null,
       floatingActionButton: floatingButton(),
-
       body: SafeArea(
         child: mysleep(),
       ), // 리스트 함수를 불러온다.
     );
   }
+}
+
+String date(int time){
+  int hour = (time/60).toInt();
+  int min = time%60;
+
+  if(min == 0)
+    return "${hour}시간";
+  else
+    return "${hour}시간 ${min}분";
 }
 
 class mysleep extends StatefulWidget {
@@ -34,124 +47,128 @@ class _mysleep extends State<mysleep> {
             fit: BoxFit.fill,
           ),
         ),
-        // decoration: BoxDecoration(
-        //   gradient: LinearGradient(
-        //     begin: Alignment.topCenter,
-        //     end: Alignment.bottomCenter,
-        //     colors: [
-        //       Color(0xFF242634),
-        //       Color(0xFF2D2F41),
-        //       Color(0xFF2c3e50)
-        //     ]
-        //   ),
-        // ),
         child: Container(
-          color: Colors.black.withOpacity(0.6),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 35, left: 30, bottom: 10),
-                    width: MediaQuery.of(context).size.width,
+          color: Colors.black.withOpacity(0.7),
+          child: buildMyFutureBuilderWidget(context),
+        ));
+  }
+}
+
+Widget buildMyFutureBuilderWidget(BuildContext context) {
+  return FutureBuilder<SleepDTO>(
+    future: fetchtodaysleep(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                    padding: const EdgeInsets.only(top: 35, left: 30, bottom: 10),
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.white38),
-                      )),
+                        border: Border(
+                          bottom: BorderSide(color: Colors.white38),
+                        )),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text("금요일",
+                        Text(
+                          DateFormat.E('ko_KR').format(focusedDay).toString() +
+                              "요일",
                           style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text("2023.05.12",
-                            style: TextStyle(
-                              fontSize: 20, color: Colors.white54,
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          DateFormat('yyyy.MM.dd', 'ko')
+                              .format(focusedDay)
+                              .toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white54,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(left: 35),
+                        child: Row(
+                          children: [
+                            Text("오늘 수면시간 : ",
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white54
+                              ),
+                            ),
+                            Text(date(snapshot.data!.totalSleepTime!),
+                              style: TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 20),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 200,
+                            child: PieChartSample3(sleep: snapshot.data!.totalSleepTime!.toDouble()),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: Text("목표 시간 : 8시간",
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white70
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left:35, top: 14),
-                    child: Row(
-                      children: [
-                        Text("수면시간 : ",
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white54
-                          ),
-                        ),
-                        Text("6시간",
-                          style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white
-                          ),
-                        ),
-                      ],
-                    )
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(bottom: 14),
-                    child: Column(
-                      children: [
-                        Padding(
-                            padding: EdgeInsets.only(top: 24),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 200,
-                                  child: PieChartSample3(),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("평균 : 6시 30분",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                          color: Colors.white70
-                                      ),
-                                    ),
-                                    Text("목표 : 8시간",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                          color: Colors.white70
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                  ],
+                ),
+                Divider(
+                  color: Colors.white38,
+                  thickness: 1,
+                ),
+                Center(
+                  child: const SizedBox(
+                    height: 254,
+                    width: double.infinity,
+                    child: sleepLineChart(),
                   ),
-                  Divider(
-                    color: Colors.white38,
-                    thickness: 1,
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(top: 16),
-                    child: Expanded(
-                      child: sleepLineChart(),
-                    ),
-                  )
-                ]),
-          ),
-        )
-    );
-  }
+                ),
+              ]),
+        );
+      }
+      else if (snapshot.hasError) {
+        return Text("Error: ${snapshot.error}");
+      }
+      return Center(child: CircularProgressIndicator());
+    },
+  );
 }
+

@@ -59,8 +59,6 @@ class _Calendar extends State<Calendar> {
               if (snapshot.hasData) {
                 // Data has been successfully fetched
                 events = convertToEventMap(snapshot.data!);
-                print(events);
-                // Return the desired widget
                 return SafeArea(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +82,7 @@ class _Calendar extends State<Calendar> {
                             return isSameDay(selectedDay, day);
                           },
                           calendarStyle: CalendarStyle(
-                            isTodayHighlighted: false,
+                            isTodayHighlighted: true,
                             selectedDecoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(color: Colors.deepPurple, width: 1.0),
@@ -158,7 +156,7 @@ class _Calendar extends State<Calendar> {
                                       child: Row(
                                         children: [
                                           Icon(Icons.account_balance_wallet,
-                                            color: Colors.deepPurple, size: 34,),
+                                            color: Colors.deepPurple, size: 30,),
                                           Container(
                                             padding: EdgeInsets.only(left: 16),
                                             width: MediaQuery.of(context).size.width*0.8,
@@ -258,7 +256,7 @@ class _Calendar extends State<Calendar> {
                 return Text('Error: ${snapshot.error}');
               }
               // Data is still being fetched
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             },
           ),
         ),
