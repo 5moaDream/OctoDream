@@ -40,6 +40,8 @@ dependencies:
   platform: ^3.1.0
   package_info_plus: ^3.1.0
 
+  audioplayers: ^4.0.1
+
   flutter_local_notifications: ^14.1.0
   timezone: ^0.9.2
   firebase_messaging: ^14.6.1
@@ -119,6 +121,9 @@ flutter:
      - assets/images/coin.png # 결제 아이콘
      - assets/images/home.png # 홈으로 돌아가기 아이콘
      - assets/images/communication.png # 방명록 작성 아이콘
+     - assets/images/friend.png # 친구목록 동의
+     - assets/images/closeSet5.png # 방명록 상자
+     - assets/sounds/alarm.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
