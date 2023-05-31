@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:prodect1/Service/settingService.dart';
+import 'package:prodect1/Service/userService.dart';
 import 'package:prodect1/setting.dart';
 import 'package:progressive_time_picker/progressive_time_picker.dart';
 import 'package:intl/intl.dart' as intl;
@@ -128,6 +130,13 @@ class _sleepsetting extends State<sleepsetting> {
                 ),
                 TextButton(onPressed: () {
                   saveData();
+                  int hourToMin = _intervalBedTime.h * 60;
+                  int sleepTime = hourToMin + _intervalBedTime.m;
+                  print(sleepTime);
+
+                  double distance = 5.0; //근데 여기 원래 distance보내야댐 ..
+                  updateTarget(sleepTime, distance);
+
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SettingPage()));
                 },

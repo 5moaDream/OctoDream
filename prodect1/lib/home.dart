@@ -237,8 +237,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               ColorFiltered(
                                 colorFilter: ColorFilter.mode(
                                     Colors.transparent, BlendMode.color),
-                                child: Image.asset(
-                                    'assets/images/first_octo.gif', height: 120),
+                                child: Image.network(
+                                    '${info.characterUrl}', height: 170),
                               ),
                         ],
                       ),

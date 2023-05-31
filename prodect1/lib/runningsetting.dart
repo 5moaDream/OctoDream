@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Service/settingService.dart';
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -65,6 +67,9 @@ class _Runningsetting extends State<Runningsetting> {
               child: Text('확인'),
               onPressed: () {
                 savekm();
+                int sleepTime = 420; // 원래 sleeptime 넣어야함
+                double distance = _currentDoubleValue;
+                updateTarget(sleepTime, distance);
                 Navigator.of(context).pop();
               },
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prodect1/Service/settingService.dart';
 import 'package:prodect1/home.dart';
 import 'package:prodect1/runningsetting.dart';
 import 'package:prodect1/sleepsetting.dart';
@@ -8,6 +9,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:prodect1/sleepsetting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Service/userService.dart';
+
 
 class Setting extends StatelessWidget {
   final String title;
@@ -70,6 +72,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
    return Scaffold(
+     resizeToAvoidBottomInset: false,
      body: Container(
        decoration: BoxDecoration(
          image: DecorationImage(
@@ -139,10 +142,10 @@ class _SettingPageState extends State<SettingPage> {
                            return Container(
                              child: Text(
                                stateMsg ?? '놀러온 친구에게 말해주세여!',
-                                 style: TextStyle(
+                               style: TextStyle(
                                  fontSize: 15,
                                  color: Colors.black,
-                             ),),
+                               ),),
                            );
                          }
                          else if (snapshot.hasError) {
@@ -174,6 +177,7 @@ class _SettingPageState extends State<SettingPage> {
                                        if(snapshot.hasData){
                                          final stateMsg = snapshot.data!.stateMsg;
                                          return TextField(
+                                           controller: myController,
                                            decoration: InputDecoration(
                                              labelText:  stateMsg ?? '',
                                              /*style: TextStyle(
@@ -195,8 +199,25 @@ class _SettingPageState extends State<SettingPage> {
                                  actions: [
                                    TextButton(
                                      onPressed: () {
-                                       Navigator.of(context).pop(); // 팝업 닫기
-
+                                       //상태메시지 수정
+                                       if (myController.text == "") {
+                                         showDialog(
+                                             context: context,
+                                             barrierDismissible: false,
+                                             builder: (BuildContext context) {
+                                               Future.delayed(Duration(seconds: 1),
+                                                       () {
+                                                     Navigator.pop(context);
+                                                   });
+                                               return AlertDialog(
+                                                 content: SingleChildScrollView(
+                                                     child: new Text("내용을 입력하세요.")),
+                                               );
+                                             });
+                                       } else {
+                                         updateStateMSG(myController.text);
+                                         Navigator.of(context).pop();
+                                       }
                                      },
                                      child: Text('확인'),
                                    ),
