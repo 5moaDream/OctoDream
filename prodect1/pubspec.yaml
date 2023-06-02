@@ -124,6 +124,7 @@ flutter:
      - assets/images/friend.png # 친구목록 동의
      - assets/images/closeSet5.png # 방명록 상자
      - assets/sounds/alarm.mp3
+     - assets/images/question.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
