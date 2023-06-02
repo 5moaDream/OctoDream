@@ -9,6 +9,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:prodect1/sleepsetting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Service/userService.dart';
+import 'notification.dart';
 
 
 class Setting extends StatelessWidget {
@@ -320,6 +321,9 @@ class _SettingPageState extends State<SettingPage> {
                              setState(() {
                                isAlarmEnabled = value;  // 사용자가 선택한 값을 저장
                              });
+                             if(!isAlarmEnabled){ // 수면 종료 알람 삭제
+                               FlutterLocalNotification.cancelNotification(2);
+                             }
                              switchsave();
                            },
                            value: isAlarmEnabled,  // 현재 설정값을 표시
@@ -341,6 +345,9 @@ class _SettingPageState extends State<SettingPage> {
                              setState(() {
                                isAlimEnabled = value;  // 사용자가 선택한 값을 저장
                              });
+                             if(!isAlarmEnabled){ // 수면 시작 알람 삭제
+                               FlutterLocalNotification.cancelNotification(1);
+                             }
                              switchsave();
                            },
                            value: isAlimEnabled,  // 현재 설정값을 표시
