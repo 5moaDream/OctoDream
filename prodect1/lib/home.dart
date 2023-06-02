@@ -25,8 +25,7 @@ void main() {
 }
 
 class Coment {
-  String diaryComent = "오늘 하루는 어땠어?";
-  String coment = '내문어어떻노어떻냐고 어떠너데?? ';
+  String coment = '오늘 하루는 어땠어?';
 
   void setComment(String coment) {
     this.coment = coment;
@@ -238,8 +237,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               ColorFiltered(
                                 colorFilter: ColorFilter.mode(
                                     Colors.transparent, BlendMode.color),
-                                child: Image.asset(
-                                    'assets/images/first_octo.gif', height: 120),
+                                child: Image.network(
+                                    '${info.characterUrl}', height: 170),
                               ),
                         ],
                       ),

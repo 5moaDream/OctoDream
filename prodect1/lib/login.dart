@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_auth.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-String token = 'your_token_value';
+import 'dart:ui';
+import 'notification.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
     _initKaKaoTalkInstalled();
-    checkTokens(); // 토큰 확인
+    // checkTokens(); // 토큰 확인
   }
 
   Future<void> _initKaKaoTalkInstalled() async {
@@ -43,16 +44,20 @@ class _LogInState extends State<LogIn> {
     try {
       http.Response response =
           await http.get(Uri.parse(apiUrl), headers: headers);
-      if (response.statusCode == 200) { // 바로 로그인
+      if (response.statusCode == 200) {
+        // 바로 로그인
         // API 호출 성공
         handleLoginSuccess();
-        print("액세스 토큰 성공------------------------------------------------------------");
-      } else { // 리프레시 토큰으로 새로 받아오기
+        print(
+            "액세스 토큰 성공------------------------------------------------------------");
+      } else {
+        // 리프레시 토큰으로 새로 받아오기
         callRefresh(accessToken);
-        print("액세스 토큰 실패---------------------------------------------------------------");
+        print(
+            "액세스 토큰 실패---------------------------------------------------------------");
       }
-    } catch (e) { // 모든 토큰 새로 받아오기
-
+    } catch (e) {
+      // 모든 토큰 새로 받아오기
     }
   }
 
@@ -63,19 +68,27 @@ class _LogInState extends State<LogIn> {
     await prefs.setString('refreshToken', refreshToken);
   }
 
+  // 인증 토큰 및 리프레시 토큰을 저장하는 함수
+  Future<void> saveKakao(String kakao) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('kakao', kakao);
+  }
+
 // 저장된 인증 토큰 및 리프레시 토큰을 가져오는 함수
   Future<Map<String, String>> getTokens() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
     String? refreshToken = prefs.getString('refreshToken');
+    String? kakao = prefs.getString('kakao');
 
     return {
       'accessToken': accessToken ?? '',
-      'refreshToken': refreshToken ?? ''
+      'refreshToken': refreshToken ?? '',
+      'kakao': kakao ?? '',
     };
   }
 
-  void callRefresh(String accessToken) async {
+  Future<void> callRefresh(String accessToken) async {
     String apiUrl =
         'http://3.39.126.140:8000/unauthorization/refresh'; // 호출할 API의 엔드포인트 URL
     Map<String, String> tokens = await getTokens();
@@ -86,7 +99,7 @@ class _LogInState extends State<LogIn> {
     };
     try {
       http.Response response =
-      await http.get(Uri.parse(apiUrl), headers: headers);
+          await http.get(Uri.parse(apiUrl), headers: headers);
       if (response.statusCode == 201) {
         // API 호출 성공
         String responseBody = response.body; // 응답 데이터 처리
@@ -113,11 +126,11 @@ class _LogInState extends State<LogIn> {
     }
   }
 
-  void callKakaoAPI(String accessToken) async {
+  Future<void> callKakaoAPI(String kakao) async {
     String apiUrl =
         'http://3.39.126.140:8000/unauthorization/kakao-login'; // 호출할 API의 엔드포인트 URL
     Map<String, String> headers = {
-      'Authorization': 'Bearer $accessToken', // 액세스 토큰을 Authorization 헤더에 포함시킴
+      'Authorization': 'Bearer $kakao', // 액세스 토큰을 Authorization 헤더에 포함시킴
       'Content-Type': 'application/json',
     };
     try {
@@ -138,6 +151,8 @@ class _LogInState extends State<LogIn> {
         String accessToken = jsonResponse['access_token'];
 
         saveTokens(accessToken, refreshToken);
+        saveKakao(kakao);
+        handleLoginSuccess();
       } else {
         // API 호출 실패
         print('API 호출 실패: ${response.statusCode}');
@@ -164,9 +179,19 @@ class _LogInState extends State<LogIn> {
   }
 
 // 로그인 실패 처리
-  void handleLoginFailure() {
+  Future<void> handleLoginFailure() async {
     // TODO: 로그인 실패 시 동작 정의
     _showPopup(context, '카카오 로그인에 실패했습니다. 다시 로그인 해주세요.');
+  }
+
+  // 카카오 로그아웃 함수
+  Future<void> kakaoLogout() async {
+    try {
+      await UserApi.instance.logout();
+      print('카카오 로그아웃 성공');
+    } catch (e) {
+      print('카카오 로그아웃 실패: $e');
+    }
   }
 
   @override
@@ -184,24 +209,14 @@ class _LogInState extends State<LogIn> {
               Image.asset('assets/images/꿈삼.jpg', height: 300),
               SizedBox(height: 40),
               ElevatedButton(
-                child: const Text('로그인'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PageView(
-                              children: [
-                                MyApp(),
-                              ],
-                            )),
-                  );
-                },
-              ),
+                  child: const Text('로그아웃'),
+                  onPressed: () => {
+                        kakaoLogout(),
+                      }),
               GestureDetector(
                 onTap: () async {
                   if (_isKaKaoTalkInstalled) {
-                    OAuthToken token =
-                        await UserApi.instance.loginWithKakaoTalk();
+                    OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
                     callKakaoAPI(token.accessToken);
                   } else {
                     // 카카오 계정으로 로그인
