@@ -3,8 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prodect1/Datelist.dart';
 import 'package:http/http.dart' as http;
+import 'package:prodect1/runningsetting.dart';
 
 import 'letterservice/letterservice.dart';
+
+
 
 class letters extends StatefulWidget{
   _letters createState() => _letters();
@@ -80,15 +83,18 @@ class _letterlist extends State<letterlist>{
                   color: Colors.white.withOpacity(0.8),
                   margin: EdgeInsets.only(top: 10,left: 10,right: 10),
                   padding: EdgeInsets.all(6),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 3,top: 7,bottom: 7),
-                        child:
-                        Text('${list[0].year}년 ${list[0].month}월 ${list[0].day}일')
-                      ),
-                      lett(context)],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                          Column(
+                            children: [
+                              lett(context)
+                            ],
+                          ),
+
+                        ],
+                    ),
                   )
               )
             ],
@@ -96,31 +102,69 @@ class _letterlist extends State<letterlist>{
         )
     );
   }
-  Widget lett(BuildContext context){
-    return Container(
-      padding: EdgeInsets.all(5),
-      width: 400,
-      height: 450,
-      child: Column(
-        children: [
-          Container(
-            height: 50,
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(70.0),
-              color: Colors.lightGreenAccent,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(list[0].content),
-                Text(list[0].name),
-              ],
-            ),
-          ),
-        ],
+  Widget lett(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.all(5),
+        width: 400,
+        height: 450,
+        child: Column(
+          children: [
+            for (var item in list)
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(item.name),
+                        content:
+                            Column(
+                              children: [
+                                Text(item.content),
+                                SizedBox(height: 8),
+                                Text('${item.year}년 ${item.month}월 ${item.day}일'),
+                              ],
+                            ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Close'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 50,
+                      padding: EdgeInsets.all(10),
+                      margin:
+                      EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(70.0),
+                        color: Colors.lightGreenAccent,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(item.content),
+                          Text(item.name),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
 }
+

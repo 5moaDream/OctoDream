@@ -38,7 +38,7 @@ Future<List<lettone>> fetchdata() async {
   var response = await http.get(url, headers: headers);
   if (response.statusCode == 200) {
     // Request was successful
-    final result = jsonDecode(response.body).cast<Map<String, dynamic>>();
+    final result = jsonDecode(utf8.decode(response.bodyBytes)).cast<Map<String, dynamic>>();
     List<lettone> list = result.map<lettone>((json) {
       return lettone.fromJson(json);
     }).toList();
