@@ -69,9 +69,9 @@ class _LogInState extends State<LogIn> {
   }
 
   // 인증 토큰 및 리프레시 토큰을 저장하는 함수
-  Future<void> saveKakao(String kakao) async {
+  Future<void> saveKakao(String kakaoToken) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('kakao', kakao);
+    await prefs.setString('kakaoToken', kakaoToken);
   }
 
 // 저장된 인증 토큰 및 리프레시 토큰을 가져오는 함수
@@ -84,7 +84,6 @@ class _LogInState extends State<LogIn> {
     return {
       'accessToken': accessToken ?? '',
       'refreshToken': refreshToken ?? '',
-      'kakao': kakao ?? '',
     };
   }
 

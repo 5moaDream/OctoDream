@@ -13,8 +13,6 @@ class Friends extends StatefulWidget {
 
 class _Friends extends State<Friends> {
   Future<List<Friend>>? friend;
-  List myFriend = ['영주', '혜원', '찬영', '광휘', '지연', '은진'];
-  List OctoFriend = ['달밤영', '감자 러버', '어쩌라고', '평화주의자', '뷁뚫꺕ㅎ', '분위기메이커'];
 
   @override
   void initState() {
@@ -38,7 +36,7 @@ class _Friends extends State<Friends> {
             Container(
               margin: EdgeInsets.fromLTRB(30, 30, 0, 0),
               child: Text(
-                "문어 친구(${myFriend.length})",
+                "문어 친구",
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
             ),
