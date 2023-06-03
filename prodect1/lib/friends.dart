@@ -1,9 +1,14 @@
 import 'dart:ffi';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'friend_home.dart';
 import 'Datelist.dart';
 import 'package:prodect1/Service/friendService.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
 
 class Friends extends StatefulWidget {
   @override
@@ -59,6 +64,7 @@ class _Friends extends State<Friends> {
                   FutureBuilder<List<Friend>>(
                     future: friend,
                     builder: (context, snapshot) {
+
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator(); // Show a loading indicator while fetching the friend list
                       } else if (snapshot.hasError) {
@@ -83,7 +89,7 @@ class _Friends extends State<Friends> {
                       } else if (snapshot.hasData) {
                         final friendList = snapshot
                             .data!; // Access the friend list from the snapshot
-
+                        logger.d("왜 안되냐고 ${friendList[0].characterImageUrl}");
                         return Row(
                           children: [
                             SizedBox(
@@ -127,10 +133,9 @@ class _Friends extends State<Friends> {
       children: [
         Column(
           children: [
-            Image.network(
-              friend[index].thumbnailImageUrl,
-              width: 100,
-              height: 100,
+            CircleAvatar(
+              radius: 25, // 반지름 크기를 조정하여 원의 크기를 설정합니다.
+              backgroundImage: NetworkImage(friend[index].thumbnailImageUrl),
             ),
           ],
         ),
@@ -148,7 +153,7 @@ class _Friends extends State<Friends> {
             InkWell(
               // 친구 문어 이미지
               onTap: () {
-                final Long Id = friend[index].Id; // 임의 지정 추후 변경
+                final int? Id = friend[index].Id; // 임의 지정 추후 변경
                 final String nickName = friend[index].nickName;
                 final characterImageUrl = friend[index].characterImageUrl;
                 // 페이지 변경 로직을 작성합니다.
@@ -162,11 +167,13 @@ class _Friends extends State<Friends> {
                           characterImageUrl: characterImageUrl)),
                 );
               },
+
               child: Image.network(
                 friend[index].characterImageUrl,
-                width: 100,
-                height: 100,
+                width: 50,
+                height: 50,
               ),
+
             ),
             Expanded(
               child: Container(

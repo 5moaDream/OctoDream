@@ -37,15 +37,18 @@ Future<List<Friend>> fetchFriend() async {
   logger.d("왜 안되냐고 ${response.statusCode}");
   if (response.statusCode == 200) {
     logger.d("왜 안되냐고 ${response.statusCode}");
-    final result = json
-        .decode(utf8.decode(response.bodyBytes))
-        .cast<Map<String, dynamic>>();
-    List<Friend> friend = result.map<Friend>((json) {
-      return Friend.fromJson(json);
-    }).toList();
-    logger.d("왜 안되냐고 ${response.statusCode}");
+    final result = json.decode(utf8.decode(response.bodyBytes));
+    if (result is List) {
+      List<Friend> friend = result.map<Friend>((json) {
+        return Friend.fromJson(json);
+      }).toList();
+      logger.d("왜 안되냐고 ${response.statusCode}");
 
-    return friend;
+      return friend;
+    } else {
+      // 응답 결과가 예상한 형식이 아니면 빈 리스트를 반환합니다.
+      return [];
+    }
   } else {
     //만약 응답이 ok가 아니면 에러를 던집니다.
     throw Exception('실패');
@@ -53,7 +56,7 @@ Future<List<Friend>> fetchFriend() async {
 }
 
 class Friend {
-  final Long Id; // 친구 아이디
+  final int? Id; // 친구 아이디
   final String nickName; // 친구 문어 닉네임
   final String characterImageUrl; // 친구 문어 이미지
   final String thumbnailImageUrl; // 친구 프로필 사진
@@ -67,10 +70,10 @@ class Friend {
 
   factory Friend.fromJson(Map<String, dynamic> json) {
     return Friend(
-      Id: json["Id"],
-      nickName: json["nickName"],
-      characterImageUrl: json["characterImageUrl"],
-      thumbnailImageUrl: json["thumbnailImageUrl"],
+      Id: json["Id"] as int? ?? 0,
+      nickName: json["nickName"] ?? '',
+      characterImageUrl: json["characterImageUrl"] ?? '',
+      thumbnailImageUrl: json["thumbnailImageUrl"] ?? '',
     );
   }
 }

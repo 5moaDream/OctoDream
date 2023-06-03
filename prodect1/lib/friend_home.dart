@@ -15,7 +15,7 @@ var logger = Logger(
 );
 
 class FriendHome extends StatefulWidget {
-  final Long Id;
+  final int? Id;
   final String nickName;
   final String characterImageUrl;
 
@@ -55,7 +55,7 @@ class _FriendHome extends State<FriendHome> {
     };
 
     Map<String, dynamic> requestBody = {
-      "userId": "5",
+      "userId": widget.Id,
       "content": "${enteredText}",
     };
     String jsonBody = jsonEncode(requestBody);
