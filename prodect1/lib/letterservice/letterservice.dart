@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class lettone{
   final int guestBookId;
@@ -26,8 +27,20 @@ class lettone{
   }
 }
 
+// 저장된 인증 토큰 및 리프레시 토큰을 가져오는 함수
+Future<Map<String, String>> getTokens() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+
+  return {
+    'accessToken': accessToken ?? '',
+  };
+}
+
 Future<List<lettone>> fetchdata() async {
-  String token =
+  Map<String, String> tokens = await getTokens();
+  String token = tokens['accessToken']!;
+  // String token =
       'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg3NDA4NTAyfQ.yizKabrMGyUpxrRvxPnw11XZu6dlB9lterq-4SxC_spYBhW2P7wvFq73v6kCs6T4mbTAGVvyjNZBvGQvM7XzJQ';
   Map<String, String> headers = {
     'Content-Type': 'application/json',
