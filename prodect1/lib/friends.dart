@@ -58,13 +58,13 @@ class _Friends extends State<Friends> {
                           MaterialPageRoute(builder: (context) => Datelist()),
                         );
                       },
-                      child: Image.asset('assets/images/left.png', height: 55, color: Colors.black38.withOpacity(0.2)),
+                      child: Image.asset('assets/images/left.png',
+                          height: 55, color: Colors.black38.withOpacity(0.2)),
                     ),
                   ),
                   FutureBuilder<List<Friend>>(
                     future: friend,
                     builder: (context, snapshot) {
-
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator(); // Show a loading indicator while fetching the friend list
                       } else if (snapshot.hasError) {
@@ -127,14 +127,34 @@ class _Friends extends State<Friends> {
     );
   }
 
+  String truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, maxLength) + "\n" + text.substring(maxLength, text.length);
+    }
+  }
+
   Widget buildFriendItem(List<Friend> friend, int index) {
+    String originalText = friend[index].nickName; // friend 리스트에서 index에 해당하는 닉네임 값 가져오기
+    String modifiedText = truncateText(originalText, 8);
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Padding(
+              // 친구 닉네임
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text(
+                modifiedText,
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
             CircleAvatar(
-              radius: 25, // 반지름 크기를 조정하여 원의 크기를 설정합니다.
+              radius: 50, // 반지름 크기를 조정하여 원의 크기를 설정합니다.
               backgroundImage: NetworkImage(friend[index].thumbnailImageUrl),
             ),
           ],
@@ -146,7 +166,7 @@ class _Friends extends State<Friends> {
               // 친구 문어 닉네임
               padding: EdgeInsets.only(bottom: 4),
               child: Text(
-                friend[index].nickName,
+                friend[index].characterName,
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -154,16 +174,17 @@ class _Friends extends State<Friends> {
               // 친구 문어 이미지
               onTap: () {
                 final int? Id = friend[index].Id; // 임의 지정 추후 변경
-                final String nickName = friend[index].nickName;
-                final characterImageUrl = friend[index].characterImageUrl;
-                // 페이지 변경 로직을 작성합니다.
-                // 예를 들어, 다른 페이지로 이동하는 코드를 작성할 수 있습니다.
+                final String characterName = friend[index].characterName;
+                final String stateMsg = friend[index].stateMsg;
+                final String characterImageUrl =
+                    friend[index].characterImageUrl;
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => FriendHome(
                           Id: Id,
-                          nickName: nickName,
+                          characterName: characterName,
+                          stateMsg: stateMsg,
                           characterImageUrl: characterImageUrl)),
                 );
               },
@@ -173,7 +194,6 @@ class _Friends extends State<Friends> {
                 width: 50,
                 height: 50,
               ),
-
             ),
             Expanded(
               child: Container(

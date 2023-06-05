@@ -20,7 +20,7 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
     _initKaKaoTalkInstalled();
-    // checkTokens(); // 토큰 확인
+    checkTokens(); // 토큰 확인
   }
 
   Future<void> _initKaKaoTalkInstalled() async {
@@ -207,11 +207,11 @@ class _LogInState extends State<LogIn> {
             children: <Widget>[
               Image.asset('assets/images/꿈삼.jpg', height: 300),
               SizedBox(height: 40),
-              ElevatedButton(
-                  child: const Text('로그아웃'),
-                  onPressed: () => {
-                        kakaoLogout(),
-                      }),
+              // ElevatedButton(
+              //     child: const Text('로그아웃'),
+              //     onPressed: () => {
+              //           kakaoLogout(),
+              //         }),
               GestureDetector(
                 onTap: () async {
                   if (_isKaKaoTalkInstalled) {
