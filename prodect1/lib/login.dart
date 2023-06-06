@@ -20,7 +20,7 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
     _initKaKaoTalkInstalled();
-    checkTokens(); // 토큰 확인
+    // checkTokens(); // 토큰 확인
   }
 
   Future<void> _initKaKaoTalkInstalled() async {
@@ -79,7 +79,6 @@ class _LogInState extends State<LogIn> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
     String? refreshToken = prefs.getString('refreshToken');
-    String? kakao = prefs.getString('kakao');
 
     return {
       'accessToken': accessToken ?? '',
@@ -108,10 +107,10 @@ class _LogInState extends State<LogIn> {
         Map<String, dynamic> jsonResponse = jsonDecode(responseBody);
 
         // 액세스 토큰 추출
-        String accessToken = jsonResponse['access_token'];
+        String accessToken = jsonResponse['access_Token'];
 
         // 리프레시 토큰 추출
-        String refreshToken = jsonResponse['refresh_token'];
+        String refreshToken = jsonResponse['refresh_Token'];
 
         saveTokens(accessToken, refreshToken);
         handleLoginSuccess();
@@ -132,7 +131,7 @@ class _LogInState extends State<LogIn> {
       'Authorization': 'Bearer $kakao', // 액세스 토큰을 Authorization 헤더에 포함시킴
       'Content-Type': 'application/json',
     };
-    try {
+
       http.Response response =
           await http.get(Uri.parse(apiUrl), headers: headers);
       if (response.statusCode == 201) {
@@ -156,11 +155,6 @@ class _LogInState extends State<LogIn> {
         // API 호출 실패
         print('API 호출 실패: ${response.statusCode}');
       }
-    } catch (e) {
-      // 예외 처리
-      handleLoginFailure();
-      print('API 호출 중 예외 발생: $e');
-    }
   }
 
   // 로그인 성공 처리
@@ -168,12 +162,7 @@ class _LogInState extends State<LogIn> {
     // TODO: 로그인 성공 시 동작 정의
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => PageView(
-                children: [
-                  MyApp(),
-                ],
-              )),
+      MaterialPageRoute(builder: (context) => MyApp()),
     );
   }
 
