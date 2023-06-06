@@ -209,7 +209,7 @@ class _SleepTimerPageState extends State<SleepTimerPage> {
   Widget build(BuildContext context) {
     if (!sleepModeActive) {
       return IconButton(
-        padding: EdgeInsets.fromLTRB(0, 0, 25, 0),
+        padding: EdgeInsets.fromLTRB(10, 10, 25, 0),
         icon: Image.asset(
           Light[0],
         ),
@@ -218,7 +218,7 @@ class _SleepTimerPageState extends State<SleepTimerPage> {
       );
     } else {
       return IconButton(
-        padding: EdgeInsets.fromLTRB(0, 0, 25, 0),
+        padding: EdgeInsets.fromLTRB(10, 10, 25, 0),
         icon: Image.asset(
           Light[1],
         ),
