@@ -71,11 +71,14 @@ class _Runningsetting extends State<Runningsetting> {
               future: info,
               builder: (context, snapshot){
                 if(snapshot.hasData){
-                  //final mySleepTime = snapshot.data!.sleepTime;
+                  final mySleepTime = snapshot.data!.sleepTime;
                   return TextButton(
                     child: Text('확인'),
                     onPressed: () {
                       savekm();
+                      int sleepTime = mySleepTime;
+                      double distance = _currentDoubleValue;
+                      updateTarget(sleepTime, distance);
                       print(_currentDoubleValue);
                       Navigator.of(context).pop();
                       Navigator.of(context).pushReplacement(
