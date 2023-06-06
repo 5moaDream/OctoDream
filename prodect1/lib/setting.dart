@@ -39,7 +39,7 @@ class _SettingPageState extends State<SettingPage> {
   PickedTime _outBedTime =PickedTime(h:0,m:0);
   PickedTime _intervalBedTime = PickedTime(h: 0, m: 0);
 
-  double _currentDoubleValue =3.0;
+  double _currentDoubleValue=0.0;
 
   Future<void> loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,11 +59,12 @@ class _SettingPageState extends State<SettingPage> {
 
   Future<void> loadkm() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    double RunningKm = prefs.getDouble('runningkm') ?? 0;
+    double RunningKm = prefs.getDouble('runningKm') ?? 0;
     setState(() {
       _currentDoubleValue = RunningKm;
     });
   }
+
 
   Future<void> switchsave() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -93,53 +94,53 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
-     resizeToAvoidBottomInset: false,
-     body: Container(
-       decoration: BoxDecoration(
-         image: DecorationImage(
-           image: AssetImage('assets/images/background.gif'),
-           fit: BoxFit.fill,),
-       ),
-       child: Container(
-         padding: EdgeInsets.all(50),
-         color: Colors.black.withOpacity(0.3),
-         child: Column(
-           children: [
-             SizedBox(
-               height: 50,
-             ),
-             Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               children: [
-                 //이름
-                 Row(
-                   children: [
-                     FutureBuilder(
-                       future: info,
-                         builder: (context, snapshot){
-                         if(snapshot.hasData){
-                           final characterName = snapshot.data!.characterName;
-                           return Text(
-                             characterName,
-                             style: TextStyle(
-                               fontSize: 30,
-                               color: Colors.black,
-                               fontWeight: FontWeight.bold,
-                               letterSpacing: 2.0,
-                               fontFamily: 'Neo',
-                             ),
-                           );
-                         } else if (snapshot.hasError) {
-                           // 데이터 가져오기 실패 시 에러 처리
-                           return Text('Error: ${snapshot.error}');
-                         } else {
-                           // 데이터 가져오는 동안 로딩 표시
-                           return CircularProgressIndicator();
-                         }
-                       }
-                       ),
-                     /*TextButton(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.gif'),
+              fit: BoxFit.fill,),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(50),
+            color: Colors.black.withOpacity(0.3),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //이름
+                    Row(
+                      children: [
+                        FutureBuilder(
+                            future: info,
+                            builder: (context, snapshot){
+                              if(snapshot.hasData){
+                                final characterName = snapshot.data!.characterName;
+                                return Text(
+                                  characterName,
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 2.0,
+                                    fontFamily: 'Neo',
+                                  ),
+                                );
+                              } else if (snapshot.hasError) {
+                                // 데이터 가져오기 실패 시 에러 처리
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                // 데이터 가져오는 동안 로딩 표시
+                                return CircularProgressIndicator();
+                              }
+                            }
+                        ),
+                        /*TextButton(
                          onPressed: () {
                            showDialog(
                              context: context,
@@ -185,181 +186,181 @@ class _SettingPageState extends State<SettingPage> {
                              color: Colors.black,
                              fontWeight: FontWeight.w600),
                          )),*/
-                   ],
-                 ),
+                      ],
+                    ),
 
-                 IconButton(onPressed: () {
-                   Navigator.push(context,
-                       MaterialPageRoute(builder: (context) => MyHomePage()));
-                 }, icon: Icon(Icons.close))
-               ],
-             ),
+                    IconButton(onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MyHomePage()));
+                    }, icon: Icon(Icons.close))
+                  ],
+                ),
 
-             Container(
-               padding: EdgeInsets.all(20),
-               margin: EdgeInsets.all(20),
-               height: 450,
-               width: 300,
-               decoration: BoxDecoration(
-                 color: Colors.white.withOpacity(0.8),
-                 borderRadius: BorderRadius.circular(30),
-               ),
-               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [
-                   FutureBuilder(
-                       future: info,
-                       builder: (context, snapshot){
-                         if(snapshot.hasData){
-                           final stateMsg = snapshot.data!.stateMsg;
-                           return Container(
-                             child: Text(
-                               stateMsg ?? '놀러온 친구에게 말해주세여!',
-                               style: TextStyle(
-                                 fontSize: 15,
-                                 color: Colors.black,
-                               ),),
-                           );
-                         }
-                         else if (snapshot.hasError) {
-                           // 데이터 가져오기 실패 시 에러 처리
-                           return Text('Error: ${snapshot.error}');
-                         } else {
-                           // 데이터 가져오는 동안 로딩 표시
-                           return CircularProgressIndicator();
-                         }
-                       }
-                       ),
-                   Container(
-                     child:
-                     Row(
-                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       children: [
-                         SizedBox(
-                           width: 10,
-                         ),
-                         IconButton(onPressed: () {
-                           showDialog(
-                             context: context,
-                             builder: (BuildContext context) {
-                               return AlertDialog(
-                                 title: Text('상태메시지는 친구에게 보여집니다!',style: TextStyle(fontSize: 15),),
-                                 content: FutureBuilder(
-                                     future: info,
-                                     builder: (context, snapshot){
-                                       if(snapshot.hasData){
-                                         final stateMsg = snapshot.data!.stateMsg;
-                                         return TextField(
-                                           controller: myController,
-                                           decoration: InputDecoration(
-                                             labelText:  stateMsg ?? '',
-                                             /*style: TextStyle(
+                Container(
+                  padding: EdgeInsets.all(20),
+                  margin: EdgeInsets.all(20),
+                  height: 450,
+                  width: 300,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FutureBuilder(
+                          future: info,
+                          builder: (context, snapshot){
+                            if(snapshot.hasData){
+                              final stateMsg = snapshot.data!.stateMsg;
+                              return Container(
+                                child: Text(
+                                  stateMsg ?? '놀러온 친구에게 말해주세여!',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                  ),),
+                              );
+                            }
+                            else if (snapshot.hasError) {
+                              // 데이터 가져오기 실패 시 에러 처리
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              // 데이터 가져오는 동안 로딩 표시
+                              return CircularProgressIndicator();
+                            }
+                          }
+                      ),
+                      Container(
+                        child:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 10,
+                            ),
+                            IconButton(onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('상태메시지는 친구에게 보여집니다!',style: TextStyle(fontSize: 15),),
+                                    content: FutureBuilder(
+                                        future: info,
+                                        builder: (context, snapshot){
+                                          if(snapshot.hasData){
+                                            final stateMsg = snapshot.data!.stateMsg;
+                                            return TextField(
+                                              controller: myController,
+                                              decoration: InputDecoration(
+                                                labelText:  stateMsg ?? '',
+                                                /*style: TextStyle(
                                                fontSize: 30,
                                                color: Colors.black,
                                              ),*/
-                                           ),
-                                          );
-                                       }
-                                       else if (snapshot.hasError) {
-                                         // 데이터 가져오기 실패 시 에러 처리
-                                         return Text('Error: ${snapshot.error}');
-                                       } else {
-                                         // 데이터 가져오는 동안 로딩 표시
-                                         return CircularProgressIndicator();
-                                       }
-                                     }
-                                 ),
-                                 actions: [
-                                   TextButton(
-                                     onPressed: () {
-                                       //상태메시지 수정
-                                       if (myController.text == "") {
-                                         showDialog(
-                                             context: context,
-                                             barrierDismissible: false,
-                                             builder: (BuildContext context) {
-                                               Future.delayed(Duration(seconds: 1),
-                                                       () {
-                                                     Navigator.pop(context);
-                                                   });
-                                               return AlertDialog(
-                                                 content: SingleChildScrollView(
-                                                     child: new Text("내용을 입력하세요.")),
-                                               );
-                                             });
-                                       } else {
-                                         updateStateMSG(myController.text);
-                                         Navigator.of(context).pop();
-                                       }
-                                     },
-                                     child: Text('확인'),
-                                   ),
-                                 ],
-                               );
-                             },
-                           );
-                         },
-                             icon:Text('수정',style: TextStyle(
-                               fontSize: 16,
-                             color: Colors.lightBlueAccent,
-                             fontWeight: FontWeight.w600),)
-                         ),
-                       ],
-                     ),
-                   ),
-                   Container(
-                     padding: EdgeInsets.only(left: 5),
-                     child: Row(
-                       children: [
-                         Text(
-                           '모닝콜 설정',
-                           style: TextStyle(fontSize: 20,fontWeight: FontWeight.w100),
-                         ),
-                         Switch(
-                           onChanged: (bool value) {
-                             setState(() {
-                               isAlarmEnabled = value;  // 사용자가 선택한 값을 저장
-                             });
-                             switchsave();
-                           },
-                           value: isAlarmEnabled,  // 현재 설정값을 표시
-                           activeColor: Colors.green,
-                         ),
-                       ],
-                     ),
-                   ),
-                   Container(
-                     padding: EdgeInsets.only(left: 5),
-                     child: Row(
-                       children: [
-                         Text(
-                           '알림 설정',
-                           style: TextStyle(fontSize: 20,fontWeight: FontWeight.w100),
-                         ),
-                         Switch(
-                           onChanged: (bool value) {
-                             setState(() {
-                               isAlimEnabled = value;  // 사용자가 선택한 값을 저장
-                             });
-                             switchsave();
-                           },
-                           value: isAlimEnabled,  // 현재 설정값을 표시
-                           activeColor: Colors.green,
-                         ),
-                       ],
-                     ),
-                   ),
-                   sleeptime(context),
-                   runningkm(context)
-                 ],
-               ),
-             ),
+                                              ),
+                                            );
+                                          }
+                                          else if (snapshot.hasError) {
+                                            // 데이터 가져오기 실패 시 에러 처리
+                                            return Text('Error: ${snapshot.error}');
+                                          } else {
+                                            // 데이터 가져오는 동안 로딩 표시
+                                            return CircularProgressIndicator();
+                                          }
+                                        }
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          //상태메시지 수정
+                                          if (myController.text == "") {
+                                            showDialog(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder: (BuildContext context) {
+                                                  Future.delayed(Duration(seconds: 1),
+                                                          () {
+                                                        Navigator.pop(context);
+                                                      });
+                                                  return AlertDialog(
+                                                    content: SingleChildScrollView(
+                                                        child: new Text("내용을 입력하세요.")),
+                                                  );
+                                                });
+                                          } else {
+                                            updateStateMSG(myController.text);
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                        child: Text('확인'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                                icon:Text('수정',style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.lightBlueAccent,
+                                    fontWeight: FontWeight.w600),)
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Row(
+                          children: [
+                            Text(
+                              '모닝콜 설정',
+                              style: TextStyle(fontSize: 20,fontWeight: FontWeight.w100),
+                            ),
+                            Switch(
+                              onChanged: (bool value) {
+                                setState(() {
+                                  isAlarmEnabled = value;  // 사용자가 선택한 값을 저장
+                                });
+                                switchsave();
+                              },
+                              value: isAlarmEnabled,  // 현재 설정값을 표시
+                              activeColor: Colors.green,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Row(
+                          children: [
+                            Text(
+                              '알림 설정',
+                              style: TextStyle(fontSize: 20,fontWeight: FontWeight.w100),
+                            ),
+                            Switch(
+                              onChanged: (bool value) {
+                                setState(() {
+                                  isAlimEnabled = value;  // 사용자가 선택한 값을 저장
+                                });
+                                switchsave();
+                              },
+                              value: isAlimEnabled,  // 현재 설정값을 표시
+                              activeColor: Colors.green,
+                            ),
+                          ],
+                        ),
+                      ),
+                      sleeptime(context),
+                      runningkm(context)
+                    ],
+                  ),
+                ),
 
-           ],
-         ),
-       )
-     ),
-   );
+              ],
+            ),
+          )
+      ),
+    );
   }
   Widget sleeptime(BuildContext context) {
     return Container(
@@ -374,11 +375,11 @@ class _SettingPageState extends State<SettingPage> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w100),),
               TextButton(
                   onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => sleepsetting()),
-                );
-              },
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => sleepsetting()),
+                    );
+                  },
                   child: Text('수정',
                     style: TextStyle(
                         fontSize: 17,
@@ -429,7 +430,7 @@ class _SettingPageState extends State<SettingPage> {
                     fontWeight: FontWeight.w600),)),
             ],
           ),
-          Text('$_currentDoubleValue 러닝을 합니다.'),
+          Text('${_currentDoubleValue}러닝을 합니다.'),
         ],
       ),
     );
