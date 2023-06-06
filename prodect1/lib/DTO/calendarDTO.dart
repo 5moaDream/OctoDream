@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class diaryList {
   final String today;
@@ -108,8 +109,20 @@ class CalendarDTO {
   }
 }
 
+// 저장된 인증 토큰 및 리프레시 토큰을 가져오는 함수
+Future<Map<String, String>> getTokens() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+
+  return {
+    'accessToken': accessToken ?? '',
+  };
+}
+
 Future<CalendarDTO> fetchtodaycalendar() async {
-  String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzk0MDk2NTI2IiwiZXhwIjoxNjg3MzExMTgyfQ.O2UIaz23NQqE_vZ4YYUdFgaF7e0PJg29PNKxKfqMbgvQzRlJiexeOV1D9-ojhp2LtdM3RUzycuCyj_FiS4D3Xw';
+  Map<String, String> tokens = await getTokens();
+  String token = tokens['accessToken']!;
+  // String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzk0MDk2NTI2IiwiZXhwIjoxNjg3MzExMTgyfQ.O2UIaz23NQqE_vZ4YYUdFgaF7e0PJg29PNKxKfqMbgvQzRlJiexeOV1D9-ojhp2LtdM3RUzycuCyj_FiS4D3Xw';
   Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $token',
