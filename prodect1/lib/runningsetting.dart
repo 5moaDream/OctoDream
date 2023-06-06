@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:prodect1/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Service/settingService.dart';
@@ -28,13 +29,13 @@ class _Runningsetting extends State<Runningsetting> {
     prefs.setDouble('runningKm', _currentDoubleValue);
 
     setState(() {
-      print('바뀐 거리: $_currentDoubleValue');
+      //print('바뀐 거리: $_currentDoubleValue');
     });
   }
 
   Future<void> loadkm() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    double RunningKm = prefs.getDouble('runningkm') ?? 0;
+    double RunningKm = prefs.getDouble('runningKm') ?? 0;
     setState(() {
       _currentDoubleValue = RunningKm;
     });
@@ -67,21 +68,19 @@ class _Runningsetting extends State<Runningsetting> {
             onChanged: (value) => setState(() => _currentDoubleValue = value),
           ),
           FutureBuilder(
-            future: info,
+              future: info,
               builder: (context, snapshot){
                 if(snapshot.hasData){
-                  final mySleepTime = snapshot.data!.sleepTime;
-                  return Container(
-                    child:  TextButton(
-                      child: Text('확인'),
-                      onPressed: () {
-                        savekm();
-                        int sleepTime = mySleepTime;
-                        double distance = _currentDoubleValue;
-                        updateTarget(sleepTime, distance);
-                        Navigator.of(context).pop();
-                      },
-                    ),
+                  //final mySleepTime = snapshot.data!.sleepTime;
+                  return TextButton(
+                    child: Text('확인'),
+                    onPressed: () {
+                      savekm();
+                      print(_currentDoubleValue);
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => SettingPage()));
+                    },
                   );
                 }
                 else if (snapshot.hasError) {
