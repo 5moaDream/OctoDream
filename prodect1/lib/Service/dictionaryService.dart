@@ -38,7 +38,60 @@ Future<List<Dictionary>> fetchDictionary() async {
       return Dictionary.fromJson(json);
     }).toList();
 
+    print(result);
     return list;
+  } else {
+    //만약 응답이 ok가 아니면 에러를 던집니다.
+    throw Exception('실패');
+  }
+}
+
+Future<String> updateUserOcto(String characterImageUrl) async {
+
+  String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg3NDA4NTAyfQ.yizKabrMGyUpxrRvxPnw11XZu6dlB9lterq-4SxC_spYBhW2P7wvFq73v6kCs6T4mbTAGVvyjNZBvGQvM7XzJQ';
+
+  Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $token',
+  };
+
+  Map<String, dynamic> requestBody = {
+    'characterImageUrl': characterImageUrl,
+  };
+
+  // String requestBody = characterImageUrl;
+  // String jsonBody = jsonEncode(requestBody);
+
+  var url = Uri.parse('http://3.39.126.140:8000/user-service/character');
+  var response = await http.put(
+      url,
+      headers: headers,
+      body: jsonEncode(requestBody),
+      //body: jsonBody
+  );
+
+  if (response.statusCode == 200) {
+    // Request was successful
+    var responseBody = response.body;
+    // Parse the response body here
+  } else {
+    // Request failed
+    print('Request failed with status: ${response.statusCode}');
+  }
+
+  var statusCode = response.statusCode;
+  var responseHeaders = response.headers;
+  var responseBody = response.body;
+  print("statusCode: ${statusCode}");
+  print("responseHeaders: ${responseHeaders}");
+  print("responseBody: ${responseBody}");
+
+  if (response.statusCode == 200) {
+    //만약 서버가 ok응답을 반환하면, json을 파싱합니다
+    print(utf8.decode(response.bodyBytes));
+    logger.d(utf8.decode(response.bodyBytes));
+    return utf8.decode(response.bodyBytes);
+    //return Info.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
   } else {
     //만약 응답이 ok가 아니면 에러를 던집니다.
     throw Exception('실패');

@@ -13,8 +13,6 @@ List<Dictionary> dic = [];
 
 class _dictionary extends State<dictionary>
 {
-  List myFriend = ['영주', '혜원', '찬영', '광휘', '지연', '은진'];
-
   final ScrollController scroll = ScrollController();
 
   @override
@@ -29,6 +27,54 @@ class _dictionary extends State<dictionary>
   void dispose() {
     scroll.dispose();
     super.dispose();
+  }
+
+  Widget images(int id, String url){
+    if(id==100) {
+      return Container(
+        padding: EdgeInsets.only(top: 10, bottom: 10),
+        height: 120,
+        child: Image.asset(url, color: Colors.black38.withOpacity(0.6),),
+      );
+      } else {
+      return Image.network(url, fit: BoxFit.cover,height: 125,);
+    }
+  }
+
+  Widget button(int id, String url){
+    if(id==100) {
+      return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.black87,
+            // 텍스트 색상
+            backgroundColor: Colors.brown[200],
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                  10), // 버튼의 모서리를 둥글게 조절
+            ),
+          ),
+          onPressed: () {
+            null;
+          },
+          child: Text('문어교환'));
+    } else {
+      return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.black87,
+            // 텍스트 색상
+            backgroundColor: Colors.brown[200],
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                  10), // 버튼의 모서리를 둥글게 조절
+            ),
+          ),
+          onPressed: () {
+            updateUserOcto(url);
+          },
+          child: Text('문어교환'));
+    }
   }
 
   scrollListener() async {
@@ -57,24 +103,40 @@ class _dictionary extends State<dictionary>
 
   @override
   Widget build(BuildContext context){
+    return FutureBuilder<List<Dictionary>>(
+      future: fetchDictionary(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          int j = 0;
+          dic=[];
+          for (int i = 0; i < 7; i++) {
+            if (j < snapshot.data!.length) {
+              int id = snapshot.data![j].characterId;
+              String name = snapshot.data![j].characterName;
+              String octo = snapshot.data![j].characterImageUrl;
+              dic.add(Dictionary(characterId: id, characterName: name, characterImageUrl: octo));
+              j++;
+            }
+            else {
+              dic.add(Dictionary(characterId: 100, characterName: "??문어", characterImageUrl: 'assets/images/question.png'));
+            }
+          }
+          return dicHome();
+        } else if (snapshot.hasError) {
+          return Text("Error: ${snapshot.error}");
+        }
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget dicHome(){
     return AlertDialog(
         title: Padding(
           padding: const EdgeInsets.only(left: 8, right: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              FutureBuilder<List<Dictionary>>(
-                future: fetchDictionary(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    dic = snapshot.data!;
-                    return Text("hello");
-                  } else if (snapshot.hasError) {
-                    return Text("Error: ${snapshot.error}");
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
-              ),
               Text('문어 다이어리',
                 style: TextStyle(
                     color: Colors.white,
@@ -97,57 +159,57 @@ class _dictionary extends State<dictionary>
               .size
               .width * 0.84,
           child: Column(
-            children: [
-              Container(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.32,
-                color: Colors.blueGrey[50],
-                child: Scrollbar(
-                  thickness: 4,
-                  thumbVisibility: true,
-                  controller: scroll,
-                  child: GridView.builder(
-                      controller: scroll,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: myFriend.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        childAspectRatio: 7/4.5,
-                        mainAxisSpacing: 2, //수평 Padding
-                        crossAxisSpacing: 2,
-                      ),
-                      itemBuilder: (BuildContext context, int i) {//item 의 반목문 항목 형성
-                        return Row(
-                          children: [
-                            Expanded(
-                                child: Container(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceEvenly,
-                                    children: [
-                                      Text(myFriend[i].toString()),
-                                      ColorFiltered(
-                                        colorFilter: ColorFilter.mode(
-                                            Colors.transparent, BlendMode.color),
-                                        child: SizedBox(
-                                          width: 200,
-                                            child: Image.network(dic[0].characterImageUrl, width: 200, height: 100, fit: BoxFit.fill,))
-                                      ),
-                                      ElevatedButton(
-                                          onPressed: () {},
-                                          child: Text('문어교환'))
-                                    ],
-                                  ),
-                                )),
-                          ],);
-                      }),
+              children: [
+                Container(
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.32,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10), // 테두리를 둥글게 설정
+                    color: Colors.blueGrey[50],
+                  ),
+                  child: Scrollbar(
+                    thickness: 4,
+                    thumbVisibility: true,
+                    controller: scroll,
+                    child: GridView.builder(
+                        controller: scroll,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: dic.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          childAspectRatio: 7/4.5,
+                          mainAxisSpacing: 2, //수평 Padding
+                          crossAxisSpacing: 2,
+                        ),
+                        itemBuilder: (BuildContext context, int i) {//item 의 반목문 항목 형성
+                          return Row(
+                            children: [
+                              Expanded(
+                                  child: Container(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(dic[i].characterName,
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        ),
+                                        ColorFiltered(
+                                            colorFilter: ColorFilter.mode(
+                                                Colors.transparent, BlendMode.color),
+                                            child: images(dic[i].characterId, dic[i].characterImageUrl),
+                                            ),
+                                button(dic[i].characterId, dic[i].characterImageUrl),
+                              ],
+                            ),
+                                  )),
+                            ],);
+                        }),
+                  ),
                 ),
-        ),
-      ]
-    ),
+              ]
+          ),
         ),
         backgroundColor: Colors.brown,
         shape: RoundedRectangleBorder(

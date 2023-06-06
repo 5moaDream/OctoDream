@@ -93,52 +93,67 @@ class _newletter extends State<newletter>{
         )
     );
   }
-  Widget newlett(BuildContext context){
+  Widget newlett(BuildContext context) {
     if (list.isEmpty) {
       return Container(); // 또는 적절한 로딩 또는 에러 표시 위젯을 반환하세요.
     }
-    return Container(
-      padding: EdgeInsets.all(5),
-      width: 400,
-      height: 450,
-      child: Column(
-        children: [
-          Container(
-            height: 50,
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(70.0),
-                color: Colors.lightGreenAccent),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.star),
-                Text(list[0].content),
-                Text(list[0].name),
-                Text('${list[0].year}-${list[0].month}-${list[0].day}')
-              ],
-            ),
-          ),
-          Container(
-            height: 50,
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(70.0),
-                color: Colors.lightGreenAccent),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.star),
-                Text(list[1].content),
-                Text(list[1].name),
-                Text('${list[1].year}-${list[1].month}-${list[1].day}')
-              ],
-            ),
-          )
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.all(5),
+        width: 400,
+        height: 450,
+        child: Column(
+          children: [
+            for (var item in list)
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(item.name),
+                        content: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(item.content),
+                            SizedBox(height: 8),
+                            Text('${item.year}-${item.month}-${item.day}'),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Close'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(70.0),
+                    color: Colors.lightGreenAccent,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(Icons.star),
+                      Text(item.content),
+                      Text(item.name),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
+
 }

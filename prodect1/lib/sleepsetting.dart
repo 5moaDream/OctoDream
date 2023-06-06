@@ -37,6 +37,8 @@ class SleepTimeData {
 
 
 class _sleepsetting extends State<sleepsetting> {
+  Future<Info>? info;
+
   ClockTimeFormat _clockTimeFormat = ClockTimeFormat.twentyFourHours;
   ClockIncrementTimeFormat _clockIncrementTimeFormat =
       ClockIncrementTimeFormat.fiveMin;
@@ -93,6 +95,7 @@ class _sleepsetting extends State<sleepsetting> {
   @override
   void initState() {
     super.initState();
+    info = fetchInfo();
     _isSleepGoal = (_sleepGoal >= 8.0) ? true : false;
     _intervalBedTime = formatIntervalTime(
       init: _inBedTime,
@@ -132,24 +135,39 @@ class _sleepsetting extends State<sleepsetting> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextButton(onPressed: () {
-                  saveData();
-                  int hourToMin = _intervalBedTime.h * 60;
-                  int sleepTime = hourToMin + _intervalBedTime.m;
-                  print(sleepTime);
+                FutureBuilder(
+                  future: info,
+                    builder: (context, snapshot){
+                      if(snapshot.hasData){
+                        final myDistance = snapshot.data!.distance;
+                        return TextButton(onPressed: () {
+                          saveData();
+                          int hourToMin = _intervalBedTime.h * 60;
+                          int sleepTime = hourToMin + _intervalBedTime.m;
+                          print(sleepTime);
 
-                  double distance = 5.0; //근데 여기 원래 distance보내야댐 ..
-                  updateTarget(sleepTime, distance);
+                          double distance = myDistance;
+                          updateTarget(sleepTime, distance);
 
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SettingPage()));
-                },
-                  child: Text('저장', style: TextStyle(
-                    color: Colors.black.withOpacity(0.8),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),),
-                ),
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => SettingPage()));
+                        },
+                          child: Text('저장', style: TextStyle(
+                            color: Colors.black.withOpacity(0.8),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),),
+                        );
+                      }
+                      else if (snapshot.hasError) {
+                        // 데이터 가져오기 실패 시 에러 처리
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        // 데이터 가져오는 동안 로딩 표시
+                        return CircularProgressIndicator();
+                      }
+                    }
+                )
               ],
             ),
             TimePicker(
