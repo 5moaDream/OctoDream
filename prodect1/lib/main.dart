@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:logger/logger.dart';
@@ -12,6 +13,18 @@ import 'notification.dart';
 var logger = Logger(
   printer: PrettyPrinter(),
 );
+
+Future<void> loadswitch() async { // 스위치 설정값 가져오기
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool onAlam = prefs.getBool('isAlarmEnabled') ?? false; // 수면 종료 알람
+  bool onAlim = prefs.getBool('isAlimEnabled') ?? false; // 푸시 알림
+  if(!onAlam){ // 수면 종료 알람 삭제
+    FlutterLocalNotification.cancelNotification(2);
+  }
+  if(!onAlim){ // 수면 시작 알람 삭제
+    FlutterLocalNotification.cancelNotification(1);
+  }
+}
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -124,6 +137,7 @@ class _OctoAppState extends State<OctoApp> {
 
     // 예약된 알림 표시
     FlutterLocalNotification.scheduleNotification();
+    loadswitch();
     //토큰 받아옴
     getToken();
   }

@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:prodect1/home.dart';
+import 'Service/userService.dart';
 import 'main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -13,11 +16,12 @@ var logger = Logger(
 );
 
 class FriendHome extends StatefulWidget {
-  final String imageName;
-  final String Octoname;
-  final String ID;
+  final int? Id;
+  final String characterName;
+  final String stateMsg;
+  final String characterImageUrl;
 
-  FriendHome({required this.ID, required this.imageName, required this.Octoname});
+  FriendHome({required this.Id, required this.characterName, required this.stateMsg, required this.characterImageUrl});
 
   @override
   _FriendHome createState() =>
@@ -25,7 +29,7 @@ class FriendHome extends StatefulWidget {
 }
 
 class _FriendHome extends State<FriendHome> {
-
+  Future<Info>? info;
   TextEditingController _textEditingController = TextEditingController();
   String enteredText = "";
 
@@ -33,11 +37,9 @@ class _FriendHome extends State<FriendHome> {
   Future<Map<String, String>> getTokens() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    String? refreshToken = prefs.getString('refreshToken');
 
     return {
       'accessToken': accessToken ?? '',
-      'refreshToken': refreshToken ?? ''
     };
   }
 
@@ -53,7 +55,7 @@ class _FriendHome extends State<FriendHome> {
     };
 
     Map<String, dynamic> requestBody = {
-      "userId": "5",
+      "userId": widget.Id,
       "content": "${enteredText}",
     };
     String jsonBody = jsonEncode(requestBody);
@@ -144,7 +146,7 @@ class _FriendHome extends State<FriendHome> {
           Row(
             children: [
               SizedBox(width: 10),
-              Text(widget.Octoname,
+              Text(widget.characterName,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
@@ -158,11 +160,36 @@ class _FriendHome extends State<FriendHome> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(height: 240),
-              Image.asset(
-                'assets/images/${widget.imageName}',
-                width: 120,
-                height: 120,
+              Container(
+                //color: Colors.blue,
+                margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                height: 180,
+                width: 230,
+                child: Image.asset(
+                  "assets/images/chat.png",
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Positioned(
+                //sizebox만들어서 row colum center위젯
+                bottom: 55,
+                right: 20,
+                child: Container(
+                    height: 110,
+                    width: 200,
+                    //color: Colors.amber,
+                    child: Center(
+                      child: Text(
+                        widget.stateMsg,
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center,
+                      ),
+                    )),
+              ),
+              Image.network(
+                widget.characterImageUrl,
+                width: 100,
+                height: 100,
               ),
             ],
           ),

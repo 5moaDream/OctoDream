@@ -20,7 +20,7 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
     _initKaKaoTalkInstalled();
-    // checkTokens(); // 토큰 확인
+    checkTokens(); // 토큰 확인
   }
 
   Future<void> _initKaKaoTalkInstalled() async {
@@ -69,9 +69,9 @@ class _LogInState extends State<LogIn> {
   }
 
   // 인증 토큰 및 리프레시 토큰을 저장하는 함수
-  Future<void> saveKakao(String kakao) async {
+  Future<void> saveKakao(String kakaoToken) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('kakao', kakao);
+    await prefs.setString('kakaoToken', kakaoToken);
   }
 
 // 저장된 인증 토큰 및 리프레시 토큰을 가져오는 함수
@@ -84,7 +84,6 @@ class _LogInState extends State<LogIn> {
     return {
       'accessToken': accessToken ?? '',
       'refreshToken': refreshToken ?? '',
-      'kakao': kakao ?? '',
     };
   }
 
@@ -208,11 +207,11 @@ class _LogInState extends State<LogIn> {
             children: <Widget>[
               Image.asset('assets/images/꿈삼.jpg', height: 300),
               SizedBox(height: 40),
-              ElevatedButton(
-                  child: const Text('로그아웃'),
-                  onPressed: () => {
-                        kakaoLogout(),
-                      }),
+              // ElevatedButton(
+              //     child: const Text('로그아웃'),
+              //     onPressed: () => {
+              //           kakaoLogout(),
+              //         }),
               GestureDetector(
                 onTap: () async {
                   if (_isKaKaoTalkInstalled) {

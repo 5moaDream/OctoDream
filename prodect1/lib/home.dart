@@ -13,6 +13,7 @@ import 'package:prodect1/paySevice.dart';
 import 'package:prodect1/setting.dart';
 import 'package:prodect1/firstDisplay.dart';
 import 'package:prodect1/sleepButton.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'Datelist.dart';
@@ -83,6 +84,16 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       isDarkened = !isDarkened;
     });
+  }
+
+  // 저장된 인증 토큰 및 리프레시 토큰을 가져오는 함수
+  Future<Map<String, String>> getTokens() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+
+    return {
+      'accessToken': accessToken ?? '',
+    };
   }
 
   @override

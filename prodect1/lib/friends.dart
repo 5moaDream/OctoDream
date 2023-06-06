@@ -1,12 +1,14 @@
+import 'dart:ffi';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart'
-    as kakao_flutter_sdk_talk;
+import 'package:logger/logger.dart';
 import 'friend_home.dart';
 import 'Datelist.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:prodect1/Service/friendService.dart';
+
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
 
 class Friends extends StatefulWidget {
   @override
@@ -14,85 +16,38 @@ class Friends extends StatefulWidget {
       _Friends(); // StatefulWidget은 상태를 생성하는 createState() 메서드로 구현한다.
 }
 
-// 저장된 인증 토큰 및 리프레시 토큰을 가져오는 함수
-Future<Map<String, String>> getTokens() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? accessToken = prefs.getString('accessToken');
-  String? refreshToken = prefs.getString('refreshToken');
-  String? kakao = prefs.getString('kakao');
-
-  return {
-    'accessToken': accessToken ?? '',
-    'refreshToken': refreshToken ?? '',
-    'kakao': kakao ?? '',
-  };
-}
-
-Future<void> KakaoFriend() async {
-  Map<String, String> tokens = await getTokens();
-  String accessToken = tokens['accessToken']!;
-  String kakao = tokens['kakao']!;
-
-  String apiUrl =
-      'http://3.39.126.140:8000/user-service/kakao-friends/$kakao?offset=0'; // 호출할 API의 엔드포인트 URL
-
-  Map<String, String> headers = {
-    'Authorization': 'Bearer $accessToken', // 액세스 토큰을 Authorization 헤더에 포함시킴
-    'Content-Type': 'application/json;charset=UTF-8',
-  };
-  try {
-    http.Response response =
-        await http.get(Uri.parse(apiUrl), headers: headers);
-    if (response.statusCode == 200) {
-      print('친구 호출 성공: ${response.statusCode}');
-    } else {
-      // API 호출 실패
-      print('친구 호출 실패: ${response.statusCode}');
-    }
-  } catch (e) {
-    // 예외 처리
-    print('친구 호출 중 예외 발생: $e');
-  }
-}
-
 class _Friends extends State<Friends> {
-  List myFriend = ['영주', '혜원', '찬영', '광휘', '지연', '은진'];
-  List OctoFriend = ['달밤영', '감자 러버', '어쩌라고', '평화주의자', '뷁뚫꺕ㅎ', '분위기메이커'];
+  Future<List<Friend>>? friend;
+
+  @override
+  void initState() {
+    super.initState();
+    friend = fetchFriend();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/background.gif'),
-              fit: BoxFit.fill,
-            ),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.gif'),
+            fit: BoxFit.fill,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(30, 30, 0, 0),
-                  child: Text("문어 친구(${myFriend.length})",
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        KakaoFriend();
-                      },
-                      child: Image.asset('assets/images/friend.png', height: 40),
-                    ),
-                    SizedBox(width: 30,),
-                  ],
-                ),
-
-              Expanded(
-                  child: Row(
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(30, 30, 0, 0),
+              child: Text(
+                "문어 친구",
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.1,
@@ -103,54 +58,104 @@ class _Friends extends State<Friends> {
                           MaterialPageRoute(builder: (context) => Datelist()),
                         );
                       },
-                      child: Image.asset('assets/images/left.png', height: 55),
+                      child: Image.asset('assets/images/left.png',
+                          height: 55, color: Colors.black38.withOpacity(0.2)),
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: GridView.builder(
-                        itemCount: myFriend.length, // 아이템 개수
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1, // 가로 방향 아이템 수
-                          childAspectRatio: 2 / 1, // 아이템 가로 세로 비율
-                          mainAxisSpacing: 10, // 세로 방향 간격
-                          crossAxisSpacing: 10, // 가로 방향 간격
-                        ),
-                        itemBuilder: (BuildContext context, int i) {
-                          //item 의 반목문 항목 형성
-                          return buildFriendItem(i);
-                        }),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.1,
+                  FutureBuilder<List<Friend>>(
+                    future: friend,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // Show a loading indicator while fetching the friend list
+                      } else if (snapshot.hasError) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(width: 80),
+                            Center(
+                              child: Text(
+                                '조회된 친구가\n'
+                                '-- 없습니닷 0 ^ 0',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.0,
+                                    fontFamily: 'Neo'),
+                              ),
+                            ), // Show an error message if fetching fails
+                          ],
+                        );
+                      } else if (snapshot.hasData) {
+                        final friendList = snapshot
+                            .data!; // Access the friend list from the snapshot
+                        logger.d("왜 안되냐고 ${friendList[0].characterImageUrl}");
+                        return Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: GridView.builder(
+                                itemCount: friendList.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 1,
+                                  childAspectRatio: 2 / 1,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                ),
+                                itemBuilder: (BuildContext context, int i) {
+                                  return buildFriendItem(friendList, i);
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.1,
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Container(); // Return an empty container if no data is available
+                      }
+                    },
                   ),
                 ],
-              ))
-            ],
-          )),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget buildFriendItem(int index) {
+  String truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, maxLength) + "\n" + text.substring(maxLength, text.length);
+    }
+  }
+
+  Widget buildFriendItem(List<Friend> friend, int index) {
+    String originalText = friend[index].nickName; // friend 리스트에서 index에 해당하는 닉네임 값 가져오기
+    String modifiedText = truncateText(originalText, 8);
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(bottom: 4),
+              // 친구 닉네임
+              padding: EdgeInsets.only(bottom: 10),
               child: Text(
-                myFriend[index].toString(),
-                style: TextStyle(fontSize: 20),
+                modifiedText,
+                style: TextStyle(fontSize: 18),
               ),
             ),
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.black12,
-              ),
+            CircleAvatar(
+              radius: 50, // 반지름 크기를 조정하여 원의 크기를 설정합니다.
+              backgroundImage: NetworkImage(friend[index].thumbnailImageUrl),
             ),
           ],
         ),
@@ -158,30 +163,36 @@ class _Friends extends State<Friends> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
+              // 친구 문어 닉네임
               padding: EdgeInsets.only(bottom: 4),
               child: Text(
-                OctoFriend[index].toString(),
+                friend[index].characterName,
                 style: TextStyle(fontSize: 20),
               ),
             ),
             InkWell(
+              // 친구 문어 이미지
               onTap: () {
-                String ID = myFriend[index].toString(); // 임의 지정 추후 변경
-                String Octoname = OctoFriend[index].toString();
-                String imageName = 'first_octo.gif';
-                // 페이지 변경 로직을 작성합니다.
-                // 예를 들어, 다른 페이지로 이동하는 코드를 작성할 수 있습니다.
+                final int? Id = friend[index].Id; // 임의 지정 추후 변경
+                final String characterName = friend[index].characterName;
+                final String stateMsg = friend[index].stateMsg;
+                final String characterImageUrl =
+                    friend[index].characterImageUrl;
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => FriendHome(
-                          ID: ID, Octoname: Octoname, imageName: imageName)),
+                          Id: Id,
+                          characterName: characterName,
+                          stateMsg: stateMsg,
+                          characterImageUrl: characterImageUrl)),
                 );
               },
-              child: Image.asset(
-                'assets/images/first_octo.gif',
-                width: 100,
-                height: 100,
+
+              child: Image.network(
+                friend[index].characterImageUrl,
+                width: 50,
+                height: 50,
               ),
             ),
             Expanded(
