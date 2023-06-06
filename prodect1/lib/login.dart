@@ -20,7 +20,7 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
     _initKaKaoTalkInstalled();
-    // checkTokens(); // 토큰 확인
+    checkTokens(); // 토큰 확인
   }
 
   Future<void> _initKaKaoTalkInstalled() async {

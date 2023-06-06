@@ -138,12 +138,10 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
     );
 
     setState(() {
-      _distance = newDistance / 1000;
-      _distanceView = newDisplayDistance / 1000;
+      _distance = _distance + (newDistance / 1000);
+      _distanceView = _distanceView + (newDisplayDistance / 1000);
     });
     _lastPosition = position;
-
-    initializeDistanceView();
   }
 
   @override
