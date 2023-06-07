@@ -44,7 +44,7 @@ Future<List<DiaryDTO>> fetchtodaydiary() async {
   http.get
     (url, headers: headers);
   if (response.statusCode == 200) { // Request was successful
-    final result = json.decode(response.body).cast<Map<String, dynamic>>();
+    final result = json.decode(utf8.decode(response.bodyBytes)).cast<Map<String, dynamic>>();
     List<DiaryDTO> list = result.map<DiaryDTO>((json) {
       return DiaryDTO.fromJson(json);
     }).toList();
