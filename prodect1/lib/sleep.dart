@@ -167,12 +167,10 @@ Widget buildMyFutureBuilderWidget(BuildContext context) {
                   thickness: 1,
                 ),
                 Center(
-                  child: const SizedBox(
-                    height: 254,
-                    width: double.infinity,
+                  child: Expanded(
                     child: sleepLineChart(),
                   ),
-                ),
+                )
               ]),
         );
       }

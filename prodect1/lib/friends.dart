@@ -87,10 +87,31 @@ class _Friends extends State<Friends> {
                           ],
                         );
                       } else if (snapshot.hasData) {
+                        logger.d("왜 안되냐고 ff ${snapshot.data}");
                         final friendList = snapshot
                             .data!; // Access the friend list from the snapshot
 
-                        logger.d("왜 안되냐고 ff ${friendList[1].characterName}");
+                        if(friendList.length == 0){
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SizedBox(width: 80),
+                              Center(
+                                child: Text(
+                                  '조회된 친구가\n'
+                                      '-- 없습니닷 0 ^ 0',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1.0,
+                                      fontFamily: 'Neo'),
+                                ),
+                              ), // Show an error message if fetching fails
+                            ],
+                          );
+                        }
+
                         return Row(
                           children: [
                             SizedBox(
