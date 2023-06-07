@@ -115,8 +115,8 @@ class Info {
       experienceValue: json["experienceValue"],
       stateMsg: json["stateMsg"],
       thumbnailImageUrl: json["thumbnailImageUrl"],
-      sleepTime: json["sleepTime"],
-      distance: json["distance"],
+      sleepTime: json["sleepTime"] ?? 0,
+      distance: json["distance"] ?? 0,
       dday: json["dday"],
     );
   }
