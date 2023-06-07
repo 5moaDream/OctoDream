@@ -119,12 +119,16 @@ class _letterlist extends State<letterlist>{
                       return AlertDialog(
                         title: Text(item.name),
                         content:
-                            Column(
-                              children: [
-                                Text(item.content),
-                                SizedBox(height: 8),
-                                Text('${item.year}년 ${item.month}월 ${item.day}일'),
-                              ],
+                            Container(
+                              width: 300,
+                              height: 300,
+                              child: Column(
+                                children: [
+                                  Text(item.content),
+                                  SizedBox(height: 8),
+                                  Text('${item.year}년 ${item.month}월 ${item.day}일'),
+                                ],
+                              ),
                             ),
                         actions: [
                           TextButton(

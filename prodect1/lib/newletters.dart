@@ -112,13 +112,17 @@ class _newletter extends State<newletter>{
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: Text(item.name),
-                        content: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(item.content),
-                            SizedBox(height: 8),
-                            Text('${item.year}-${item.month}-${item.day}'),
-                          ],
+                        content: Container(
+                          width: 300,
+                          height: 300,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(item.content),
+                              SizedBox(height: 8),
+                              Text('${item.year}-${item.month}-${item.day}'),
+                            ],
+                          ),
                         ),
                         actions: [
                           TextButton(
