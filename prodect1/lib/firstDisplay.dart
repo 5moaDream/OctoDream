@@ -124,16 +124,14 @@ class _firstDisplay extends State<firstDisplay> {
                                           );
                                         } else {
                                           fetchName(myController.text);
+                                          Navigator.of(context).pop();
                                           Future.delayed(Duration(seconds: 3), () {
-                                            Navigator.of(context).pop();
-                                            Future.delayed(Duration(seconds: 3), () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => MyHomePage(),
-                                                ),
-                                              );
-                                            });
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => MyHomePage(),
+                                              ),
+                                            );
                                           });
                                           showDialog(
                                             context: context,
