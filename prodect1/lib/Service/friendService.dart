@@ -56,30 +56,30 @@ Future<List<Friend>> fetchFriend() async {
 }
 
 class Friend {
-  final int? Id; // 친구 아이디
+  final int? id; // 친구 아이디
   final String nickName; // 친구 닉네임
+  final String characterImage; // 친구 문어 이미지
   final String characterName; // 친구 문어 닉네임
-  final String stateMsg; // 친구 문어 상태 메시지
-  final String characterImageUrl; // 친구 문어 이미지
+  final String statusMSG; // 친구 문어 상태 메시지
   final String thumbnailImageUrl; // 친구 프로필 사진
 
   Friend({
-    required this.Id,
-    required this.characterName,
-    required this.stateMsg,
+    required this.id,
     required this.nickName,
-    required this.characterImageUrl,
+    required this.characterImage,
+    required this.characterName,
+    required this.statusMSG,
     required this.thumbnailImageUrl,
   });
 
   factory Friend.fromJson(Map<String, dynamic> json) {
     return Friend(
-      Id: json["Id"] as int? ?? 0,
+      id: json["id"] as int?,
       nickName: json["nickName"] ?? '',
+      characterImage: json["characterImage"] ?? '',
       characterName: json["characterName"] ?? '',
-      stateMsg: json["stateMsg"] ?? '',
-      characterImageUrl: json["characterImageUrl"] ?? '',
       thumbnailImageUrl: json["thumbnailImageUrl"] ?? '',
+      statusMSG: json["statusMSG"] ?? '',
     );
   }
 }

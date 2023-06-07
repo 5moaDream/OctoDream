@@ -89,7 +89,8 @@ class _Friends extends State<Friends> {
                       } else if (snapshot.hasData) {
                         final friendList = snapshot
                             .data!; // Access the friend list from the snapshot
-                        logger.d("왜 안되냐고 ${friendList[0].characterImageUrl}");
+
+                        logger.d("왜 안되냐고 ff ${friendList[1].characterName}");
                         return Row(
                           children: [
                             SizedBox(
@@ -173,26 +174,26 @@ class _Friends extends State<Friends> {
             InkWell(
               // 친구 문어 이미지
               onTap: () {
-                final int? Id = friend[index].Id; // 임의 지정 추후 변경
+                final int? Id = friend[index].id; // 임의 지정 추후 변경
                 final String characterName = friend[index].characterName;
-                final String stateMsg = friend[index].stateMsg;
-                final String characterImageUrl =
-                    friend[index].characterImageUrl;
+                final String stateMsg = friend[index].statusMSG;
+                final String characterImage =
+                    friend[index].characterImage;
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => FriendHome(
-                          Id: Id,
+                          id: Id,
                           characterName: characterName,
                           stateMsg: stateMsg,
-                          characterImageUrl: characterImageUrl)),
+                          characterImage: characterImage)),
                 );
               },
 
               child: Image.network(
-                friend[index].characterImageUrl,
-                width: 50,
-                height: 50,
+                friend[index].characterImage,
+                width: 130,
+                height: 120,
               ),
             ),
             Expanded(
