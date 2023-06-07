@@ -134,19 +134,26 @@ class _newletter extends State<newletter>{
                     },
                   );
                 },
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(70.0),
-                    color: Colors.lightGreenAccent,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.star),
-                      Text(item.content),
+                      Container(
+                        height: 50,
+                        padding: EdgeInsets.all(10),
+                        margin: EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(70.0),
+                          color: Colors.lightGreenAccent,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(Icons.star),
+                            Text(item.content),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
