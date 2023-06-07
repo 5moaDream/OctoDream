@@ -149,10 +149,9 @@ class _sleepsetting extends State<sleepsetting> {
                           double distance = myDistance;
                           updateTarget(sleepTime, distance);
 
-                          //Navigator.push(context,
-                           //   MaterialPageRoute(builder: (context) => SettingPage()));
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) => SettingPage()));
+                          Navigator.push(context,
+                             MaterialPageRoute(builder: (context) => SettingPage()));
+
                         },
                           child: Text('저장', style: TextStyle(
                             color: Colors.black.withOpacity(0.8),
@@ -163,7 +162,8 @@ class _sleepsetting extends State<sleepsetting> {
                       }
                       else if (snapshot.hasError) {
                         // 데이터 가져오기 실패 시 에러 처리
-                        return Text('Error: ${snapshot.error}');
+                        return CircularProgressIndicator();
+                          //Text('Error: ${snapshot.error}');
                       } else {
                         // 데이터 가져오는 동안 로딩 표시
                         return CircularProgressIndicator();

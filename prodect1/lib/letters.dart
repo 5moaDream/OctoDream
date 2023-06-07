@@ -117,7 +117,7 @@ class _letterlist extends State<letterlist>{
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text(item.name),
+                        title: Text('새로운 메시지'),
                         content:
                             Container(
                               width: 300,
@@ -158,7 +158,6 @@ class _letterlist extends State<letterlist>{
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(item.content),
-                          Text(item.name),
                         ],
                       ),
                     ),

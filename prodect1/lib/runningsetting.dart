@@ -75,20 +75,23 @@ class _Runningsetting extends State<Runningsetting> {
                   return TextButton(
                     child: Text('확인'),
                     onPressed: () {
+                      Navigator.of(context).pop();
                       savekm();
                       int sleepTime = mySleepTime;
                       double distance = _currentDoubleValue;
                       updateTarget(sleepTime, distance);
-                      print(_currentDoubleValue);
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushReplacement(
+                      Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => SettingPage()));
+
+                      print(_currentDoubleValue);
+
                     },
                   );
                 }
                 else if (snapshot.hasError) {
                   // 데이터 가져오기 실패 시 에러 처리
-                  return Text('Error: ${snapshot.error}');
+                  return CircularProgressIndicator();
+                    //Text('Error: ${snapshot.error}');
                 } else {
                   // 데이터 가져오는 동안 로딩 표시
                   return CircularProgressIndicator();

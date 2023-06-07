@@ -111,7 +111,7 @@ class _newletter extends State<newletter>{
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text(item.name),
+                        title: Text('${item.year}-${item.month}-${item.day}'),
                         content: Container(
                           width: 300,
                           height: 300,
@@ -119,8 +119,6 @@ class _newletter extends State<newletter>{
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(item.content),
-                              SizedBox(height: 8),
-                              Text('${item.year}-${item.month}-${item.day}'),
                             ],
                           ),
                         ),
@@ -145,11 +143,10 @@ class _newletter extends State<newletter>{
                     color: Colors.lightGreenAccent,
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.star),
                       Text(item.content),
-                      Text(item.name),
                     ],
                   ),
                 ),
