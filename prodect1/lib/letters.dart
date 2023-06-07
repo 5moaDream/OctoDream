@@ -117,7 +117,7 @@ class _letterlist extends State<letterlist>{
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('새로운 메시지'),
+                        title: Text('${item.year}년 ${item.month}월 ${item.day}일'),,
                         content:
                             Container(
                               width: 300,
@@ -126,7 +126,6 @@ class _letterlist extends State<letterlist>{
                                 children: [
                                   Text(item.content),
                                   SizedBox(height: 8),
-                                  Text('${item.year}년 ${item.month}월 ${item.day}일'),
                                 ],
                               ),
                             ),
