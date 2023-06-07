@@ -149,7 +149,9 @@ class _sleepsetting extends State<sleepsetting> {
                           double distance = myDistance;
                           updateTarget(sleepTime, distance);
 
-                          Navigator.push(context,
+                          //Navigator.push(context,
+                           //   MaterialPageRoute(builder: (context) => SettingPage()));
+                          Navigator.of(context).pushReplacement(
                               MaterialPageRoute(builder: (context) => SettingPage()));
                         },
                           child: Text('저장', style: TextStyle(

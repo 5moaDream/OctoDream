@@ -21,7 +21,11 @@ class FriendHome extends StatefulWidget {
   final String stateMsg;
   final String characterImage;
 
-  FriendHome({required this.id, required this.characterName, required this.stateMsg, required this.characterImage});
+  FriendHome(
+      {required this.id,
+      required this.characterName,
+      required this.stateMsg,
+      required this.characterImage});
 
   @override
   _FriendHome createState() =>
@@ -58,16 +62,18 @@ class _FriendHome extends State<FriendHome> {
       "content": "${enteredText}",
     };
     String jsonBody = jsonEncode(requestBody);
-    try{
+    try {
       http.Response response = await http.post(
         url,
         headers: headers,
         body: jsonBody,
       );
-      if (response.statusCode == 200) { // 요청 성공
-      } else { // 요청 실패
+      if (response.statusCode == 200) {
+        // 요청 성공
+      } else {
+        // 요청 실패
       }
-    }catch(e){}
+    } catch (e) {}
   }
 
   @override
@@ -79,122 +85,124 @@ class _FriendHome extends State<FriendHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Container(
-      padding: EdgeInsets.only(top: 40),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/background.gif'),
-          fit: BoxFit.fill,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.gif'),
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyHomePage()),
-                  );
-                },
-                child: Image.asset('assets/images/home.png', width: 60),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyHomePage()),
+                      );
+                    },
+                    child: Image.asset('assets/images/home.png', width: 60),
+                  ),
+                  SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("방명록 작성",
+                                  style: TextStyle(fontSize: 20)),
+                              content: TextField(
+                                controller: _textEditingController,
+                                // TextEditingController 설정
+                                decoration: InputDecoration(
+                                  suffixStyle: TextStyle(fontSize: 15),
+                                  hintText: '내용을 입력해주세요-',
+                                  border: OutlineInputBorder(), //외곽선
+                                ),
+                                maxLines: 3,
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: const Text('보내기'),
+                                  onPressed: () {
+                                    enteredText = _textEditingController
+                                        .text; // 입력된 내용 가져오기
+                                    Server();
+                                    _textEditingController.clear(); // 수정된 부분
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    child: Image.asset('assets/images/communication.png',
+                        width: 50),
+                  ),
+                  SizedBox(width: 10),
+                ],
               ),
-              SizedBox(width: 10),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("방명록 작성", style: TextStyle(fontSize: 20)),
-                          content: TextField(
-                            controller: _textEditingController, // TextEditingController 설정
-                            decoration: InputDecoration(
-                              suffixStyle: TextStyle(fontSize: 15),
-                              hintText: '내용을 입력해주세요-',
-                              border: OutlineInputBorder(), //외곽선
-                            ),
-                            maxLines: 6,
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  SizedBox(width: 10),
+                  Text(
+                    widget.characterName,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2.0,
+                        fontFamily: 'Neo'),
+                  ),
+                ],
+              ),
+              SizedBox(height: 70),
+              Stack(
+                children: [
+                  Container(
+                    //color: Colors.blue,
+                    margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                    height: 180,
+                    width: 230,
+                    child: Image.asset(
+                      "assets/images/chat.png",
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Positioned(
+                    //sizebox만들어서 row colum center위젯
+                    bottom: 55,
+                    right: 20,
+                    child: Container(
+                        height: 110,
+                        width: 200,
+                        //color: Colors.amber,
+                        child: Center(
+                          child: Text(
+                            widget.stateMsg,
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.center,
                           ),
-                          actions: [
-                            TextButton(
-                              child: const Text('보내기'),
-                              onPressed: () {
-                                enteredText = _textEditingController.text; // 입력된 내용 가져오기
-                                Server();
-                                _textEditingController.clear(); // 수정된 부분
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      });
-                },
-                child:
-                    Image.asset('assets/images/communication.png', width: 50),
+                        )),
+                  ),
+                ],
               ),
-              SizedBox(width: 10),
-            ],
-          ),
-          SizedBox(height: 10),
-          Row(
-            children: [
-              SizedBox(width: 10),
-              Text(widget.characterName,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2.0,
-                    fontFamily: 'Neo'),
-              ),
-            ],
-          ),
-          SizedBox(height: 70),
-          Stack(
-            children: [
-              Container(
-                //color: Colors.blue,
-                margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                height: 180,
-                width: 230,
-                child: Image.asset(
-                  "assets/images/chat.png",
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Positioned(
-                //sizebox만들어서 row colum center위젯
-                bottom: 55,
-                right: 20,
-                child: Container(
-                    height: 110,
-                    width: 200,
-                    //color: Colors.amber,
-                    child: Center(
-                      child: Text(
-                        widget.stateMsg,
-                        style: TextStyle(fontSize: 20),
-                        textAlign: TextAlign.center,
-                      ),
-                    )),
-              ),
-            ],
-          ),
               Image.network(
                 widget.characterImage,
                 width: 200,
                 height: 200,
               ),
-
-
-        ],
-      ),
-    ));
+            ],
+          ),
+        ));
   }
 }
