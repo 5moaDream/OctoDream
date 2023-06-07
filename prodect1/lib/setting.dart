@@ -291,6 +291,9 @@ class _SettingPageState extends State<SettingPage> {
                                           } else {
                                             updateStateMSG(myController.text);
                                             Navigator.of(context).pop();
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(builder: (context) => SettingPage()));
+
                                           }
                                         },
                                         child: Text('확인'),

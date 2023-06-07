@@ -36,7 +36,7 @@ class MyRunning extends StatefulWidget {
 }
 
 List<RunningDTO> runningList = [];
-double runGoal = 0;
+int runGoal = 0;
 
 class _MyRunningState extends State<MyRunning> {
   late Future<List<RunningDTO>> runningDataFuture;
@@ -193,11 +193,13 @@ class _MyRunningState extends State<MyRunning> {
       key: PageStorageKey('runningData'),
       future: runningDataFuture,
       builder: (context, snapshot) {
+        runningList = [];
         if (snapshot.hasData) {
           runningList = snapshot.data!;
           if (runningList.isNotEmpty) {
             return ch(context);
-          } else {
+          }
+          else {
             runningList.add(RunningDTO(runningId: 0, userId: 0, createdTime: '', totalRunningTime: 0, distance: 0));
             return ch(context);
           }
@@ -252,7 +254,7 @@ class _MyRunningState extends State<MyRunning> {
                 ],
               )),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 children: [
@@ -288,7 +290,7 @@ class _MyRunningState extends State<MyRunning> {
                               progressColor: Color(0xFF4facfe),
                               backgroundColor: Colors.grey[100]!,
                               borderRadius: BorderRadius.circular(30),
-                              currentValue: distanceRun() * 100 / runGoal,
+                              currentValue: distanceRun(),
                               displayText: '%',
                               size: 40,
                             ),
