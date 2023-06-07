@@ -83,18 +83,11 @@ class _letterlist extends State<letterlist>{
                   color: Colors.white.withOpacity(0.8),
                   margin: EdgeInsets.only(top: 10,left: 10,right: 10),
                   padding: EdgeInsets.all(6),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                          Column(
-                            children: [
-                              lett(context)
-                            ],
-                          ),
-
-                        ],
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                            lett(context)
+                      ],
                   )
               )
             ],
@@ -103,70 +96,66 @@ class _letterlist extends State<letterlist>{
     );
   }
   Widget lett(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.all(5),
-        width: 400,
-        height: 450,
-        child: Column(
-          children: [
-            for (var item in list)
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('${item.year}년 ${item.month}월 ${item.day}일'),
-                        content:
-                            Container(
-                              width: 300,
-                              height: 300,
-                              child: Column(
-                                children: [
-                                  Text(item.content),
-                                  SizedBox(height: 8),
-                                ],
-                              ),
+    return Container(
+      padding: EdgeInsets.all(5),
+      width: 400,
+      height: 450,
+      child: Column(
+        children: [
+          for (var item in list)
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('${item.year}년 ${item.month}월 ${item.day}일'),
+                      content:
+                          Container(
+                            width: 300,
+                            height: 300,
+                            child: Column(
+                              children: [
+                                Text(item.content),
+                                SizedBox(height: 8),
+                              ],
                             ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('Close'),
                           ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 50,
-                        padding: EdgeInsets.all(10),
-                        margin:
-                        EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(70.0),
-                          color: Colors.lightGreenAccent,
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Close'),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(item.content),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    );
+                  },
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 50,
+                    padding: EdgeInsets.all(10),
+                    margin:
+                    EdgeInsets.only(left: 5, right: 5, top: 7, bottom: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(70.0),
+                      color: Colors.lightGreenAccent,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(item.content),
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
