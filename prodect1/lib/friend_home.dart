@@ -155,9 +155,8 @@ class _FriendHome extends State<FriendHome> {
               ),
             ],
           ),
-          SizedBox(height: 10),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          SizedBox(height: 70),
+          Stack(
             children: [
               Container(
                 //color: Colors.blue,
@@ -185,13 +184,15 @@ class _FriendHome extends State<FriendHome> {
                       ),
                     )),
               ),
+            ],
+          ),
               Image.network(
                 widget.characterImage,
                 width: 200,
                 height: 200,
               ),
-            ],
-          ),
+
+
         ],
       ),
     ));

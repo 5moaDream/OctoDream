@@ -90,7 +90,7 @@ class _Friends extends State<Friends> {
                         final friendList = snapshot
                             .data!; // Access the friend list from the snapshot
 
-                        logger.d("왜 안되냐고 ff ${friendList[1].statusMSG}");
+                        logger.d("왜 안되냐고 ff ${friendList[1].characterName}");
                         return Row(
                           children: [
                             SizedBox(

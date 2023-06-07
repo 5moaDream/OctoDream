@@ -58,17 +58,17 @@ Future<List<Friend>> fetchFriend() async {
 class Friend {
   final int? id; // 친구 아이디
   final String nickName; // 친구 닉네임
+  final String characterImage; // 친구 문어 이미지
   final String characterName; // 친구 문어 닉네임
   final String statusMSG; // 친구 문어 상태 메시지
-  final String characterImage; // 친구 문어 이미지
   final String thumbnailImageUrl; // 친구 프로필 사진
 
   Friend({
     required this.id,
-    required this.characterName,
-    required this.statusMSG,
     required this.nickName,
     required this.characterImage,
+    required this.characterName,
+    required this.statusMSG,
     required this.thumbnailImageUrl,
   });
 
@@ -76,10 +76,10 @@ class Friend {
     return Friend(
       id: json["id"] as int?,
       nickName: json["nickName"] ?? '',
-      characterName: json["characterName"] ?? '',
-      statusMSG: json["statusMSG"] ?? '',
       characterImage: json["characterImage"] ?? '',
+      characterName: json["characterName"] ?? '',
       thumbnailImageUrl: json["thumbnailImageUrl"] ?? '',
+      statusMSG: json["statusMSG"] ?? '',
     );
   }
 }
