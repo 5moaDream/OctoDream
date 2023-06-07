@@ -1,6 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+DateTime focusedDay = DateTime.now();
+
+String _twoDigits(int n) {
+  if (n >= 10) return "$n";
+  return "0$n";
+}
+
 class diaryList {
   final String today;
   final String content;
@@ -108,14 +115,14 @@ class CalendarDTO {
   }
 }
 
-Future<CalendarDTO> fetchtodaycalendar() async {
+Future<CalendarDTO> fetchtodaycalendar(String format) async {
   String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzk0MDk2NTI2IiwiZXhwIjoxNjg3MzExMTgyfQ.O2UIaz23NQqE_vZ4YYUdFgaF7e0PJg29PNKxKfqMbgvQzRlJiexeOV1D9-ojhp2LtdM3RUzycuCyj_FiS4D3Xw';
   Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer $token',
   };
 
-  var url = Uri.parse('http://3.39.126.140:8000/activity-service/calender/2023-05-01');
+  var url = Uri.parse('http://3.39.126.140:8000/activity-service/calender/${format}');
   var response = await http.get(url, headers: headers);
   if (response.statusCode == 200) { // Request was successful
     final encodedBody = utf8.decode(response.bodyBytes);
@@ -178,35 +185,70 @@ Map<DateTime, List<Event>> convertToEventMap(CalendarDTO calendarDTO) {
   }
 
   // Iterate over the diary list
-  for (diaryList diary in calendarDTO.diarylist) {
-    DateTime date1 = DateTime.parse(diary.today!).toUtc();
+  if(calendarDTO.diarylist.isNotEmpty){
+    for (diaryList diary in calendarDTO.diarylist) {
+      DateTime date1 = DateTime.parse(diary.today!).toUtc();
+      for (runningList running in calendarDTO.runninglist) {
+        DateTime date2 = DateTime.parse(running.today!).toUtc();
+        for (sleepList sleep in calendarDTO.sleeplist) {
+          DateTime date = DateTime.parse(sleep.today!).toUtc();
+          if(!events.containsKey(date)){
+            if (date == date1 && date == date2) {
+              combineEvents(date, Event(
+                diary.content,
+                running.totalDistance,
+                sleep.sleepTime.toDouble(),
+              ));
+            }
+            else if (date == date1 && date != date2) {
+              combineEvents(date, Event(
+                diary.content,
+                0,
+                sleep.sleepTime.toDouble(),
+              ));
+            }
+            else if (date != date1 && date == date2) {
+              combineEvents(date, Event(
+                '',
+                running.totalDistance,
+                sleep.sleepTime.toDouble(),
+              ));
+            }
+            else if (date != date1 && date != date2 && date1 == date2) {
+              combineEvents(date, Event(
+                '',
+                0,
+                sleep.sleepTime.toDouble(),
+              ));
+            }
+          }
+        }
+        if (!events.containsKey(date2) && date2 == date1) {
+          combineEvents(date2, Event(diary.content,running.totalDistance, 0));
+        }
+        if (!events.containsKey(date2) && date2 != date1) {
+          combineEvents(date2, Event('',running.totalDistance, 0));
+        }
+      }
+      if (!events.containsKey(date1)) {
+        combineEvents(date1, Event(diary.content,0, 0));
+      }
+    }
+  }
+  else{
     for (runningList running in calendarDTO.runninglist) {
       DateTime date2 = DateTime.parse(running.today!).toUtc();
       for (sleepList sleep in calendarDTO.sleeplist) {
         DateTime date = DateTime.parse(sleep.today!).toUtc();
-        if(!events.containsKey(date)){
-          if (date == date1 && date == date2) {
-            combineEvents(date, Event(
-              diary.content,
-              running.totalDistance,
-              sleep.sleepTime.toDouble(),
-            ));
-          }
-          else if (date == date1 && date != date2) {
-            combineEvents(date, Event(
-              diary.content,
-              0,
-              sleep.sleepTime.toDouble(),
-            ));
-          }
-          else if (date != date1 && date == date2) {
+        if (!events.containsKey(date)) {
+          if (date == date2) {
             combineEvents(date, Event(
               '',
               running.totalDistance,
               sleep.sleepTime.toDouble(),
             ));
           }
-          else if (date != date1 && date != date2 && date1 == date2) {
+          else if (date != date2) {
             combineEvents(date, Event(
               '',
               0,
@@ -215,15 +257,9 @@ Map<DateTime, List<Event>> convertToEventMap(CalendarDTO calendarDTO) {
           }
         }
       }
-      if (!events.containsKey(date2) && date2 == date1) {
-        combineEvents(date2, Event(diary.content,running.totalDistance, 0));
+      if (!events.containsKey(date2)) {
+        combineEvents(date2, Event('', running.totalDistance, 0));
       }
-      if (!events.containsKey(date2) && date2 != date1) {
-        combineEvents(date2, Event('',running.totalDistance, 0));
-      }
-    }
-    if (!events.containsKey(date1)) {
-      combineEvents(date1, Event(diary.content,0, 0));
     }
   }
   return events;

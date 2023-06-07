@@ -211,7 +211,8 @@ class _LogInState extends State<LogIn> {
               ElevatedButton(
                   child: const Text('로그아웃'),
                   onPressed: () => {
-                        kakaoLogout(),
+                        //kakaoLogout(),
+                    handleLoginSuccess(),
                       }),
               GestureDetector(
                 onTap: () async {

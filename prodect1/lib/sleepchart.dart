@@ -79,7 +79,8 @@ class _LineChartState extends State<sleepLineChart> {
           DateTime first = DateTime.now();
           int b = first.day.toInt()-7;
           int j = 0;
-          for (int i = 0; i < 7; i++) {
+
+          for (b; b < first.day; b++) {
             if(j<snapshot.data!.length){
               int distance = snapshot.data![j].totalSleepTime!;
               DateTime date = DateTime.parse(snapshot.data![j].wakeUpTime!);
@@ -89,7 +90,6 @@ class _LineChartState extends State<sleepLineChart> {
               } else {
                 sleepdata.add(FlSpot(b.toDouble(), 0));
               }
-              b++;
             }
             else {
               sleepdata.add(FlSpot(b.toDouble(), 0));

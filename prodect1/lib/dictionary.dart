@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:prodect1/Service/dictionaryService.dart';
 
 
+
 class dictionary extends StatefulWidget{
   @override
   State<dictionary> createState()=>_dictionary();
@@ -71,7 +72,8 @@ class _dictionary extends State<dictionary>
             ),
           ),
           onPressed: () {
-            updateUserOcto(url);
+            // updateUserOcto(url);
+            // MyHomePage.
           },
           child: Text('문어교환'));
     }

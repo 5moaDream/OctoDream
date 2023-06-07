@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:prodect1/home.dart';
 import 'diary.dart';
 import 'running.dart';
 import 'sleep.dart';
@@ -76,6 +77,21 @@ class _floatingButton  extends State<floatingButton> {
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => diary()));
+          },
+        ),
+        SpeedDialChild(
+          child: const Icon(
+            Icons.home,
+            color: Colors.indigo,
+          ),
+          label: "홈",
+          backgroundColor: Colors.white,
+          labelBackgroundColor: Colors.white,
+          labelStyle: const TextStyle(
+              fontWeight: FontWeight.w500, color: Colors.indigo, fontSize: 13.0),
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MyHomePage()));
           },
         )
       ],

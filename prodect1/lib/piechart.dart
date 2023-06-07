@@ -12,9 +12,10 @@ String date(int time){
 }
 
 class PieChartSample3 extends StatefulWidget {
-  final double sleep;
+  final int sleep;
+  final int goal;
 
-  PieChartSample3({Key? key, required this.sleep}) : super(key: key);
+  PieChartSample3({Key? key, required this.sleep, required this.goal}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => PieChartSample3State();
@@ -40,7 +41,8 @@ class PieChartSample3State extends State<PieChartSample3> {
                     touchedIndex = -1;
                     return;
                   }
-                  touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                  touchedIndex =
+                      pieTouchResponse.touchedSection!.touchedSectionIndex;
                 });
               },
             ),
@@ -49,25 +51,26 @@ class PieChartSample3State extends State<PieChartSample3> {
             ),
             sectionsSpace: 0,
             centerSpaceRadius: 0,
-            sections: showingSections(widget.sleep),
+            sections: showingSections(widget.sleep, widget.goal),
           ),
         ),
       ),
     );
   }
 
-  List<PieChartSectionData> showingSections(double sleep) {
+  List<PieChartSectionData> showingSections(int sleep, int goal) {
     return List.generate(2, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
       final radius = isTouched ? 80.0 : 75.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+      final double data = (goal - sleep).toDouble();
 
       switch (i) {
         case 0:
           return PieChartSectionData(
             color: Color(0xFF444974),
-            value: sleep,
+            value: sleep.toDouble(),
             title: date(sleep.toInt()),
             radius: radius,
             titleStyle: TextStyle(
@@ -80,8 +83,8 @@ class PieChartSample3State extends State<PieChartSample3> {
           );
         case 1:
           return PieChartSectionData(
-            color: Color(0xFFEAECFF).withOpacity(0.7),
-            value: 480-sleep,
+            color: Color(0xFFEAECFF).withOpacity(0.5),
+            value: data,
             title: "",
             radius: radius,
             titleStyle: TextStyle(

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'dart:math';
 import 'dart:ui' as ui;
 import 'DTO/calendarDTO.dart';
+import 'Service/userService.dart';
 import 'floatingbutton.dart';
 
 class Calendar extends StatefulWidget {
@@ -13,6 +14,10 @@ class Calendar extends StatefulWidget {
   @override
   State<Calendar> createState() => _Calendar();
 }
+
+Future<Info>? info;
+double runGoal = 0;
+int sleepGoal = 0;
 
 class _Calendar extends State<Calendar> {
 
@@ -38,6 +43,12 @@ class _Calendar extends State<Calendar> {
   );
 
   @override
+  void initState() {
+    super.initState();
+    info = fetchInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     initializeDateFormatting();
     return Scaffold(
@@ -54,7 +65,7 @@ class _Calendar extends State<Calendar> {
         ),
         child: SafeArea(
           child: FutureBuilder<CalendarDTO>(
-            future: fetchtodaycalendar(),
+            future: fetchtodaycalendar(selectedDay.toString()),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 // Data has been successfully fetched
@@ -122,131 +133,199 @@ class _Calendar extends State<Calendar> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: ListView(
-                          children: _getEventsForDay(selectedDay)
-                              .map((event) => Container(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Column(
-                                children: [
-                                  Container(
-                                      padding: EdgeInsets.fromLTRB(20, 10, 16, 0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            DateFormat('yyyy.MM.dd', 'ko').format(selectedDay)
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 20, fontWeight: FontWeight.bold,
-                                                height: 2.0
+                      FutureBuilder(
+                          future: info,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              runGoal = snapshot.data!.distance;
+                              sleepGoal = snapshot.data!.sleepTime;
+                            }
+                            return Expanded(
+                              child: ListView(
+                                children: _getEventsForDay(selectedDay)
+                                    .map((event) => Container(
+                                    padding: EdgeInsets.only(top: 5),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                20, 10, 16, 0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  DateFormat('yyyy.MM.dd',
+                                                      'ko')
+                                                      .format(selectedDay)
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                      height: 2.0),
+                                                ),
+                                              ],
+                                            )),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                              0.94,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(
+                                                15), //모서리를 둥글게
+                                            border: Border.all(
+                                                color: Colors.black12,
+                                                width: 3),
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                            const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons
+                                                      .account_balance_wallet,
+                                                  color:
+                                                  Colors.deepPurple,
+                                                  size: 30,
+                                                ),
+                                                Container(
+                                                  padding:
+                                                  EdgeInsets.only(
+                                                      left: 16),
+                                                  width: MediaQuery.of(
+                                                      context)
+                                                      .size
+                                                      .width *
+                                                      0.8,
+                                                  child: Text(
+                                                    "${event.content}",
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      )
-                                  ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width*0.94,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15), //모서리를 둥글게
-                                      border: Border.all(color: Colors.black12, width: 3),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.account_balance_wallet,
-                                            color: Colors.deepPurple, size: 30,),
-                                          Container(
-                                            padding: EdgeInsets.only(left: 16),
-                                            width: MediaQuery.of(context).size.width*0.8,
-                                            child: Text("${event.content}",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                              ),),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                          padding: EdgeInsets.only(top: 20,left: 20),
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text("수면: ",
-                                                    style: TextStyle(
-                                                        fontSize: 14, fontWeight: FontWeight.bold
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .spaceAround,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                padding: EdgeInsets.only(
+                                                    top: 20, left: 20),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "수면: ",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                              14,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold),
+                                                        ),
+                                                        Text(
+                                                          "${(event.sleepTime / 60).toInt()}시간 ${(event.sleepTime % 60).toInt()}분",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                              18,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                  Text("${(event.sleepTime/60).toInt()}시간 ${(event.sleepTime%60).toInt()}분",
-                                                    style: TextStyle(
-                                                        fontSize: 18, fontWeight: FontWeight.bold
+                                                    Padding(
+                                                      padding:
+                                                      EdgeInsets.only(
+                                                          top: 10),
+                                                      child: CustomPaint(
+                                                        // CustomPaint를 그리고 이 안에 차트를 그려줍니다..
+                                                        size: Size(
+                                                            120, 120),
+                                                        // CustomPaint의 크기는 가로 세로 150, 150으로 합니다.
+                                                        painter: PieChart(
+                                                          goal: sleepGoal,
+                                                          percentage: event
+                                                              .sleepTime,
+                                                          // 파이 차트가 얼마나 칠해져 있는지 정하는 변수입니다.
+                                                          textScaleFactor:
+                                                          1.0,
+                                                          chart: "sleep",
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                )),
+                                            Container(
+                                                padding: EdgeInsets.only(
+                                                    top: 20, right: 40),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "러닝: ",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                              14,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold),
+                                                        ),
+                                                        Text(
+                                                          "${event.distance}km",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                              18,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.only(top: 10),
-                                                child: CustomPaint( // CustomPaint를 그리고 이 안에 차트를 그려줍니다..
-                                                  size: Size(120, 120), // CustomPaint의 크기는 가로 세로 150, 150으로 합니다.
-                                                  painter: PieChart(
-                                                    goal: 8*60,
-                                                    percentage: event.sleepTime, // 파이 차트가 얼마나 칠해져 있는지 정하는 변수입니다.
-                                                    textScaleFactor: 1.0,
-                                                    chart: "sleep",
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          )
-                                      ),
-                                      Container(
-                                          padding: EdgeInsets.only(top: 20,right: 40),
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text("러닝: ",
-                                                    style: TextStyle(
-                                                        fontSize: 14, fontWeight: FontWeight.bold
-                                                    ),
-                                                  ),
-                                                  Text("${event.distance}km",
-                                                    style: TextStyle(
-                                                        fontSize: 18, fontWeight: FontWeight.bold
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.only(top: 10),
-                                                child: CustomPaint( // CustomPaint를 그리고 이 안에 차트를 그려줍니다..
-                                                  size: Size(120, 120), // CustomPaint의 크기는 가로 세로 150, 150으로 합니다.
-                                                  painter: PieChart(
-                                                    goal: 3,
-                                                    percentage: event.distance, // 파이 차트가 얼마나 칠해져 있는지 정하는 변수입니다.
-                                                    textScaleFactor: 1.0,
-                                                    chart: "run",
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          )
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
-                          ))
-                              .toList(),
-                        ),
-                      ),
+                                                    Padding(
+                                                      padding:
+                                                      EdgeInsets.only(
+                                                          top: 10),
+                                                      child: CustomPaint(
+                                                        // CustomPaint를 그리고 이 안에 차트를 그려줍니다..
+                                                        size: Size(
+                                                            120, 120),
+                                                        // CustomPaint의 크기는 가로 세로 150, 150으로 합니다.
+                                                        painter: PieChart(
+                                                          goal: runGoal.toInt(),
+                                                          percentage: event
+                                                              .distance,
+                                                          // 파이 차트가 얼마나 칠해져 있는지 정하는 변수입니다.
+                                                          textScaleFactor:
+                                                          1.0,
+                                                          chart: "run",
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ))
+                                          ],
+                                        )
+                                      ],
+                                    )))
+                                    .toList(),
+                              ),
+                            );
+                          })
                     ],
                   ),
                 );
@@ -305,7 +384,7 @@ class PieChart extends CustomPainter {
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -pi / 2, arcAngle, false, paint); // 호(arc)를 그림.
 
     if(chart == "sleep"){
-      drawText(canvas, size, "${(percentage/60).toInt()}시간 ${(percentage%60).toInt()}분/ ${(goal/60).toInt()}");
+      drawSlText(canvas, size, "${(percentage/60).toInt()}시간 ${(percentage%60).toInt()}분\n/${(goal/60).toInt()}시간 ${(goal%60).toInt()}분");
     }
     else
       drawText(canvas, size, "$percentage / $goal");
@@ -314,6 +393,23 @@ class PieChart extends CustomPainter {
   // 원의 중앙에 텍스트를 적음.
   void drawText(Canvas canvas, Size size, String text) {
     double fontSize = getFontSize(size, text);
+
+    TextSpan sp = TextSpan(
+        style: TextStyle(
+            fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.black), text: text); // TextSpan은 Text위젯과 거의 동일하다.
+    TextPainter tp = TextPainter(text: sp, textDirection: ui.TextDirection.ltr);
+
+    tp.layout(); // 필수! 텍스트 페인터에 그려질 텍스트의 크기와 방향를 정함.
+
+    double dx = size.width / 2 - tp.width / 2;
+    double dy = size.height / 2 - tp.height / 2;
+
+    Offset offset = Offset(dx, dy);
+    tp.paint(canvas, offset);
+  }
+
+  void drawSlText(Canvas canvas, Size size, String text) {
+    double fontSize = 12;
 
     TextSpan sp = TextSpan(
         style: TextStyle(

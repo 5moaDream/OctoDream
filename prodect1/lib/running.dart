@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'DTO/runningDTO.dart';
+import 'Service/userService.dart';
 import 'runningchart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
@@ -20,12 +21,22 @@ class running extends StatelessWidget {
   }
 }
 
+double distanceRun(){
+  double dis = 0;
+  for(int i=0; i<runningList.length; i++){
+    dis = runningList[i].distance + dis;
+    print(dis);
+  }
+  return dis;
+}
+
 class MyRunning extends StatefulWidget {
   @override
   _MyRunningState createState() => _MyRunningState();
 }
 
 List<RunningDTO> runningList = [];
+double runGoal = 0;
 
 class _MyRunningState extends State<MyRunning> {
   late Future<List<RunningDTO>> runningDataFuture;
@@ -109,7 +120,7 @@ class _MyRunningState extends State<MyRunning> {
                                   ),
                                 ),
                                 Text(
-                                  runningList[i].totalRunningTime.toString(),
+                                  runningList[i].totalRunningTime.toString()+"분",
                                   style: TextStyle(
                                     color: Color(0xff373b44),
                                     fontSize: 16,
@@ -257,7 +268,7 @@ class _MyRunningState extends State<MyRunning> {
                               color: Colors.white70),
                         ),
                         Text(
-                          "${runningList[0].distance}km",
+                          "${distanceRun()}km",
                           style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -277,8 +288,7 @@ class _MyRunningState extends State<MyRunning> {
                               progressColor: Color(0xFF4facfe),
                               backgroundColor: Colors.grey[100]!,
                               borderRadius: BorderRadius.circular(30),
-                              currentValue:
-                              runningList[0].distance! * 100 / 2.5,
+                              currentValue: distanceRun() * 100 / runGoal,
                               displayText: '%',
                               size: 40,
                             ),
@@ -298,13 +308,21 @@ class _MyRunningState extends State<MyRunning> {
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xff373b44)),
                                   ),
-                                  Text(
-                                    "목표 : 2.5km",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff373b44)),
-                                  )
+                                  FutureBuilder<Info>(
+                                      future: fetchInfo(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          runGoal =
+                                              snapshot.data!.distance;
+                                        }
+                                        return Text(
+                                          "목표 : ${runGoal}km",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xff373b44)),
+                                        );
+                                      }),
                                 ],
                               )),
                           _runningList(),
