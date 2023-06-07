@@ -54,6 +54,8 @@ Future<List<RunningDTO>> fetchtodayrunning() async {
       return RunningDTO.fromJson(json);
     }).toList();
 
+    print(result);
+
     return list;
   }
   else { // Request failed

@@ -1,11 +1,13 @@
 import'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'DTO/sleepDTO.dart';
+import 'Service/userService.dart';
 import 'floatingbutton.dart';
 import 'sleepchart.dart';
 import 'piechart.dart';
 
 DateTime focusedDay = DateTime.now();
+int sleepGoal = 0;
 
 class sleep extends StatelessWidget {
 
@@ -133,18 +135,28 @@ Widget buildMyFutureBuilderWidget(BuildContext context) {
                         children: [
                           Container(
                             width: 200,
-                            child: PieChartSample3(sleep: snapshot.data!.totalSleepTime!.toDouble()),
+                            child: PieChartSample3(sleep: snapshot.data!.totalSleepTime!, goal: sleepGoal,),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text("목표 시간 : 8시간",
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white70
-                              ),
-                            ),
-                          ),
+                          FutureBuilder<Info>(
+                              future: fetchInfo(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  sleepGoal =
+                                      snapshot.data!.sleepTime;
+                                }
+                                return Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child:
+                                  Text("목표 시간 : ${date(sleepGoal)}",
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white70
+                                    ),
+                                  ),
+                                );
+                              }),
+
                         ],
                       ),
                     ),
