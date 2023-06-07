@@ -123,27 +123,27 @@ class _DistanceTrackerDialogState extends State<DistanceTrackerDialog> {
       _lastPosition = position;
       return;
     }
-
-    double distanceInMeters = Geolocator.distanceBetween(
-      _lastPosition.latitude,
-      _lastPosition.longitude,
+    double newDistance = _distance + Geolocator.distanceBetween(
+      _lastPosition == null ? position.latitude : _lastPosition!.latitude,
+      _lastPosition == null ? position.longitude : _lastPosition!.longitude,
       position.latitude,
       position.longitude,
     );
 
-    if (distanceInMeters > 10) { // Only update if there is a significant change (e.g., more than 10 meters)
-      double newDistance = _distance + (distanceInMeters / 1000);
-      double newDisplayDistance = _distanceView + (distanceInMeters / 1000);
+    double newDisplayDistance = _distanceView + Geolocator.distanceBetween(
+      _lastPosition == null ? position.latitude : _lastPosition!.latitude,
+      _lastPosition == null ? position.longitude : _lastPosition!.longitude,
+      position.latitude,
+      position.longitude,
+    );
 
-      setState(() {
-        _distance = newDistance;
-        _distanceView = newDisplayDistance;
-      });
-    }
-
+    setState(() {
+      _distance += newDistance / 1000;
+      _distanceView += newDisplayDistance / 1000;
+    });
     _lastPosition = position;
   }
-  
+
   @override
   void dispose() {
     if (_distance != 0) {
