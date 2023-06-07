@@ -16,12 +16,12 @@ var logger = Logger(
 );
 
 class FriendHome extends StatefulWidget {
-  final int? Id;
+  final int? id;
   final String characterName;
   final String stateMsg;
-  final String characterImageUrl;
+  final String characterImage;
 
-  FriendHome({required this.Id, required this.characterName, required this.stateMsg, required this.characterImageUrl});
+  FriendHome({required this.id, required this.characterName, required this.stateMsg, required this.characterImage});
 
   @override
   _FriendHome createState() =>
@@ -29,7 +29,6 @@ class FriendHome extends StatefulWidget {
 }
 
 class _FriendHome extends State<FriendHome> {
-  Future<Info>? info;
   TextEditingController _textEditingController = TextEditingController();
   String enteredText = "";
 
@@ -55,7 +54,7 @@ class _FriendHome extends State<FriendHome> {
     };
 
     Map<String, dynamic> requestBody = {
-      "userId": widget.Id,
+      "userId": widget.id,
       "content": "${enteredText}",
     };
     String jsonBody = jsonEncode(requestBody);
@@ -187,9 +186,9 @@ class _FriendHome extends State<FriendHome> {
                     )),
               ),
               Image.network(
-                widget.characterImageUrl,
-                width: 100,
-                height: 100,
+                widget.characterImage,
+                width: 200,
+                height: 200,
               ),
             ],
           ),
