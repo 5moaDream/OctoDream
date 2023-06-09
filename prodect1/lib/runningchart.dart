@@ -81,7 +81,7 @@ class _BarChartSample extends State<BarChartSample> {
           int j = 0;
           for (int i = 0; i < 7; i++) {
             if(j<snapshot.data!.length){
-              double distance = snapshot.data![j].distance;
+              final distance = snapshot.data![j].distance;
               DateTime date = DateTime.parse(snapshot.data![j].createdTime);
               if (b == date.day.toInt()) {
                 j++;

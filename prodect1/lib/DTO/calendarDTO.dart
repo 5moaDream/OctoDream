@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 DateTime focusedDay = DateTime.now();
@@ -32,7 +33,7 @@ class diaryList {
 
 class runningList {
   final String today;
-  final double totalDistance;
+  final totalDistance;
 
   runningList({required this.today, required this.totalDistance});
 
@@ -53,7 +54,7 @@ class runningList {
 
 class sleepList {
   final String today;
-  final int sleepTime;
+  final sleepTime;
 
   sleepList({required this.today, required this.sleepTime});
 
@@ -155,8 +156,6 @@ Future<CalendarDTO> fetchtodaycalendar(String format) async {
 
     CalendarDTO calendarDTO = CalendarDTO(diarylist: diarylist, runninglist: runninglist, sleeplist: sleeplist);
 
-    print(result);
-
     return calendarDTO;
   } else { // Request failed
     print('Request failed with status: ${response.statusCode}');
@@ -168,8 +167,8 @@ Future<CalendarDTO> fetchtodaycalendar(String format) async {
 
 class Event {
   final String content;
-  final double distance;
-  final double sleepTime;
+  final distance;
+  final sleepTime;
 
   Event(this.content, this.distance, this.sleepTime);
 
@@ -197,71 +196,54 @@ Map<DateTime, List<Event>> convertToEventMap(CalendarDTO calendarDTO) {
     }
   }
 
-  // Iterate over the diary list
-  if(calendarDTO.diarylist.isNotEmpty){
-    for (diaryList diary in calendarDTO.diarylist) {
-      DateTime date1 = DateTime.parse(diary.today!).toUtc();
-      for (runningList running in calendarDTO.runninglist) {
-        DateTime date2 = DateTime.parse(running.today!).toUtc();
-        for (sleepList sleep in calendarDTO.sleeplist) {
-          DateTime date = DateTime.parse(sleep.today!).toUtc();
-          if(!events.containsKey(date)){
-            if (date == date1 && date == date2) {
-              combineEvents(date, Event(
-                diary.content,
-                running.totalDistance,
-                sleep.sleepTime.toDouble(),
-              ));
-            }
-            else if (date == date1 && date != date2) {
-              combineEvents(date, Event(
-                diary.content,
-                0,
-                sleep.sleepTime.toDouble(),
-              ));
-            }
-            else if (date != date1 && date == date2) {
-              combineEvents(date, Event(
-                '',
-                running.totalDistance,
-                sleep.sleepTime.toDouble(),
-              ));
-            }
-            else if (date != date1 && date != date2 && date1 == date2) {
-              combineEvents(date, Event(
-                '',
-                0,
-                sleep.sleepTime.toDouble(),
-              ));
-            }
-          }
-        }
-        if (!events.containsKey(date2) && date2 == date1) {
-          combineEvents(date2, Event(diary.content,running.totalDistance, 0));
-        }
-        if (!events.containsKey(date2) && date2 != date1) {
-          combineEvents(date2, Event('',running.totalDistance, 0));
-        }
-      }
-      if (!events.containsKey(date1)) {
-        combineEvents(date1, Event(diary.content,0, 0));
-      }
-    }
-  }
-  else{
+  for (diaryList diary in calendarDTO.diarylist) {
+    DateTime dateTime = DateTime.parse(diary.today!);
+    DateTime date1 = DateTime.utc(dateTime.year, dateTime.month, dateTime.day, dateTime.hour);
+    // DateTime utcTime = dateTime.toUtc();
+    // Duration timeDifference = utcTime.timeZoneOffset;
+    // utcTime = utcTime.subtract(timeDifference);
+
+    // DateTime date1 = DateFormat("yyyy-MM-dd HH:mm:ss.SSS'Z'").format(dateTime.toUtc()) as DateTime;
+    //String date1 = DateFormat("yyyy-MM-dd HH:mm:ss.SSS'Z'").format(midnight.toUtc());
+
+    //DateTime date1 = DateTime.parse(diary.today!).toUtc();
     for (runningList running in calendarDTO.runninglist) {
-      DateTime date2 = DateTime.parse(running.today!).toUtc();
+      DateTime dateTime = DateTime.parse(running.today!);
+      DateTime date2 = DateTime.utc(dateTime.year, dateTime.month, dateTime.day, dateTime.hour);
+      //DateTime dateTime = DateTime.parse(running.today!);
+      //DateTime date2 = DateTime(dateTime.year, dateTime.month, dateTime.day).toLocal();
+
+      //DateTime date2 = DateTime.parse(running.today!).toUtc();
       for (sleepList sleep in calendarDTO.sleeplist) {
-        DateTime date = DateTime.parse(sleep.today!).toUtc();
+        DateTime dateTime = DateTime.parse(sleep.today!);
+        DateTime date = DateTime.utc(dateTime.year, dateTime.month, dateTime.day, dateTime.hour);
+        //DateTime dateTime = DateTime.parse(sleep.today!);
+        //DateTime date = DateTime(dateTime.year, dateTime.month, dateTime.day).toUtc();
+
+        //DateTime date = DateTime.parse(sleep.today!).toUtc();
         if (!events.containsKey(date)) {
-          if (date == date2) {
+          if (date == date1 && date == date2) {
+            combineEvents(date, Event(
+              diary.content,
+              running.totalDistance,
+              sleep.sleepTime.toDouble(),
+            ));
+          }
+          else if (date == date1 && date != date2) {
+            combineEvents(date, Event(
+              diary.content,
+              0,
+              sleep.sleepTime.toDouble(),
+            ));
+          }
+          else if (date != date1 && date == date2) {
             combineEvents(date, Event(
               '',
               running.totalDistance,
               sleep.sleepTime.toDouble(),
             ));
           }
-          else if (date != date2) {
+          else if (date != date1 && date != date2 && date1 == date2) {
             combineEvents(date, Event(
               '',
               0,
@@ -270,10 +252,96 @@ Map<DateTime, List<Event>> convertToEventMap(CalendarDTO calendarDTO) {
           }
         }
       }
-      if (!events.containsKey(date2)) {
+      if (!events.containsKey(date2) && date2 == date1) {
+        combineEvents(date2, Event(diary.content, running.totalDistance, 0));
+      }
+      if (!events.containsKey(date2) && date2 != date1) {
         combineEvents(date2, Event('', running.totalDistance, 0));
       }
     }
+    if (!events.containsKey(date1)) {
+      combineEvents(date1, Event(diary.content, 0, 0));
+    }
   }
+
+  // Iterate over the diary list
+  // if(calendarDTO.diarylist.isNotEmpty){
+  //   for (diaryList diary in calendarDTO.diarylist) {
+  //     DateTime date1 = DateTime.parse(diary.today!).toUtc();
+  //     for (runningList running in calendarDTO.runninglist) {
+  //       DateTime date2 = DateTime.parse(running.today!).toUtc();
+  //       for (sleepList sleep in calendarDTO.sleeplist) {
+  //         DateTime date = DateTime.parse(sleep.today!).toUtc();
+  //         if(!events.containsKey(date)){
+  //           if (date == date1 && date == date2) {
+  //             combineEvents(date, Event(
+  //               diary.content,
+  //               running.totalDistance,
+  //               sleep.sleepTime.toDouble(),
+  //             ));
+  //           }
+  //           else if (date == date1 && date != date2) {
+  //             combineEvents(date, Event(
+  //               diary.content,
+  //               0,
+  //               sleep.sleepTime.toDouble(),
+  //             ));
+  //           }
+  //           else if (date != date1 && date == date2) {
+  //             combineEvents(date, Event(
+  //               '',
+  //               running.totalDistance,
+  //               sleep.sleepTime.toDouble(),
+  //             ));
+  //           }
+  //           else if (date != date1 && date != date2 && date1 == date2) {
+  //             combineEvents(date, Event(
+  //               '',
+  //               0,
+  //               sleep.sleepTime.toDouble(),
+  //             ));
+  //           }
+  //         }
+  //       }
+  //       if (!events.containsKey(date2) && date2 == date1) {
+  //         combineEvents(date2, Event(diary.content,running.totalDistance, 0));
+  //       }
+  //       if (!events.containsKey(date2) && date2 != date1) {
+  //         combineEvents(date2, Event('',running.totalDistance, 0));
+  //       }
+  //     }
+  //     if (!events.containsKey(date1)) {
+  //       combineEvents(date1, Event(diary.content,0, 0));
+  //     }
+  //   }
+  // }
+  // else{
+  //   for (runningList running in calendarDTO.runninglist) {
+  //     DateTime date2 = DateTime.parse(running.today!).toUtc();
+  //     for (sleepList sleep in calendarDTO.sleeplist) {
+  //       DateTime date = DateTime.parse(sleep.today!).toUtc();
+  //       if (!events.containsKey(date)) {
+  //         if (date == date2) {
+  //           combineEvents(date, Event(
+  //             '',
+  //             running.totalDistance,
+  //             sleep.sleepTime.toDouble(),
+  //           ));
+  //         }
+  //         else if (date != date2) {
+  //           combineEvents(date, Event(
+  //             '',
+  //             0,
+  //             sleep.sleepTime.toDouble(),
+  //           ));
+  //         }
+  //       }
+  //     }
+  //     if (!events.containsKey(date2)) {
+  //       combineEvents(date2, Event('', running.totalDistance, 0));
+  //     }
+  //   }
+  // }
+
   return events;
 }

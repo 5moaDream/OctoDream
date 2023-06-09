@@ -3,11 +3,11 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RunningDTO {
-  final int runningId;
-  final int userId;
+  final runningId;
+  final userId;
   final String createdTime;
-  final int totalRunningTime;
-  final double distance;
+  final totalRunningTime;
+  final distance;
 
   RunningDTO({required this.runningId,required this.userId, required this.createdTime, required this.totalRunningTime,required this.distance});
 

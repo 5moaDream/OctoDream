@@ -47,8 +47,10 @@ Future<List<Dictionary>> fetchDictionary() async {
 }
 
 Future<String> updateUserOcto(String characterImageUrl) async {
+  Map<String, String> tokens = await getTokens();
+  String token = tokens['accessToken']!;
 
-  String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg3NDA4NTAyfQ.yizKabrMGyUpxrRvxPnw11XZu6dlB9lterq-4SxC_spYBhW2P7wvFq73v6kCs6T4mbTAGVvyjNZBvGQvM7XzJQ';
+  //String token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzkzMTI3MzkyIiwiZXhwIjoxNjg3NDA4NTAyfQ.yizKabrMGyUpxrRvxPnw11XZu6dlB9lterq-4SxC_spYBhW2P7wvFq73v6kCs6T4mbTAGVvyjNZBvGQvM7XzJQ';
 
   Map<String, String> headers = {
     'Content-Type': 'application/json',

@@ -72,7 +72,7 @@ class _dictionary extends State<dictionary>
             ),
           ),
           onPressed: () {
-            // updateUserOcto(url);
+             updateUserOcto(url);
             // MyHomePage.
           },
           child: Text('문어교환'));
@@ -202,7 +202,7 @@ class _dictionary extends State<dictionary>
                                                 Colors.transparent, BlendMode.color),
                                             child: images(dic[i].characterId, dic[i].characterImageUrl),
                                             ),
-                                button(dic[i].characterId, dic[i].characterImageUrl),
+                                        button(dic[i].characterId, dic[i].characterImageUrl),
                               ],
                             ),
                                   )),

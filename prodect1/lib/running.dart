@@ -36,7 +36,7 @@ class MyRunning extends StatefulWidget {
 }
 
 List<RunningDTO> runningList = [];
-int runGoal = 0;
+double runGoal = 0;
 
 class _MyRunningState extends State<MyRunning> {
   late Future<List<RunningDTO>> runningDataFuture;
